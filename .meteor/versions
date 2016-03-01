@@ -13,6 +13,8 @@ caching-compiler@1.0.1-beta.12
 caching-html-compiler@1.0.3-beta.12
 callback-hook@1.0.5-beta.12
 check@1.1.1-beta.12
+coffeescript@1.0.12-beta.12
+cosmos:browserify@0.9.4
 ddp@1.2.2
 ddp-client@1.2.2-beta.12
 ddp-common@1.2.2
@@ -32,6 +34,7 @@ http@1.1.2-beta.12
 id-map@1.0.4
 insecure@1.0.4
 jquery@1.11.5-beta.12
+kadira:flow-router@2.10.1
 launch-screen@1.0.6-beta.12
 livedata@1.0.15
 logging@1.0.9-beta.12
@@ -63,7 +66,6 @@ spacebars@1.0.8-beta.12
 spacebars-compiler@1.0.8-beta.12
 standard-minifier-css@1.0.3-beta.12
 standard-minifier-js@1.0.3-beta.12
-standard-minifiers@1.0.3-beta.12
 templating@1.1.6-beta.12
 templating-tools@1.0.1-beta.12
 tracker@1.0.10-beta.12
