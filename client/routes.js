@@ -21,7 +21,7 @@ FlowRouter.route('/dashboard', {
 FlowRouter.route('/login', {
   action () {
     mount(pages.Layout, {
-      content: (<pages.Login />)
+      content: React.createElement(pages.Login)
     })
   }
 })
