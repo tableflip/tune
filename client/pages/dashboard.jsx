@@ -17,15 +17,15 @@ export default React.createClass({
   mixins: [ReactMeteorData],
 
   componentWillMount () {
-    this.itemSub = Meteor.subscribe('items')
   },
 
   componentWillUnmount () {
-    this.itemSub.stop()
   },
 
   getMeteorData () {
+    var itemSub = Meteor.subscribe('items')
     return {
+      itemsReady: itemSub.ready()
       items: Items.find({}).fetch()
     }
   },
