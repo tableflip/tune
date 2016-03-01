@@ -17,3 +17,11 @@ FlowRouter.route('/dashboard', {
     })
   }
 })
+
+FlowRouter.route('/edit', {
+  action () {
+    mount(pages.Layout, {
+      content: React.createElement(pages.Edit)
+    })
+  }
+})
