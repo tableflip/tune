@@ -1,3 +1,6 @@
+accounts-base@1.2.3-beta.12
+accounts-github@1.0.6
+accounts-oauth@1.1.9-beta.12
 allow-deny@1.0.1-beta.12
 autoupdate@1.2.5-beta.12
 babel-compiler@6.5.0-beta.12
@@ -17,6 +20,7 @@ cosmos:browserify@0.9.4
 ddp@1.2.2
 ddp-client@1.2.2-beta.12
 ddp-common@1.2.2
+ddp-rate-limiter@1.0.1-beta.12
 ddp-server@1.2.3-beta.12
 deps@1.0.9
 diff-sequence@1.0.2-beta.12
@@ -25,7 +29,9 @@ ecmascript-runtime@0.2.7-beta.12
 ejson@1.0.8-beta.12
 es5-shim@4.3.2-beta.12
 fastclick@1.0.8-beta.12
+fortawesome:fontawesome@4.5.0
 geojson-utils@1.0.5-beta.12
+github@1.1.5-beta.12
 hot-code-push@1.0.1-beta.12
 html-tools@1.0.6-beta.12
 htmljs@1.0.6-beta.12
@@ -36,6 +42,7 @@ jsx@0.2.4
 kadira:flow-router@2.10.1
 launch-screen@1.0.6-beta.12
 livedata@1.0.15
+localstorage@1.0.6-beta.12
 logging@1.0.9-beta.12
 meteor@1.1.11-beta.12
 meteor-base@1.0.1
@@ -51,16 +58,20 @@ modules-runtime@0.5.0-beta.12
 mongo@1.1.4-beta.12
 mongo-id@1.0.1
 npm-mongo@1.4.40-beta.12
+oauth@1.1.7-beta.12
+oauth2@1.1.6-beta.12
 observe-sequence@1.0.8-beta.12
 ordered-dict@1.0.4
 promise@0.5.2-beta.12
 random@1.0.6-beta.12
+rate-limit@1.0.1-beta.12
 react-meteor-data@0.2.5
 reactive-dict@1.1.4-beta.12
 reactive-var@1.0.6
 reload@1.1.5-beta.12
 retry@1.0.4
 routepolicy@1.0.7-beta.12
+service-configuration@1.0.6-beta.12
 session@1.1.2-beta.12
 spacebars@1.0.8-beta.12
 spacebars-compiler@1.0.8-beta.12

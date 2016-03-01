@@ -25,7 +25,7 @@ export default React.createClass({
   getMeteorData () {
     var itemSub = Meteor.subscribe('items')
     return {
-      itemsReady: itemSub.ready()
+      itemsReady: itemSub.ready(),
       items: Items.find({}).fetch()
     }
   },
