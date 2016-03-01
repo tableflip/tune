@@ -5,7 +5,7 @@ import * as pages from './pages/index'
 FlowRouter.route('/', {
   action () {
     mount(pages.Layout, {
-      content: (<pages.Home />)
+      content: React.createElement(pages.Home)
     })
   }
 })
@@ -13,7 +13,7 @@ FlowRouter.route('/', {
 FlowRouter.route('/dashboard', {
   action () {
     mount(pages.Layout, {
-      content: (<pages.Dashboard />)
+      content: React.createElement(pages.Dashboard)
     })
   }
 })
