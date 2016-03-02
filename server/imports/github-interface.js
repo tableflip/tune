@@ -12,7 +12,6 @@ export default function (userId) {
     opts.headers.Authorization = `token ${token}`
     opts.headers.Accept = opts.headers.Accept || 'application/vnd.github.v3+json'
     opts.headers['User-Agent'] = Meteor.settings.appName
-    console.log(opts)
     if (cb) return HTTP.call(method, url, opts, cb)
     return HTTP.call(method, url, opts)
   }
@@ -53,6 +52,24 @@ export default function (userId) {
         }
       }, cb)
       if (!cb) return res.data
+    },
+
+    putFileContents: function (fullName, path, { commitMsg, json, sha }, cb) {
+      var opts = {
+        params: {
+          path: path,
+          message: commitMsg,
+          content: base64Encode(json),
+          sha: sha
+        }
+      }
+      console.log(`${baseUrl}/repos/${fullName}/contents/${path}`)
+      var res = githubCall({
+        method: 'PUT',
+        url: `${baseUrl}/repos/${fullName}/contents/${path}`,
+        opts: opts
+      }, cb)
+      if (!cb) return res
     }
   }
 
@@ -64,4 +81,8 @@ function makeReturnData (key, cb) {
     if (res) return cb(err, res[key])
     cb(err)
   }
+}
+
+function base64Encode (json) {
+  return new Buffer(JSON.stringify(json)).toString('base64')
 }
