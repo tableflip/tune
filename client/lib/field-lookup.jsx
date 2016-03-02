@@ -59,6 +59,13 @@ const UnorderedList = React.createClass({
     }
     this.setState({list: _.union(top, bottom)})
   },
+  addItem: function (e) {
+    e.preventDefault()
+    let newList = this.state.list
+    newList.push(this.refs.addItem.value)
+    this.setState({list: newList})
+    this.refs.addItem.value = ''
+  },
   render () {
     return (
       <ul>
@@ -70,7 +77,8 @@ const UnorderedList = React.createClass({
               { item }
             </li>
         })}
-        <input placeholder='Add an Item'/><button>+</button>
+        <input placeholder='Add an Item' ref='addItem'/>
+        <button onClick={ this.addItem }>+</button>
       </ul>
     )
   }
