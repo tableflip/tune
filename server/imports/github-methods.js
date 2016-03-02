@@ -75,22 +75,15 @@ export function getPageContents (userId, fullName, page, cb) {
   })
 }
 
-export function putPages (userId, fullName, { json, commitMsg }, cb) {
+export function putFacts (userId, fullName, cb) {
   var github = githubInterface(userId)
-  async.map(json, (pageDetails, cb) => {
-    var pageObj = {
-      commitMsg: commitMsg,
-      json: pageDetails.content,
-      sha: pageDetails.sha
-    }
-    putPageContents(github, fullName, pageDetails.name, pageObj, cb)
+  var project = Projects.findOne({ full_name: fullName })
+  if (!project) return cb('Cannot find project')
+  github.putFileContents('richsilv/marmalade-productions', 'facts.json', {
+    commitMsg: `This is a commit by ${Meteor.settings.appName}`,
+    json: project.facts.content,
+    sha: project.facts.sha
   }, cb)
-}
-
-export function putPageContents (userId, fullName, page, { commitMsg, json, sha }, cb) {
-  var github = githubInterface(userId)
-  var pagePath = `pages/${page}/contents.json`
-  return github.putFileContents(fullName, pagePath, { commitMsg, json, sha }, cb)
 }
 
 function isPlatformProject (repo) {

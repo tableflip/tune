@@ -1,3 +1,7 @@
+import { putFacts } from '../imports/github-methods'
+
+var putFactsAsync = Meteor.wrapAsync(putFacts)
+
 Meteor.methods({
   'projects/updateFact': function ({ projectId, key, newValue }) {
     if (!this.userId) throw new Meteor.Error('Only a logged in user can update project facts')
@@ -11,6 +15,7 @@ Meteor.methods({
     if (!project.facts.content.hasOwnProperty(key)) throw new Meteor.Error('You cannot add a key to project facts')
     var update = {}
     update[`facts.content.${key}`] = newValue
-    return Projects.update(projectId, { $set: update })
+    Projects.update(projectId, { $set: update })
+    return putFactsAsync(this.userId, project.full_name)
   }
 })
