@@ -1,13 +1,33 @@
 import React from 'react'
-import { Field } from '../components/editable-fields'
+import fields from '../lib/field-lookup'
 
 export default React.createClass({
+  getInitialState: () => {
+    return null
+  },
+  submitHandler: function (value) {
+    console.log('Got this ', value)
+  },
+  componentDidMount () {
+    let page = FlowRouter.getParam('page')
+    let key = FlowRouter.getParam('key')
+    Meteor.call('getField', page, key, (err, response) => {
+      if (err) return console.error(err)
+      this.setState(response)
+    })
+  },
   render () {
+    if (!this.state) return (<div>Fetching your content ...</div>)
+    let field = fields(this.state.type, this.state.content, this.submitHandler)
     return (
-      <div>
-        <Field type='textarea' value='button love' elementId='boo'/>
-        <Field type='img' value='http://s3.amazonaws.com/dogfish-uploads/uploadcare/f5840aac-f875-4a08-8116-3cf6e53db1a3/bg.png'/>
-      </div>
+      <form>
+        <fieldset className='form-group'>
+          { field }
+        </fieldset>
+        <fieldset className='form-group'>
+          <button type='submit' className='btn btn-primary'>Save</button>
+        </fieldset>
+      </form>
     )
   }
 })
