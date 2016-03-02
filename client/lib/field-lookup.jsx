@@ -30,9 +30,56 @@ const Textarea = React.createClass({
   }
 })
 
+const UnorderedList = React.createClass({
+  propTypes: {
+    content: React.PropTypes.array,
+    submitHandler: React.PropTypes.func
+  },
+  getInitialState: function () {
+    return {
+      list: this.props.content
+    }
+  },
+  update: function (e) {
+    this.props.submitHandler(this.refs.textarea.value)
+  },
+  move: function (index, dir, e) {
+    e.preventDefault()
+    if (dir < 0 && index === 0 || dir > 0 && index === this.state.list.length - 1) return
+    let top = this.state.list.slice(0, index)
+    let bottom = this.state.list.slice(index, this.state.list.length)
+    let moving = bottom.shift()
+    if (dir < 0) {
+      bottom.unshift(top.pop())
+      top.push(moving)
+    }
+    if (dir > 0) {
+      top.push(bottom.shift())
+      bottom.unshift(moving)
+    }
+    this.setState({list: _.union(top, bottom)})
+  },
+  render () {
+    return (
+      <ul>
+        { this.state.list.map((item, i) => {
+          return <li key={ i + item.replace(' ', '-') }>
+              <button onClick={ this.move.bind(null, i, -1) } >&uarr;</button>
+              <button onClick={ this.move.bind(null, i, 1) } >&darr;</button>
+              &nbsp;
+              { item }
+            </li>
+        })}
+        <input placeholder='Add an Item'/><button>+</button>
+      </ul>
+    )
+  }
+})
+
 const components = {
   text: (content, submitHandler) => (<TextField content={ content } submitHandler={ submitHandler }/>),
-  textarea: (content, submitHandler) => (<Textarea content={ content } submitHandler={ submitHandler }/>)
+  textarea: (content, submitHandler) => (<Textarea content={ content } submitHandler={ submitHandler }/>),
+  list: (content, submitHandler) => (<UnorderedList content={ content } submitHandler={ submitHandler }/>)
 }
 
 module.exports = function (type, content, submitHandler) {
