@@ -2,6 +2,17 @@
 
 Client for the TABLEFLIP static site generator
 
+## Getting started
+
+- Copy `settings.json.tpl` to `settings.json`
+- Grab the `clientId` & `clientSecret` from: https://github.com/organizations/tableflip/settings/applications/313932
+
+Now start it up with a
+
+```sh
+meteor --settings setting.json
+```
+
 ## Client-side structure
 
 We use *kadira:flow-router* along with the npm module *react-mounter* to render pages.
