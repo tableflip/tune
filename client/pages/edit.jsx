@@ -6,7 +6,7 @@ export default React.createClass({
     return null
   },
   submitHandler: function (value) {
-    console.log('Got this ', value)
+    this.setState({payload: value})
   },
   componentDidMount () {
     let page = FlowRouter.getParam('page')
@@ -15,6 +15,10 @@ export default React.createClass({
       if (err) return console.error(err)
       this.setState(response)
     })
+  },
+  save: function (e) {
+    e.preventDefault()
+    console.log(this.state.payload)
   },
   render () {
     if (!this.state) return (<div>Fetching your content ...</div>)
@@ -25,7 +29,7 @@ export default React.createClass({
           { field }
         </fieldset>
         <fieldset className='form-group'>
-          <button type='submit' className='btn btn-primary'>Save</button>
+          <button onClick={ this.save } className='btn btn-primary'>Save</button>
         </fieldset>
       </form>
     )
