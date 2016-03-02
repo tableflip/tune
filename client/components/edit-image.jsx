@@ -10,6 +10,9 @@ export default React.createClass({
       src: this.props.content
     }
   },
+  componentDidMount: function () {
+    this.update()
+  },
   update: function () {
     this.props.parentState(this.refs.img.src)
   },
