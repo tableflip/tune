@@ -1,6 +1,8 @@
 import { putFacts } from '../imports/github-methods'
+import { syncAll } from '../imports/github-sync'
 
 var putFactsAsync = Meteor.wrapAsync(putFacts)
+var syncAllAsync = Meteor.wrapAsync(syncAll)
 
 Meteor.methods({
   'projects/updateFact': function ({ projectId, key, newValue }) {
@@ -17,5 +19,9 @@ Meteor.methods({
     update[`facts.content.${key}`] = newValue
     Projects.update(projectId, { $set: update })
     return putFactsAsync(this.userId, project.full_name)
+  },
+  'projects/sync': function () {
+    if (!this.userId) throw new Meteor.Error('Only a logged in user can sync projects')
+    return syncAllAsync(this.userId)
   }
 })

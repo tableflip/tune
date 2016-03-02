@@ -1,5 +1,6 @@
 import async from 'async'
 import githubInterface from './github-interface'
+import isPlatformProject from './is-platform-project'
 
 export function getRepos (userId) {
   var github = githubInterface(userId)
@@ -79,13 +80,23 @@ export function putFacts (userId, fullName, cb) {
   var github = githubInterface(userId)
   var project = Projects.findOne({ full_name: fullName })
   if (!project) return cb('Cannot find project')
-  github.putFileContents('richsilv/marmalade-productions', 'facts.json', {
-    commitMsg: `This is a commit by ${Meteor.settings.appName}`,
+  github.putFileContents(project.full_name, 'facts.json', {
+    commitMsg: `Commit by ${Meteor.settings.appName}`,
     json: project.facts.content,
     sha: project.facts.sha
   }, cb)
 }
 
-function isPlatformProject (repo) {
-  return repo.description && repo.description.indexOf('[THE_PLATFORM]') > -1
+export function putPageContent (userId, fullName, pageName, cb) {
+  var github = githubInterface(userId)
+  var project = Projects.findOne({ full_name: fullName })
+  if (!project) return cb('Cannot find project')
+  var page = Pages.findOne({ 'project._id': project._id, name: pageName })
+  if (!page) return cb('Cannot find page')
+  github.putFileContents(project.full_name, `pages/${pageName}/content.json`, {
+    commitMsg: `Commit by ${Meteor.settings.appName}`,
+    json: page.content,
+    sha: page.lastCommit.content.sha
+  }, cb)
+
 }

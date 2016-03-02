@@ -43,7 +43,7 @@ export function syncProject (userId, fullName, cb) {
 
 export function syncPages (userId, fullName, masterCb) {
   var project = Projects.findOne({ full_name: fullName })
-  if (!project) return cb('Cannot find matching project')
+  if (!project) return masterCb('Cannot find matching project')
   async.waterfall([
     function getPageMetadata (cb) {
       githubMethods.getPages(userId, fullName, cb)
@@ -83,7 +83,7 @@ export function syncPages (userId, fullName, masterCb) {
               sha: pageDetails.dirSha
             }
           },
-          content: pageDetails.contents
+          content: pageDetails.content
         }
         Pages.upsert({ name: pageDetails.name, 'project.full_name': project.full_name }, { $set: page })
       })
