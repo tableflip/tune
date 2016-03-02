@@ -3,7 +3,7 @@ import React from 'react'
 export default React.createClass({
   propTypes: {
     content: React.PropTypes.array,
-    submitHandler: React.PropTypes.func
+    parentState: React.PropTypes.func
   },
   getInitialState: function () {
     return { list: this.props.content }
@@ -12,7 +12,7 @@ export default React.createClass({
     this.update()
   },
   update: function () {
-    this.props.submitHandler(this.state.list)
+    this.props.parentState(this.state.list)
   },
   move: function (index, dir, e) {
     e.preventDefault()

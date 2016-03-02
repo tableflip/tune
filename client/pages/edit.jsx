@@ -5,7 +5,7 @@ export default React.createClass({
   getInitialState: () => {
     return null
   },
-  submitHandler: function (value) {
+  updateState: function (value) {
     this.setState({payload: value})
   },
   componentDidMount () {
@@ -22,7 +22,7 @@ export default React.createClass({
   },
   render () {
     if (!this.state) return (<div>Fetching your content ...</div>)
-    let field = fields(this.state.type, this.state.content, this.submitHandler)
+    let field = fields(this.state.type, this.state.content, this.updateState)
     return (
       <form>
         <fieldset className='form-group'>

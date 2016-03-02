@@ -2,13 +2,15 @@ import React from 'react'
 import TextField from '../components/edit-text'
 import Textarea from '../components/edit-textarea'
 import UnorderedList from '../components/edit-list'
+import SingleImage from '../components/edit-image'
 
 const components = {
-  text: (content, submitHandler) => (<TextField content={ content } submitHandler={ submitHandler }/>),
-  textarea: (content, submitHandler) => (<Textarea content={ content } submitHandler={ submitHandler }/>),
-  list: (content, submitHandler) => (<UnorderedList content={ content } submitHandler={ submitHandler }/>)
+  text: (content, parentState) => (<TextField content={ content } parentState={ parentState }/>),
+  textarea: (content, parentState) => (<Textarea content={ content } parentState={ parentState }/>),
+  list: (content, parentState) => (<UnorderedList content={ content } parentState={ parentState }/>),
+  img: (content, parentState) => (<SingleImage content={ content } parentState={ parentState }/>)
 }
 
-module.exports = function (type, content, submitHandler) {
-  return components[type](content, submitHandler)
+module.exports = function (type, content, parentState) {
+  return components[type](content, parentState)
 }

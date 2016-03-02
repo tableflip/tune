@@ -21,9 +21,13 @@ Meteor.methods({
           'Item Five'
         ],
         type: 'list'
+      },
+      {
+        content: 'https://ucarecdn.com/assets/images/cloud.6b86b4f1d77e.jpg',
+        type: 'img'
       }
     ]
 
-    return responses[0]
+    return responses[3]
   }
 })

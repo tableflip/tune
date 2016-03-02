@@ -3,10 +3,10 @@ import React from 'react'
 export default React.createClass({
   propTypes: {
     content: React.PropTypes.string,
-    submitHandler: React.PropTypes.func
+    parentState: React.PropTypes.func
   },
   update: function (e) {
-    this.props.submitHandler(this.refs.textarea.value)
+    this.props.parentState(this.refs.textarea.value)
   },
   render () {
     return (
