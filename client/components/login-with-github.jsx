@@ -10,7 +10,7 @@ export const LoginWithGithub = React.createClass({
     }
   },
   login () {
-    Meteor.loginWithGithub()
+    Meteor.loginWithGithub({ requestPermissions: ['repo'] })
   },
   logout () {
     Meteor.logout()

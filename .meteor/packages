@@ -23,3 +23,5 @@ accounts-github
 fortawesome:fontawesome
 service-configuration
 http
+aldeed:simple-schema
+check

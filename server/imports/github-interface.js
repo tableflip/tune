@@ -5,7 +5,6 @@ export default function (userId) {
   if (!user) throw new Meteor.Error('You must supply a valid userId')
   if (!user.services || !user.services.github || !user.services.github.accessToken) throw new Meteor.Error('User has no Github auth credentials')
   var token = user.services.github.accessToken
-
   function githubCall ({ method, url, opts }, cb) {
     opts = opts || {}
     opts.headers = opts.headers || {}
@@ -18,7 +17,7 @@ export default function (userId) {
 
   var github = {
     getRepos: function (cb) {
-      var cb = cb ? makeReturnData('data', cb) : null
+      cb = cb ? makeReturnData('data', cb) : null
       var res = githubCall({
         method: 'GET',
         url: `${baseUrl}/user/repos`,
@@ -31,8 +30,22 @@ export default function (userId) {
       if (!cb) return res.data
     },
 
+    getLastCommit: function (fullName, cb) {
+      cb = cb ? makeReturnData('data', cb) : null
+      var res = githubCall({
+        method: 'GET',
+        url: `${baseUrl}/repos/${fullName}/commits`,
+        opts: {
+          params: {
+            per_page: 1
+          }
+        }
+      }, cb)
+      if (!cb) return res.data
+    },
+
     getDirContents: function (fullName, path, cb) {
-      var cb = cb ? makeReturnData('data', cb) : null
+      cb = cb ? makeReturnData('data', cb) : null
       var res = githubCall({
         method: 'GET',
         url: `${baseUrl}/repos/${fullName}/contents/${path}`
@@ -41,7 +54,7 @@ export default function (userId) {
     },
 
     getFileContents: function (fullName, path, cb) {
-      var cb = cb ? makeReturnData('content', cb) : null
+      cb = cb ? makeReturnData('content', cb) : null
       var res = githubCall({
         method: 'GET',
         url: `${baseUrl}/repos/${fullName}/contents/${path}`,
@@ -56,14 +69,12 @@ export default function (userId) {
 
     putFileContents: function (fullName, path, { commitMsg, json, sha }, cb) {
       var opts = {
-        params: {
-          path: path,
+        data: {
           message: commitMsg,
           content: base64Encode(json),
           sha: sha
         }
       }
-      console.log(`${baseUrl}/repos/${fullName}/contents/${path}`)
       var res = githubCall({
         method: 'PUT',
         url: `${baseUrl}/repos/${fullName}/contents/${path}`,
@@ -84,5 +95,5 @@ function makeReturnData (key, cb) {
 }
 
 function base64Encode (json) {
-  return new Buffer(JSON.stringify(json)).toString('base64')
+  return new Buffer(JSON.stringify(json, null, '\t')).toString('base64')
 }

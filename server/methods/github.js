@@ -1,4 +1,5 @@
 import * as githubMethods from '../imports/github-methods'
+import * as githubSync from '../imports/github-sync'
 
 Meteor.methods({
   'github/getRepos' () {
