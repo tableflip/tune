@@ -2,6 +2,10 @@ import React from 'react'
 import fields from '../lib/field-lookup'
 
 export default React.createClass({
+  propTypes: {
+    page: React.PropTypes.string,
+    key: React.PropTypes.string
+  },
   getInitialState: () => {
     return null
   },
@@ -9,9 +13,7 @@ export default React.createClass({
     this.setState({payload: value})
   },
   componentDidMount () {
-    let page = FlowRouter.getParam('page')
-    let key = FlowRouter.getParam('key')
-    Meteor.call('getField', page, key, (err, response) => {
+    Meteor.call('getField', this.props.page, this.props.key, (err, response) => {
       if (err) return console.error(err)
       this.setState(response)
     })

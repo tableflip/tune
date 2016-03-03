@@ -40,15 +40,16 @@ export default React.createClass({
   },
   remove: function (index, e) {
     e.preventDefault()
-    let newList = this.state.list
-    delete newList[index]
-    this.setState({list: newList}, this.update)
+    let top = this.state.list.slice(0, index)
+    let bottom = this.state.list.slice(index, this.state.list.length)
+    bottom.shift()
+    this.setState({list: _.union(top, bottom)}, this.update)
   },
   render () {
     return (
       <ul className='list-group'>
         { this.state.list.map((item, i) => {
-          return <li key={ i + item.replace(' ', '-') } className='list-group-item'>
+          return <li key={ Math.random().toString().split('.')[1] } className='list-group-item'>
               <button onClick={ this.move.bind(null, i, -1) } >&uarr;</button>
               <button onClick={ this.move.bind(null, i, 1) } >&darr;</button>
               { item }

@@ -5,3 +5,8 @@ $font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto"
 
 @import 'bootstrap/scss/bootstrap';
 
+#map {
+  width: 98%;
+  margin: auto;
+  height: 340px;
+}

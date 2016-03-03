@@ -36,6 +36,7 @@ Meteor.methods({
       }
     ]
 
-    return responses[5]
+    // return _.sample(responses)
+    return responses[2]
   }
 })

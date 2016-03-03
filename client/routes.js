@@ -19,9 +19,9 @@ FlowRouter.route('/dashboard', {
 })
 
 FlowRouter.route('/page/:page/edit/:key', {
-  action () {
+  action (params) {
     mount(pages.Layout, {
-      content: React.createElement(pages.Edit)
+      content: React.createElement(pages.Edit, {page: params.page, key: params.key})
     })
   }
 })
