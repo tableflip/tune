@@ -17,7 +17,6 @@ export default function (userId) {
 
   var github = {
     getRepos: function (cb) {
-      cb = cb ? makeReturnData('data', cb) : null
       var res = githubCall({
         method: 'GET',
         url: `${baseUrl}/user/repos`,
@@ -26,12 +25,11 @@ export default function (userId) {
             per_page: 100
           }
         }
-      }, cb)
+      }, pluckFromResponse('data', cb))
       if (!cb) return res.data
     },
 
     getLastCommit: function (fullName, cb) {
-      cb = cb ? makeReturnData('data', cb) : null
       var res = githubCall({
         method: 'GET',
         url: `${baseUrl}/repos/${fullName}/commits`,
@@ -40,21 +38,19 @@ export default function (userId) {
             per_page: 1
           }
         }
-      }, cb)
+      }, pluckFromResponse('data', cb))
       if (!cb) return res.data
     },
 
     getDirContents: function (fullName, path, cb) {
-      cb = cb ? makeReturnData('data', cb) : null
       var res = githubCall({
         method: 'GET',
         url: `${baseUrl}/repos/${fullName}/contents/${path}`
-      }, cb)
+      }, pluckFromResponse('data', cb))
       if (!cb) return res.data
     },
 
     getFileContents: function (fullName, path, cb) {
-      cb = cb ? makeReturnData('content', cb) : null
       var res = githubCall({
         method: 'GET',
         url: `${baseUrl}/repos/${fullName}/contents/${path}`,
@@ -63,8 +59,8 @@ export default function (userId) {
             Accept: 'application/vnd.github.v3.raw'
           }
         }
-      }, cb)
-      if (!cb) return res.data
+      }, pluckFromResponse('content', cb))
+      if (!cb) return res.content
     },
 
     putFileContents: function (fullName, path, { commitMsg, json, sha }, cb) {
@@ -87,7 +83,8 @@ export default function (userId) {
   return github
 }
 
-function makeReturnData (key, cb) {
+function pluckFromResponse (key, cb) {
+  if (!cb) return null
   return (err, res) => {
     if (res) return cb(err, res[key])
     cb(err)
