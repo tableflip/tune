@@ -80,10 +80,13 @@ Pages which exist within an individual project.
 ## Publications
 
 `Meteor.subscribe('projects')` - Returns all the project docs to which the logged-in user has access.
+
 `Meteor.subscribe('project', PROJECT_ID)` - Returns the given project and all its pages, provided the logged in user has access to it.
 
 ## Methods
 
 `Meteor.call('projects/updateFact', { projectID: '08joikjf2o43ijf2oij23fo', key: 'foo', newValue: 'baz' }, cb)`
+
 `Meteor.call('pages/updateContent', { pageId: 'dof0f3j3j9j3jfp2onc3kr3a', key: 'heading', newValue: 'Hello World' }, cb)`
+
 `Meteor.call('projects/sync', cb)` - syncs all of the logged in user's projects.  **This is run automatically on login**.
