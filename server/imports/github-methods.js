@@ -82,7 +82,7 @@ export function putFacts (userId, fullName, cb) {
   if (!project) return cb('Cannot find project')
   github.putFileContents(project.full_name, 'facts.json', {
     commitMsg: `Commit by ${Meteor.settings.appName}`,
-    json: project.facts.content,
+    json: project.facts.json,
     sha: project.facts.sha
   }, cb)
 }
@@ -95,8 +95,8 @@ export function putPageContent (userId, fullName, pageName, cb) {
   if (!page) return cb('Cannot find page')
   github.putFileContents(project.full_name, `pages/${pageName}/content.json`, {
     commitMsg: `Commit by ${Meteor.settings.appName}`,
-    json: page.content,
-    sha: page.lastCommit.content.sha
+    json: page.content.json,
+    sha: page.content.sha
   }, cb)
 
 }

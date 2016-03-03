@@ -34,9 +34,10 @@ export function syncProject (userId, fullName, cb) {
         sha: res.lastCommit[0].sha,
         dateTime: res.lastCommit[0].commit.committer.date
       },
-      facts: res.facts
+      'facts.json': res.facts.content,
+      'facts.sha': res.facts.sha
     }
-    var ret = Projects.upsert({ full_name: fullName }, { $set: project, $addToSet: { users: userId } })
+    Projects.upsert({ full_name: fullName }, { $set: project, $addToSet: { users: userId } })
     syncPages(userId, fullName, cb)
   })
 }
@@ -53,16 +54,17 @@ export function syncPages (userId, fullName, masterCb) {
         return !Pages.find({
           'project.full_name': fullName,
           'name': page.name,
-          'lastCommit.dir.sha': page.sha
+          'lastCommit.sha': page.sha
         }).count()
       })
       cb(null, filteredPages)
     },
+    // At some point I will work out why everything works without binding environment apart from this step
     Meteor.bindEnvironment(function getUpdatedPageContents (pages, cb) {
       async.map(pages, (page, cb) => {
         githubMethods.getPageContents(userId, fullName, page.name, (err, res) => {
           if (err) return cb(err)
-          res.dirSha = page.sha
+          res.commitSha = page.sha
           cb(null, res)
         })
       }, cb)
@@ -76,14 +78,12 @@ export function syncPages (userId, fullName, masterCb) {
             full_name: project.full_name
           },
           lastCommit: {
-            content: {
-              sha: pageDetails.sha
-            },
-            dir: {
-              sha: pageDetails.dirSha
-            }
+            sha: pageDetails.commitSha
           },
-          content: pageDetails.content
+          content: {
+            sha: pageDetails.sha,
+            json: pageDetails.content
+          }
         }
         Pages.upsert({ name: pageDetails.name, 'project.full_name': project.full_name }, { $set: page })
       })

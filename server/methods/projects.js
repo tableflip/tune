@@ -14,11 +14,17 @@ Meteor.methods({
     if (project.users.indexOf(this.userId) < 0) {
       throw new Meteor.Error('A user can only update a project of which they are a member')
     }
-    if (!project.facts.content.hasOwnProperty(key)) throw new Meteor.Error('You cannot add a key to project facts')
+    if (!project.facts.json.hasOwnProperty(key)) throw new Meteor.Error('You cannot add a key to project facts')
     var update = {}
-    update[`facts.content.${key}`] = newValue
+    update[`facts.json.${key}`] = newValue
     Projects.update(projectId, { $set: update })
-    return putFactsAsync(this.userId, project.full_name)
+    var response = putFactsAsync(this.userId, project.full_name)
+    var githubProjectUpdate = {
+      'lastCommit.sha': response.data.commit.sha,
+      'facts.sha': response.data.content.sha,
+      'lastCommit.dateTime': response.data.commit.committer.date
+    }
+    return Projects.update(project._id, { $set: githubProjectUpdate })
   },
   'projects/sync': function () {
     if (!this.userId) throw new Meteor.Error('Only a logged in user can sync projects')

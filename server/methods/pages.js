@@ -14,10 +14,20 @@ Meteor.methods({
     if (project.users.indexOf(this.userId) < 0) {
       throw new Meteor.Error('A user can only update a project of which they are a member')
     }
-    if (!page.content.hasOwnProperty(key)) throw new Meteor.Error('You cannot add a key to page content')
+    if (!page.content.json.hasOwnProperty(key)) throw new Meteor.Error('You cannot add a key to page content')
     var update = {}
-    update[`content.${key}`] = newValue
+    update[`content.json.${key}`] = newValue
     Pages.update(page._id, { $set: update })
-    return putPageContentAsync(this.userId, project.full_name, page.name)
+    var response = putPageContentAsync(this.userId, project.full_name, page.name)
+    var githubProjectUpdate = {
+      'lastCommit.sha': response.data.commit.sha,
+      'lastCommit.dateTime': response.data.commit.committer.date
+    }
+    var githubPageUpdate = {
+      'content.sha': response.data.content.sha,
+      'lastCommit.sha': response.data.commit.sha
+    }
+    Projects.update(project._id, { $set: githubProjectUpdate })
+    return Pages.update(page._id, { $set: githubPageUpdate })
   }
 })
