@@ -2,5 +2,5 @@
 // boolean indicating whether it represents a relevant project.
 // See [Github API](https://developer.github.com/v3/repos/#get)
 export default function isPlatformProject (repo) {
-  return repo.description && repo.description.indexOf('[THE_PLATFORM]') > -1
+  return repo.description && repo.description.indexOf(':robot:') > -1
 }
