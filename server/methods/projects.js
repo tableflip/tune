@@ -26,6 +26,7 @@ Meteor.methods({
     }
     return Projects.update(project._id, { $set: githubProjectUpdate })
   },
+  
   'projects/sync': function () {
     if (!this.userId) throw new Meteor.Error('Only a logged in user can sync projects')
     return syncAllAsync(this.userId)
