@@ -24,7 +24,7 @@ export default React.createClass({
         <div className='card-header' style={ {background: this.props.content} }>Old Color</div>
         <div className='card-header' style={ {background: this.state.color} }>New Color</div>
         <div className='card-block'>
-          <ColorPicker type='chrome' color={ this.state.color } onChange={ this.changeColor }/>
+          <ColorPicker type='chrome' color={ this.state.color } onChange={ this.changeColor } />
         </div>
       </div>
     )
