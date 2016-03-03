@@ -30,9 +30,6 @@ export default React.createClass({
       items: Items.find({}).fetch()
     }
   },
-  iframe: () => {
-    return
-  },
   render () {
     return (
       <div>

@@ -4,10 +4,6 @@ export default React.createClass({
   propTypes: {
     url: React.PropTypes.string
   },
-  stopPropagation: function (e) {
-    e.stopPropagation()
-    console.log(stop)
-  },
   render () {
     let block = {
       position: 'absolute',
