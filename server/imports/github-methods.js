@@ -23,12 +23,27 @@ export function getFacts (userId, fullName, cb) {
       github.getFileContents(fullName, 'facts.json', (err, res) => {
         cb(err, { sha: factsJson.sha, content: res })
       })
+    },
+    function getSchema (data, cb) {
+      github.getFileContents(fullName, 'schema.json', (err, res) => {
+        if (err) {
+          if (err.response && err.response.statusCode === 404) {
+            data.schema = '{}'
+          } else {
+            return cb(err)
+          }
+        } else {
+          data.schema = res
+        }
+        cb(null, data)
+      })
     }
   ], (err, data) => {
     if (err) return cb(err)
     cb(null, {
       sha: data.sha,
-      content: JSON.parse(data.content)
+      content: JSON.parse(data.content),
+      schema: JSON.parse(data.schema)
     })
   })
 }
@@ -64,6 +79,20 @@ export function getPageContents (userId, fullName, page, cb) {
       github.getFileContents(fullName, `pages/${page}/${contentJson.name}`, (err, res) => {
         cb(err, { sha: contentJson.sha, content: res })
       })
+    },
+    function getPageSchemaJson (data, cb) {
+      github.getFileContents(fullName, `pages/${page}/schema.json`, (err, res) => {
+        if (err) {
+          if (err.response && err.response.statusCode === 404) {
+            data.schema = '{}'
+          } else {
+            return cb(err)
+          }
+        } else {
+          data.schema = res
+        }
+        cb(null, data)
+      })
     }
   ], (err, data) => {
     if (err) return cb(err)
@@ -71,7 +100,8 @@ export function getPageContents (userId, fullName, page, cb) {
       name: page,
       sha: data.sha,
       dateTime: new Date(),
-      content: JSON.parse(data.content)
+      content: JSON.parse(data.content),
+      schema: JSON.parse(data.schema)
     })
   })
 }
