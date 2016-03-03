@@ -5,3 +5,8 @@ $font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto"
 
 @import 'bootstrap/scss/bootstrap';
 
+iframe {
+  overflow: hidden;
+  box-shadow: 3px 3px 6px 0px rgba(0,0,0,0.1);
+  border: solid 1px rgba(0,0,0,0.1);
+}
