@@ -29,9 +29,13 @@ Meteor.methods({
       {
         content: [51.505, -0.09],
         type: 'map'
+      },
+      {
+        content: '#00cc99',
+        type: 'color'
       }
     ]
 
-    return responses[4]
+    return responses[5]
   }
 })
