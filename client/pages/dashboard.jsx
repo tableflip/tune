@@ -1,5 +1,6 @@
 import React from 'react'
 import { TimeNow } from '../components/time-now'
+import Thumbnail from '../components/site-thumbnail'
 
 var ListItem = React.createClass({
   propTypes: {
@@ -29,7 +30,9 @@ export default React.createClass({
       items: Items.find({}).fetch()
     }
   },
-
+  iframe: () => {
+    return
+  },
   render () {
     return (
       <div>
@@ -38,6 +41,7 @@ export default React.createClass({
         <ul>
           {this.data.items.map(item => (<ListItem item={item} key={item._id} />))}
         </ul>
+        <Thumbnail url='https://kitmapper.com'/>
         <a href="/">Home</a>
       </div>
     )
