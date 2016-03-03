@@ -79,8 +79,8 @@ Pages which exist within an individual project.
 
 ## Publications
 
-`Meteor.subscribe(project)` - Returns all the project docs to which the logged-in user has access.
-`Meteor.subscribe(projects, PROJECT_ID)` - Returns the given project and all its pages, provided the logged in user has access to it.
+`Meteor.subscribe('projects')` - Returns all the project docs to which the logged-in user has access.
+`Meteor.subscribe('project', PROJECT_ID)` - Returns the given project and all its pages, provided the logged in user has access to it.
 
 ## Methods
 
