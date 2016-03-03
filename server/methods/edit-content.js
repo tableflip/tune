@@ -32,6 +32,6 @@ Meteor.methods({
       }
     ]
 
-    return responses[2]
+    return responses[4]
   }
 })
