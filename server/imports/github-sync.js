@@ -3,7 +3,7 @@ import * as githubMethods from './github-methods'
 
 export function syncAll (userId, cb) {
   var projects = githubMethods.getRepos(userId)
-  async.map(projects, (project, cb) => {
+  async.mapLimit(projects, 3, (project, cb) => {
     syncProject(userId, project.full_name, cb)
   }, (err, res) => {
     if (err) return cb(err)
@@ -42,9 +42,9 @@ export function syncProject (userId, fullName, cb) {
   })
 }
 
-export function syncPages (userId, fullName, masterCb) {
+export function syncPages (userId, fullName, done) {
   var project = Projects.findOne({ full_name: fullName })
-  if (!project) return masterCb('Cannot find matching project')
+  if (!project) return done('Cannot find matching project')
   async.waterfall([
     function getPageMetadata (cb) {
       githubMethods.getPages(userId, fullName, cb)
@@ -68,7 +68,7 @@ export function syncPages (userId, fullName, masterCb) {
           cb(null, res)
         })
       }, cb)
-    }, masterCb),
+    }, done),
     function updatePages (pagesDetails, cb) {
       pagesDetails.forEach(pageDetails => {
         var page = {
@@ -90,6 +90,6 @@ export function syncPages (userId, fullName, masterCb) {
       cb(null, { numberAffected: pagesDetails.length })
     }
   ], (err, res) => {
-    masterCb(err, res)
+    done(err, res)
   })
 }

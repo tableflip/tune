@@ -85,7 +85,7 @@ Pages which exist within an individual project.
 
 ## Methods
 
-`Meteor.call('projects/updateFact', { projectID: '08joikjf2o43ijf2oij23fo', key: 'foo', newValue: 'baz' }, cb)`
+`Meteor.call('projects/updateFact', { projectId: '08joikjf2o43ijf2oij23fo', key: 'foo', newValue: 'baz' }, cb)`
 
 `Meteor.call('pages/updateContent', { pageId: 'dof0f3j3j9j3jfp2onc3kr3a', key: 'heading', newValue: 'Hello World' }, cb)`
 

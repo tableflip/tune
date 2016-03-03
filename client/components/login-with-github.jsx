@@ -20,13 +20,13 @@ export const LoginWithGithub = React.createClass({
       return (
         <div>
           <div>Logged in as {this.data.user.profile.name}</div>
-          <button type="button" onClick={this.logout}>Log out</button>
+          <button className="btn btn-secondary" type="button" onClick={this.logout}>Log out</button>
         </div>
       )
     }
     return (
       <div>
-        <button type="button" onClick={this.login}>Log in with Github</button>
+        <button className="btn btn-primary" type="button" onClick={this.login}>Log in with Github</button>
       </div>
     )
   }
