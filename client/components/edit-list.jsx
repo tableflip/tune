@@ -28,7 +28,7 @@ export default React.createClass({
       top.push(bottom.shift())
       bottom.unshift(moving)
     }
-    this.setState({list: top.concat(bottom)}, this.update)
+    this.setState({list: _.union(top, bottom)}, this.update)
   },
   addItem: function (e) {
     e.preventDefault()

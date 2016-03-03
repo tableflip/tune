@@ -25,9 +25,13 @@ Meteor.methods({
       {
         content: 'https://ucarecdn.com/assets/images/cloud.6b86b4f1d77e.jpg',
         type: 'img'
+      },
+      {
+        content: [51.505, -0.09],
+        type: 'map'
       }
     ]
 
-    return responses[3]
+    return responses[2]
   }
 })
