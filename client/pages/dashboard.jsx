@@ -9,7 +9,7 @@ var ListItem = React.createClass({
   render () {
     return (
       <li>{this.props.item.text}</li>
-    );
+    )
   }
 })
 
@@ -35,10 +35,12 @@ export default React.createClass({
       <div>
         <h1>This is the dashboard</h1>
         <TimeNow />
-        <ul>
+        <ul className='list-group'>
           {this.data.items.map(item => (<ListItem item={item} key={item._id} />))}
+          <li className='list-group-ltem'><a href="/">Home</a></li>
+          <li className='list-group-ltem'><a href="/page/home/edit/type">Edit</a></li>
         </ul>
-        <a href="/">Home</a>
+
       </div>
     )
   }
