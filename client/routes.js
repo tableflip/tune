@@ -26,6 +26,22 @@ FlowRouter.route('/project/:id', {
   }
 })
 
+FlowRouter.route('/project/:id/facts', {
+  action (params, queryParams) {
+    mount(pages.Layout, {
+      content: React.createElement(pages.Facts, {projectId: params.id})
+    })
+  }
+})
+
+FlowRouter.route('/project/:id/facts/edit/:fact', {
+  action (params) {
+    mount(pages.Layout, {
+      content: React.createElement(pages.Facts, {projectId: params.id, fact: params.fact})
+    })
+  }
+})
+
 FlowRouter.route('/page/:pageId', {
   action (params, queryParams) {
     if (!queryParams || !queryParams.field) {
