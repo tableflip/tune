@@ -2,9 +2,9 @@ import async from 'async'
 import githubInterface from './github-interface'
 import isPlatformProject from './is-platform-project'
 
-export function getRepos (userId) {
+export function getRepos (userId, cb) {
   var github = githubInterface(userId)
-  return github.getRepos().filter(isPlatformProject)
+  return github.getRepos(cb)
 }
 
 export function getLastCommit (userId, fullName, cb) {

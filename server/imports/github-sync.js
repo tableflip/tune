@@ -1,8 +1,10 @@
 import async from 'async'
 import * as githubMethods from './github-methods'
 
+var getReposSync = Meteor.wrapAsync(githubMethods.getRepos)
+
 export function syncAll (userId, cb) {
-  var projects = githubMethods.getRepos(userId)
+  var projects = getReposSync(userId)
   async.mapLimit(projects, 3, (project, cb) => {
     syncProject(userId, project.full_name, cb)
   }, (err, res) => {
