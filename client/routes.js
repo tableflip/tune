@@ -34,10 +34,10 @@ FlowRouter.route('/project/:id/facts', {
   }
 })
 
-FlowRouter.route('/project/:id/facts/edit/:fact', {
-  action (params) {
+FlowRouter.route('/project/:id/facts/edit', {
+  action (params, queryParams) {
     mount(pages.Layout, {
-      content: React.createElement(pages.Facts, {projectId: params.id, fact: params.fact})
+      content: React.createElement(pages.EditFact, {projectId: params.id, field: queryParams.field})
     })
   }
 })
