@@ -40,8 +40,12 @@ export function syncProject (userId, fullName, cb) {
       'facts.sha': res.facts.sha,
       schema: res.facts.schema
     }
-    Projects.upsert({ full_name: fullName }, { $set: project, $addToSet: { users: userId } })
-    syncPages(userId, fullName, cb)
+    try {
+      Projects.upsert({ full_name: fullName }, { $set: project, $addToSet: { users: userId } })
+      syncPages(userId, fullName, cb)
+    } catch (e) {
+      console.error(`Cannot sync project "${project.full_name}"`, e)
+    }
   })
 }
 
@@ -89,7 +93,11 @@ export function syncPages (userId, fullName, done) {
           },
           schema: pageDetails.schema
         }
-        Pages.upsert({ name: pageDetails.name, 'project.full_name': project.full_name }, { $set: page })
+        try {
+          Pages.upsert({ name: pageDetails.name, 'project.full_name': project.full_name }, { $set: page })
+        } catch (e) {
+          if (e) console.error(`Cannot sync page "${page}" in project "${project.full_name}"`, e)
+        }
       })
       cb(null, { numberAffected: pagesDetails.length })
     }
