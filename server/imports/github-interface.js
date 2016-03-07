@@ -1,3 +1,6 @@
+import parseGithubHeaders from 'parse-link-header'
+import async from 'async'
+import isPlatformProject from './is-platform-project'
 var baseUrl = 'https://api.github.com'
 
 export default function (userId) {
@@ -14,19 +17,29 @@ export default function (userId) {
     if (cb) return HTTP.call(method, url, opts, cb)
     return HTTP.call(method, url, opts)
   }
-
+  function makeRepoRequest (url, cb) {
+    githubCall({
+      method: 'GET',
+      url: url,
+      opts: {}
+    }, cb)
+  }
   var github = {
     getRepos: function (cb) {
-      var res = githubCall({
-        method: 'GET',
-        url: `${baseUrl}/user/repos`,
-        opts: {
-          params: {
-            per_page: 100
-          }
-        }
-      }, pluckFromResponse('data', cb))
-      if (!cb) return res.data
+      if (!cb) throw new Error('Please supply a callback function')
+      let repos = []
+      let q = async.queue(Meteor.bindEnvironment(function (url, done) {
+        makeRepoRequest(url, function (err, res) {
+          repos = _.union(repos, res.data.filter(isPlatformProject))
+          let headers = parseGithubHeaders(res.headers.link)
+          if (headers.next) q.push(headers.next.url)
+          done()
+        })
+      }), 1)
+      q.push(`${baseUrl}/user/repos?per_page=100`)
+      q.drain = function () {
+        cb(null, repos)
+      }
     },
 
     getLastCommit: function (fullName, cb) {

@@ -23,7 +23,7 @@ export default React.createClass({
           <LoginWithGithub />
         </div>
         {this.data.projects.map(project => {
-          return (<h4 key={project._id}>{project.full_name} - Last commit at {moment(project.lastCommit.dateTime).format('HH:mm on ddd DD MMM YYYY')}</h4>)
+          return (<h4 key={project._id}><a href={`/project/${project._id}`}>{project.full_name} - Last commit at {moment(project.lastCommit.dateTime).format('HH:mm on ddd DD MMM YYYY')}</a></h4>)
         })}
       </div>
     )
