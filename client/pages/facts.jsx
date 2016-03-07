@@ -53,7 +53,8 @@ export default React.createClass({
             {
               keys.map((key) => {
                 return <li className='list-group-item' key={ key }>
-                  <a href={`/project/${this.props.projectId}/facts/edit/${key}`}>{ key }</a>
+                  <a href={`/project/${this.props.projectId}/facts/edit/${key}`}>{ key }</a><br />
+                  <small><i>{ facts[key] }</i></small>
                 </li>
               })
             }
