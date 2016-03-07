@@ -104,20 +104,6 @@ function pluckFromResponse (key, cb) {
   }
 }
 
-// function getRepos (cd) {
-//   githubCall({
-//     method: 'GET',
-//     url: `${baseUrl}/user/repos`,
-//     opts: {
-//       params: {
-//         per_page: 100
-//       }
-//     }
-//   }, pluckFromResponse('data', cb))
-// }
-
-
-
 function base64Encode (json) {
   return new Buffer(JSON.stringify(json, null, '\t')).toString('base64')
 }
