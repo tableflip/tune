@@ -18,6 +18,14 @@ FlowRouter.route('/dashboard', {
   }
 })
 
+FlowRouter.route('/project/:id', {
+  action (params) {
+    mount(pages.Layout, {
+      content: React.createElement(pages.Project, {projectId: params.id})
+    })
+  }
+})
+
 FlowRouter.route('/page/:page/edit/:key', {
   action (params) {
     mount(pages.Layout, {
