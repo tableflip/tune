@@ -35,7 +35,8 @@ export function syncProject (userId, fullName, cb) {
         dateTime: res.lastCommit[0].commit.committer.date
       },
       'facts.json': res.facts.content,
-      'facts.sha': res.facts.sha
+      'facts.sha': res.facts.sha,
+      schema: res.facts.schema
     }
     Projects.upsert({ full_name: fullName }, { $set: project, $addToSet: { users: userId } })
     syncPages(userId, fullName, cb)
@@ -83,7 +84,8 @@ export function syncPages (userId, fullName, done) {
           content: {
             sha: pageDetails.sha,
             json: pageDetails.content
-          }
+          },
+          schema: pageDetails.schema
         }
         Pages.upsert({ name: pageDetails.name, 'project.full_name': project.full_name }, { $set: page })
       })
