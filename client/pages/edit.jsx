@@ -2,9 +2,23 @@ import React from 'react'
 import fields from '../lib/field-lookup'
 
 export default React.createClass({
+  mixins: [ReactMeteorData],
   propTypes: {
-    page: React.PropTypes.string,
-    key: React.PropTypes.string
+    pageId: React.PropTypes.string,
+    field: React.PropTypes.string
+  },
+  getMeteorData () {
+    var pageSub = Meteor.subscribe('page', this.props.pageId, () => {
+      let page = Pages.findOne(this.props.pageId)
+      if (!page) return
+      var type = (page.schema[this.props.field] && page.schema[this.props.field].type) || 'text'
+      var content = page.content.json[this.props.field]
+      this.setState({ type: type, content: content })
+    })
+    return {
+      pageReady: pageSub.ready(),
+      page: Pages.findOne({ _id: this.props.pageId })
+    }
   },
   getInitialState: () => {
     return null
@@ -12,15 +26,16 @@ export default React.createClass({
   updateState: function (value) {
     this.setState({payload: value})
   },
-  componentDidMount () {
-    Meteor.call('getField', this.props.page, this.props.key, (err, response) => {
-      if (err) return console.error(err)
-      this.setState(response)
-    })
-  },
   save: function (e) {
     e.preventDefault()
-    console.log(this.state.payload)
+    Meteor.call('pages/updateContent', {
+      pageId: this.props.pageId,
+      key: this.props.field,
+      newValue: this.state.payload
+    }, (err, res) => {
+      if (err) return console.error(err)
+      FlowRouter.go(`/page/${this.props.pageId}`)
+    })
   },
   render () {
     if (!this.state) return (<div>Fetching your content ...</div>)

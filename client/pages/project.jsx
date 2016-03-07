@@ -18,8 +18,8 @@ export default React.createClass({
       <div>
         <h1>{this.data.project.name}</h1>
         <ul className='list-group'>
-          <li><a href="#">Website facts</a></li>
-          {this.data.pages.map(page => (<li><a href="#">{page.name}</a></li>))}
+          <li className='list-group-item'><a href="#">Website facts</a></li>
+          {this.data.pages.map(page => (<li className='list-group-item' key={page._id}><a href={`/page/${page._id}`}>{page.name}</a></li>))}
         </ul>
       </div>
     )
