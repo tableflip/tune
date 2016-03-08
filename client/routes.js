@@ -10,14 +10,6 @@ FlowRouter.route('/', {
   }
 })
 
-FlowRouter.route('/dashboard', {
-  action () {
-    mount(pages.Layout, {
-      content: React.createElement(pages.Dashboard)
-    })
-  }
-})
-
 FlowRouter.route('/project/:id', {
   action (params) {
     mount(pages.Layout, {
@@ -37,13 +29,5 @@ FlowRouter.route('/page/:pageId', {
         content: React.createElement(pages.Edit, {pageId: params.pageId, field: queryParams.field})
       })
     }
-  }
-})
-
-FlowRouter.route('/page/:page/edit/:key', {
-  action (params) {
-    mount(pages.Layout, {
-      content: React.createElement(pages.Edit, {page: params.page, key: params.key})
-    })
   }
 })

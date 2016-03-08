@@ -40,8 +40,13 @@ export function syncProject (userId, fullName, cb) {
       'facts.sha': res.facts.sha,
       schema: res.facts.schema
     }
-    Projects.upsert({ full_name: fullName }, { $set: project, $addToSet: { users: userId } })
-    syncPages(userId, fullName, cb)
+    Projects.upsert({ full_name: fullName }, { $set: project, $addToSet: { users: userId } }, {}, e => {
+      if (e) {
+        console.error(`Cannot sync project "${project.full_name}"`, e)
+        return cb(e)
+      }
+      syncPages(userId, fullName, cb)
+    })
   })
 }
 
@@ -73,7 +78,7 @@ export function syncPages (userId, fullName, done) {
       }, cb)
     }, done),
     function updatePages (pagesDetails, cb) {
-      pagesDetails.forEach(pageDetails => {
+      async.each(pagesDetails, (pageDetails, done) => {
         var page = {
           name: pageDetails.name,
           project: {
@@ -89,9 +94,16 @@ export function syncPages (userId, fullName, done) {
           },
           schema: pageDetails.schema
         }
-        Pages.upsert({ name: pageDetails.name, 'project.full_name': project.full_name }, { $set: page })
+        Pages.upsert({ name: pageDetails.name, 'project.full_name': project.full_name }, { $set: page }, {}, e => {
+          if (e) {
+            console.error(`Cannot sync page "${page}" in project "${project.full_name}"`, e)
+            return done(e)
+          }
+          done()
+        })
+      }, err => {
+        cb(err, { numberAffected: pagesDetails.length })
       })
-      cb(null, { numberAffected: pagesDetails.length })
     }
   ], (err, res) => {
     done(err, res)

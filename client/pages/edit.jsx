@@ -8,25 +8,19 @@ export default React.createClass({
     field: React.PropTypes.string
   },
   getMeteorData () {
-    var pageSub = Meteor.subscribe('page', this.props.pageId, () => {
-      let page = Pages.findOne(this.props.pageId)
-      if (!page) return
-      var type = (page.schema[this.props.field] && page.schema[this.props.field].type) || 'text'
-      var content = page.content.json[this.props.field]
-      this.setState({ type: type, content: content })
-    })
+    var pageSub = Meteor.subscribe('page', this.props.pageId)
     return {
       pageReady: pageSub.ready(),
       page: Pages.findOne({ _id: this.props.pageId })
     }
   },
-  getInitialState: () => {
+  getInitialState () {
     return null
   },
-  updateState: function (value) {
+  updateState (value) {
     this.setState({payload: value})
   },
-  save: function (e) {
+  save (e) {
     e.preventDefault()
     Meteor.call('pages/updateContent', {
       pageId: this.props.pageId,
@@ -38,7 +32,25 @@ export default React.createClass({
     })
   },
   render () {
-    if (!this.state) return (<div>Fetching your content ...</div>)
+    if (!this.data.pageReady) return (<div>Fetching your content ...</div>)
+    var props = {page: this.data.page, field: this.props.field, save: this.save}
+    return (<PageField {...props} />)
+  }
+})
+
+var PageField = React.createClass({
+  propTypes: {
+    page: React.PropTypes.object,
+    field: React.PropTypes.string,
+    save: React.PropTypes.func
+  },
+  getInitialState () {
+    let page = this.props.page
+    var type = (page.schema[this.props.field] && page.schema[this.props.field].type) || 'text'
+    var content = page.content.json[this.props.field]
+    return { type: type, content: content }
+  },
+  render () {
     let field = fields(this.state.type, this.state.content, this.updateState)
     return (
       <form>
@@ -46,7 +58,7 @@ export default React.createClass({
           { field }
         </fieldset>
         <fieldset className='form-group'>
-          <button onClick={ this.save } className='btn btn-primary'>Save</button>
+          <button onClick={ this.props.save } className='btn btn-primary'>Save</button>
         </fieldset>
       </form>
     )
