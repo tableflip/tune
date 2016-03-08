@@ -48,7 +48,6 @@ var PageField = React.createClass({
     let page = this.props.page
     var type = (page.schema[this.props.field] && page.schema[this.props.field].type) || 'text'
     var content = page.content.json[this.props.field]
-    console.log('PageField', { type: type, content: content }, page)
     return { type: type, content: content }
   },
   render () {
