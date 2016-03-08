@@ -1,13 +1,17 @@
 import Layout from './layout'
 import Home from './home'
-import Edit from './edit'
+import PageEdit from './page-edit'
 import Project from './project'
 import Page from './page'
+import Facts from './facts'
+import FactsEdit from './facts-edit'
 
 export {
   Layout,
   Home,
-  Edit,
+  PageEdit,
   Project,
-  Page
+  Page,
+  Facts,
+  FactsEdit
 }
