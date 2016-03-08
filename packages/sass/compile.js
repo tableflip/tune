@@ -59,17 +59,3 @@ function appImport () {
 function moduleImport () {
   if (url.indexOf('{') !== 1) return
 }
-
-// modified from https://github.com/meteor/meteor/blob/3e51cbea2703df5261c874a75cfbe36667eea080/packages/less/plugin/compile-less.js#L162
-// function decodeFilePath (filePath) {
-//   const match = filePath.match(/^{(.*)}\/(.*)$/);
-//   if (! match)
-//     throw new Error('Failed to decode sass import path: ' + filePath);
-//
-//   if (match[1] === '') {
-//     // app
-//     return match[2];
-//   }
-//
-//   return 'packages/' + match[1] + '/' + match[2];
-// }

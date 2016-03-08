@@ -1,5 +1,5 @@
 import React from 'react'
-import fields from '../lib/field-lookup'
+import fields from '../components/field-lookup'
 
 export default React.createClass({
   mixins: [ReactMeteorData],

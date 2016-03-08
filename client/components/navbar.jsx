@@ -18,9 +18,6 @@ export const Navbar = React.createClass({
               <li className="nav-item active">
                 <a className="nav-link" href="/">Home</a>
               </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/dashboard">Dashboard</a>
-              </li>
             </ul>
           </div>
         </div>

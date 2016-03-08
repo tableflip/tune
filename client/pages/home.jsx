@@ -1,7 +1,7 @@
 import React from 'react'
 import moment from 'moment'
 import { LoginWithGithub } from '../components/login-with-github'
-import { Navbar } from '../components/navbar'
+import { ProjectCard } from '../components/project-card'
 
 export default React.createClass({
   mixins: [ReactMeteorData],
@@ -17,14 +17,19 @@ export default React.createClass({
   render () {
     return (
       <div>
-        <Navbar pagename="home" />
         <div className="jumbotron">
           <p className="lead">TABLEFLIP Automated Build System</p>
           <LoginWithGithub />
         </div>
-        {this.data.projects.map(project => {
-          return (<h4 key={project._id}><a href={`/project/${project._id}`}>{project.full_name} - Last commit at {moment(project.lastCommit.dateTime).format('HH:mm on ddd DD MMM YYYY')}</a></h4>)
-        })}
+        <div className="container">
+          <div className="row">
+            {this.data.projects.map(project => (
+              <div className="col-sm-6 col-md-4">
+                <ProjectCard project={project} />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     )
   }

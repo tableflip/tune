@@ -1,10 +1,10 @@
 import React from 'react'
-import TextField from '../components/edit-text'
-import Textarea from '../components/edit-textarea'
-import UnorderedList from '../components/edit-list'
-import SingleImage from '../components/edit-image'
-import Map from '../components/edit-map'
-import ColorPicker from '../components/edit-color'
+import TextField from './edit/edit-text'
+import Textarea from './edit/edit-textarea'
+import UnorderedList from './edit/edit-list'
+import SingleImage from './edit/edit-image'
+import Map from './edit/edit-map'
+import ColorPicker from './edit/edit-color'
 
 const components = {
   text: (content, parentState) => (<TextField content={ content } parentState={ parentState }/>),
