@@ -14,13 +14,13 @@ export default React.createClass({
       page: Pages.findOne({ _id: this.props.pageId })
     }
   },
-  getInitialState: () => {
+  getInitialState () {
     return null
   },
-  updateState: function (value) {
+  updateState (value) {
     this.setState({payload: value})
   },
-  save: function (e) {
+  save (e) {
     e.preventDefault()
     Meteor.call('pages/updateContent', {
       pageId: this.props.pageId,
