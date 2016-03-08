@@ -23,8 +23,10 @@ export default React.createClass({
       <div className='card'>
         <div className='card-header' style={ {background: this.props.content} }>Old Color</div>
         <div className='card-header' style={ {background: this.state.color} }>New Color</div>
-        <div className='card-block'>
-          <ColorPicker type='chrome' color={ this.state.color } onChange={ this.changeColor } />
+        <div className='card-block text-xs-center'>
+          <div style={{display: 'inline-block'}}>
+            <ColorPicker type='sketch' color={ this.state.color } onChange={ this.changeColor } />
+          </div>
         </div>
       </div>
     )
