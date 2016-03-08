@@ -4,7 +4,10 @@ import isPlatformProject from './is-platform-project'
 
 export function getRepos (userId, cb) {
   var github = githubInterface(userId)
-  return github.getRepos(cb)
+  github.getRepos((err, res) => {
+    if (err) return cb(err)
+    cb(null, _.uniq(res, false, repo => repo.full_name))
+  })
 }
 
 export function getLastCommit (userId, fullName, cb) {
