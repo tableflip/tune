@@ -3,6 +3,7 @@ import { mount } from 'react-mounter'
 import * as pages from './pages'
 
 FlowRouter.route('/', {
+  name: 'home',
   action () {
     mount(pages.Layout, {
       content: React.createElement(pages.Home)
@@ -10,23 +11,32 @@ FlowRouter.route('/', {
   }
 })
 
-FlowRouter.route('/dashboard', {
-  action () {
+FlowRouter.route('/project/:projectId', {
+  name: 'project',
+  action (params) {
     mount(pages.Layout, {
-      content: React.createElement(pages.Dashboard)
+      content: React.createElement(pages.Project, {projectId: params.projectId})
     })
   }
 })
 
-FlowRouter.route('/project/:id', {
-  action (params) {
-    mount(pages.Layout, {
-      content: React.createElement(pages.Project, {projectId: params.id})
-    })
+FlowRouter.route('/project/:projectId/facts', {
+  name: 'project-facts',
+  action (params, queryParams) {
+    if (!queryParams || !queryParams.field) {
+      mount(pages.Layout, {
+        content: React.createElement(pages.Facts, {projectId: params.projectId})
+      })
+    } else {
+      mount(pages.Layout, {
+        content: React.createElement(pages.FactsEdit, {projectId: params.projectId, field: queryParams.field})
+      })
+    }
   }
 })
 
 FlowRouter.route('/page/:pageId', {
+  name: 'page',
   action (params, queryParams) {
     if (!queryParams || !queryParams.field) {
       mount(pages.Layout, {
@@ -34,16 +44,8 @@ FlowRouter.route('/page/:pageId', {
       })
     } else {
       mount(pages.Layout, {
-        content: React.createElement(pages.Edit, {pageId: params.pageId, field: queryParams.field})
+        content: React.createElement(pages.PageEdit, {pageId: params.pageId, field: queryParams.field})
       })
     }
-  }
-})
-
-FlowRouter.route('/page/:page/edit/:key', {
-  action (params) {
-    mount(pages.Layout, {
-      content: React.createElement(pages.Edit, {page: params.page, key: params.key})
-    })
   }
 })
