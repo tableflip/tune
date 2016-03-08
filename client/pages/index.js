@@ -4,7 +4,7 @@ import Edit from './edit'
 import Project from './project'
 import Page from './page'
 import Facts from './facts'
-import EditFact from './facts-edit'
+import FactsEdit from './facts-edit'
 
 export {
   Layout,
@@ -13,5 +13,5 @@ export {
   Project,
   Page,
   Facts,
-  EditFact
+  FactsEdit
 }

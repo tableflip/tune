@@ -2,11 +2,11 @@ import React from 'react'
 import fields from '../lib/field-lookup'
 
 export default React.createClass({
+  mixins: [ReactMeteorData],
   propTypes: {
     projectId: React.PropTypes.string,
     field: React.PropTypes.string || null
   },
-  mixins: [ReactMeteorData],
   getMeteorData () {
     var projectSub = Meteor.subscribe('project', this.props.projectId)
     return {
@@ -14,11 +14,11 @@ export default React.createClass({
       project: Projects.findOne({ _id: this.props.projectId })
     }
   },
-  getInitialState: function () {
+  getInitialState () {
     return null
   },
-  update: function (newValue) {
-    this.setState({payload: newValue})
+  update (newValue) {
+    this.setState({ payload: newValue })
   },
   save: function (e) {
     e.preventDefault()
@@ -29,18 +29,41 @@ export default React.createClass({
     }
     Meteor.call('projects/updateFact', payload, (err) => {
       if (err) return console.error('Error calling "projects/updateFact"', err)
-      FlowRouter.go(`/project/${this.props.projectId}/facts`)
+      FlowRouter.go('project', { projectId: this.props.projectId })
     })
   },
   render () {
-    if (!this.data.projectReady) return (<div>Fetching your fact...</div>)
-    let type = (this.data.project.schema[this.props.field] && this.data.project.schema[this.props.field].type) || 'text'
-    let content = this.data.project.facts.json[this.props.field]
-    let field = fields(type, content, this.update)
+    if (!this.data.projectReady) return (<div>Fetching facts...</div>)
+    var props = {
+      project: this.data.project,
+      field: this.props.field,
+      update: this.update,
+      save: this.save
+    }
+    return (<ProjectField {...props} />)
+  }
+})
+
+var ProjectField = React.createClass({
+  propTypes: {
+    project: React.PropTypes.object,
+    field: React.PropTypes.string,
+    update: React.PropTypes.func,
+    save: React.PropTypes.func
+  },
+  getInitialState () {
+    let project = this.props.project
+    let field = this.props.field
+    let type = (project.schema[field] && project.schema[field].type) || 'text'
+    let content = project.facts.json[field]
+    return { type, content }
+  },
+  render () {
+    let field = fields(this.state.type, this.state.content, this.props.update)
     return (
       <form>
         { field }
-        <button type='submit' className='btn btn-primary' onClick={ this.save }>Save</button>
+        <button type='submit' className='btn btn-primary' onClick={this.props.save}>Save</button>
       </form>
     )
   }
