@@ -9,8 +9,21 @@ export const Navbar = React.createClass({
   },
   render () {
     return (
-      <div className="navbar navbar-light bg-primary">
-        <div className="navbar-brand">TABLEFLIP</div>
+      <div>
+        <div className="navbar navbar-light bg-primary">
+          <a className="navbar-brand" href="#">TABLEFLIP</a>
+          <button className="navbar-toggler pull-xs-right" type="button" data-toggle="collapse" data-target="#navbarMenu">&#9776;</button>
+          <div className="collapse navbar-toggleable-xs" id="navbarMenu">
+            <ul className="nav navbar-nav">
+              <li className="nav-item active">
+                <a className="nav-link" href="/">Home</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="/dashboard">Dashboard</a>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     )
   }

@@ -1,5 +1,6 @@
 import React from 'react'
 import { TimeNow } from '../components/time-now'
+import { Navbar } from '../components/navbar'
 
 var ListItem = React.createClass({
   propTypes: {
@@ -8,7 +9,7 @@ var ListItem = React.createClass({
 
   render () {
     return (
-      <li>{this.props.item.text}</li>
+      <li className="list-group-item">{this.props.item.text}</li>
     )
   }
 })
@@ -33,14 +34,22 @@ export default React.createClass({
   render () {
     return (
       <div>
-        <h1>This is the dashboard</h1>
-        <TimeNow />
-        <ul className='list-group'>
-          {this.data.items.map(item => (<ListItem item={item} key={item._id} />))}
-          <li className='list-group-ltem'><a href="/">Home</a></li>
-          <li className='list-group-ltem'><a href="/page/home/edit/type">Edit</a></li>
-        </ul>
+        <Navbar pagename="dashboard" />
+        <div className="container-fluid">
 
+          <div className="row">
+            <div className="col-md-2">
+              <div className="card m-t-2">
+                <div className="card-block"><TimeNow /></div>
+                <ul className='list-group list-group-flush'>
+                  {this.data.items.map(item => (<ListItem className="list-group-item" item={item} key={item._id} />))}
+                  <li className='list-group-item'><a href="/">Home</a></li>
+                  <li className='list-group-item'><a href="/page/home/edit/type">Edit</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }

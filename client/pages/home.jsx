@@ -17,9 +17,9 @@ export default React.createClass({
   render () {
     return (
       <div>
-        <Navbar />
+        <Navbar pagename="home" />
         <div className="jumbotron">
-          <a className="btn btn-lnk pull-xs-right" href="/dashboard">Dashboard</a>
+          <p className="lead">TABLEFLIP Automated Build System</p>
           <LoginWithGithub />
         </div>
         {this.data.projects.map(project => {
