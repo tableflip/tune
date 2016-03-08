@@ -77,6 +77,7 @@ var ProjectField = React.createClass({
             </p>
             <p>
               <button type='submit' className='btn btn-primary' onClick={this.props.save}>Save</button>
+              <a href={`/project/${this.props.project._id}`} className="btn btn-link">Cancel</a>
             </p>
           </form>
         </div>

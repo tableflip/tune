@@ -81,6 +81,7 @@ var PageField = React.createClass({
             </p>
             <p>
               <button onClick={ this.props.save } className='btn btn-primary'>Save</button>
+              <a href={`/page/${this.props.page._id}`} className="btn btn-link">Cancel</a>
             </p>
           </form>
         </div>
