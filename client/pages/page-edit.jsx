@@ -1,4 +1,6 @@
 import React from 'react'
+import Loader from 'react-loader'
+import { Breadcrumbs } from '../components/breadcrumbs'
 import fields from '../components/field-lookup'
 
 export default React.createClass({
@@ -9,9 +11,11 @@ export default React.createClass({
   },
   getMeteorData () {
     var pageSub = Meteor.subscribe('page', this.props.pageId)
+    let page = Pages.findOne({ _id: this.props.pageId })
     return {
       pageReady: pageSub.ready(),
-      page: Pages.findOne({ _id: this.props.pageId })
+      page: page,
+      project: Projects.findOne({ _id: page && page.project._id })
     }
   },
   getInitialState () {
@@ -33,9 +37,10 @@ export default React.createClass({
     })
   },
   render () {
-    if (!this.data.pageReady) return (<div>Fetching content ...</div>)
+    if (!this.data.pageReady) return (<Loader loaded={false} />)
     var props = {
       page: this.data.page,
+      project: this.data.project,
       field: this.props.field,
       update: this.update,
       save: this.save
@@ -47,6 +52,7 @@ export default React.createClass({
 var PageField = React.createClass({
   propTypes: {
     page: React.PropTypes.object,
+    project: React.PropTypes.object,
     field: React.PropTypes.string,
     update: React.PropTypes.func,
     save: React.PropTypes.func
@@ -61,10 +67,24 @@ var PageField = React.createClass({
   render () {
     let field = fields(this.state.type, this.state.content, this.props.update)
     return (
-      <form>
-        { field }
-        <button onClick={ this.props.save } className='btn btn-primary'>Save</button>
-      </form>
+      <div>
+        <Breadcrumbs pages={[
+          { text: 'home', href: '/' },
+          { text: this.props.project.full_name, href: `/project/${this.props.project._id}` },
+          { text: this.props.page.name, href: `/page/${this.props.page._id}` }
+        ]} />
+        <div className="container">
+          <h3 className="m-t-1 m-b-2">{this.props.field}</h3>
+          <form>
+            <p>
+              { field }
+            </p>
+            <p>
+              <button onClick={ this.props.save } className='btn btn-primary'>Save</button>
+            </p>
+          </form>
+        </div>
+      </div>
     )
   }
 })

@@ -1,4 +1,6 @@
 import React from 'react'
+import Loader from 'react-loader'
+import { Breadcrumbs } from '../components/breadcrumbs'
 import fields from '../components/field-lookup'
 
 export default React.createClass({
@@ -33,7 +35,7 @@ export default React.createClass({
     })
   },
   render () {
-    if (!this.data.projectReady) return (<div>Fetching facts...</div>)
+    if (!this.data.projectReady) return (<Loader loaded={false} />)
     var props = {
       project: this.data.project,
       field: this.props.field,
@@ -61,10 +63,24 @@ var ProjectField = React.createClass({
   render () {
     let field = fields(this.state.type, this.state.content, this.props.update)
     return (
-      <form>
-        { field }
-        <button type='submit' className='btn btn-primary' onClick={this.props.save}>Save</button>
-      </form>
+      <div>
+        <Breadcrumbs pages={[
+          { text: 'home', href: '/' },
+          { text: this.props.project.full_name, href: `/project/${this.props.project._id}` },
+          { text: 'Website settings', href: `/project/${this.props.project._id}/facts` }
+        ]} />
+        <div className="container">
+          <h3 className="m-t-1 m-b-2">{this.props.field}</h3>
+          <form>
+            <p>
+              { field }
+            </p>
+            <p>
+              <button type='submit' className='btn btn-primary' onClick={this.props.save}>Save</button>
+            </p>
+          </form>
+        </div>
+      </div>
     )
   }
 })

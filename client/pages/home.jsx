@@ -1,5 +1,6 @@
 import React from 'react'
 import moment from 'moment'
+import Loader from 'react-loader'
 import { LoginWithGithub } from '../components/login-with-github'
 import { ProjectCard } from '../components/project-card'
 
@@ -22,14 +23,22 @@ export default React.createClass({
           <LoginWithGithub />
         </div>
         <div className="container">
-          <div className="row">
-            {this.data.projects.map(project => (
-              <div className="col-sm-6 col-md-4">
-                <ProjectCard project={project} />
-              </div>
-            ))}
-          </div>
+          {this.data.projectsReady ? <ProjectsList projects={this.data.projects} /> : <Loader loaded={false} />}
         </div>
+      </div>
+    )
+  }
+})
+
+let ProjectsList = React.createClass({
+  render() {
+    return (
+      <div className="row">
+        {this.props.projects.map(project => (
+          <div className="col-sm-6 col-md-4" key={project._id}>
+            <ProjectCard project={project} />
+          </div>
+        ))}
       </div>
     )
   }
