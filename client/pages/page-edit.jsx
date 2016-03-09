@@ -1,5 +1,5 @@
 import React from 'react'
-import Loader from 'react-loader'
+import Loader from '../components/loader'
 import OverlayLoader from '../components/overlay-loader'
 import Breadcrumbs from '../components/breadcrumbs'
 import fields from '../components/field-lookup'
@@ -77,12 +77,12 @@ var PageField = React.createClass({
     return (
       <div>
         <Breadcrumbs pages={[
-          { text: 'home', href: '/' },
-          { text: this.props.project.full_name, href: `/project/${this.props.project._id}` },
+          { text: 'Home', href: '/' },
+          { text: 'Site', href: `/project/${this.props.project._id}` },
           { text: this.props.page.name, href: `/page/${this.props.page._id}` }
         ]} />
         <div className="container">
-          <h3 className="m-t-1 m-b-2">{this.props.field}</h3>
+          <p>Edit <code>{this.props.field}</code></p>
           <div className="m-y-1">
             { field }
           </div>

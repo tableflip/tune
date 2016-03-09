@@ -1,5 +1,9 @@
 // Override boostrap vars
-$enable-rounded: true;
+$btn-font-weight:         normal;
+$enable-rounded:          true;
+$border-radius:           3px;
+$border-radius-lg:        3px;
+$border-radius-sm:        1px;
 
 // Use the system UI font: https://www.smashingmagazine.com/2015/11/using-system-ui-fonts-practical-guide/
 $font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
@@ -9,20 +13,37 @@ $gray:                      #55595c;
 $gray-light:                #818a91;
 $gray-lighter:              #eceeef;
 $gray-lightest:             #f7f7f9;
-
 $brand-primary:             #FFC107;
 $brand-success:             #5cb85c;
 $brand-info:                #5bc0de;
 $brand-warning:             #f0ad4e;
 $brand-danger:              #d9534f;
-
 $body-bg:                   #FAFAFA;
+$code-color:                hotpink;
+$code-bg:                   $gray-lighter;
 
 @import 'bootstrap/scss/bootstrap';
 @import './components/page-transitions';
 
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: 'Biryani', $font-family-sans-serif;
+  letter-spacing: 1px;
+  line-height:1.4;
+}
+.btn {
+  letter-spacing: 1px;
+}
+
 .h-100 {
-  min-height:100vh;
+  min-height:calc(100vh - 70px - 65px);
+}
+
+html {
+  height:100%;
+}
+
+body {
+  min-height:calc(100% - 65px);
 }
 
 #map {
@@ -43,4 +64,21 @@ $body-bg:                   #FAFAFA;
   height: 100%;
   line-height: 1;
 }
-
+.navbar .icon-logo-table {
+  width: 37px;
+  height:48px;
+  padding-top:6px;
+}
+.footer {
+  position:absolute;
+  bottom:0;
+  width:100%;
+  font-size: 20px;
+  a {
+    color:white;
+  }
+}
+.tableflip {
+  letter-spacing: 1px;
+  font-family: 'Biryani', $font-family-sans-serif;
+}

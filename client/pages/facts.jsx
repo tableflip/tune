@@ -1,5 +1,5 @@
 import React from 'react'
-import Loader from 'react-loader'
+import Loader from '../components/loader'
 import Breadcrumbs from '../components/breadcrumbs'
 import FieldPreview from '../components/field-preview'
 
@@ -22,12 +22,12 @@ export default React.createClass({
     return (
       <div>
         <Breadcrumbs pages={[
-          { text: 'home', href: '/' },
-          { text: this.data.project.full_name, href: `/project/${this.data.project._id}` },
-          { text: 'Website settings', active: true }
+          { text: 'Home', href: '/' },
+          { text: 'Site', href: `/project/${this.data.project._id}` },
+          { text: 'Settings', active: true }
         ]} />
         <div className="container">
-          <h3 className="m-t-1 m-b-2">{this.data.project.name}</h3>
+          <p className="lead m-t-1">Pick a setting</p>
           <ul className='list-group'>
             {facts.map((fact, ind) => {
               let schema = this.data.project.schema[fact]
@@ -35,10 +35,8 @@ export default React.createClass({
               let value = this.data.project.facts.json[fact]
               return (
                 <a className='list-group-item' key={ind} href={`/project/${this.props.projectId}/facts/edit?field=${fact}`}>
-                  <h5 className="list-group-item-heading">{fact}</h5>
-                  <div className="list-group-item-text"><em>
-                    <FieldPreview type={type} value={value} />
-                  </em></div>
+                  <p><code>{fact}</code></p>
+                  <div><em><FieldPreview type={type} value={value} /></em></div>
                 </a>
               )}
             )}

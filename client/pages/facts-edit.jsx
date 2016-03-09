@@ -1,5 +1,5 @@
 import React from 'react'
-import Loader from 'react-loader'
+import Loader from '../components/loader'
 import OverlayLoader from '../components/overlay-loader'
 import Breadcrumbs from '../components/breadcrumbs'
 import fields from '../components/field-lookup'
@@ -71,12 +71,12 @@ var ProjectField = React.createClass({
     return (
       <div>
         <Breadcrumbs pages={[
-          { text: 'home', href: '/' },
-          { text: this.props.project.full_name, href: `/project/${this.props.project._id}` },
-          { text: 'Website settings', href: `/project/${this.props.project._id}/facts` }
+          { text: 'Home', href: '/' },
+          { text: 'Site', href: `/project/${this.props.project._id}` },
+          { text: 'Facts', href: `/project/${this.props.project._id}/facts` }
         ]} />
         <div className="container">
-          <h3 className="m-t-1 m-b-2">{this.props.field}</h3>
+          <p className="lead m-t-1">Edit <code>{this.props.field}</code></p>
           <div className="m-y-1">
             { field }
           </div>

@@ -19,11 +19,11 @@ export default React.createClass({
     return (
       <div>
         <Breadcrumbs pages={[
-          { text: 'home', href: '/' },
-          { text: this.data.project.full_name, active:true }
+          { text: 'Home', href: '/' },
+          { text: 'Site', active:true }
         ]} />
         <div className="container">
-          <h3 className="m-t-1 m-b-2">{this.data.project.full_name}</h3>
+          <p className="lead m-t-1">Pick a page</p>
           <div className='list-group'>
             <a className='list-group-item' href={`/project/${this.props.projectId}/facts`}>Website settings</a>
             {this.data.pages.map(page => (<a className='list-group-item' key={page._id} href={`/page/${page._id}`}>Page - {page.name}</a>))}

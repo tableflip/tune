@@ -1,5 +1,5 @@
 import React from 'react'
-import Loader from 'react-loader'
+import Loader from './loader'
 
 export const LoginWithGithub = React.createClass({
   mixins: [ReactMeteorData],
@@ -31,7 +31,7 @@ export const LoginWithGithub = React.createClass({
       return (
         <div>
           <p>&nbsp;</p>
-          <button className="btn btn-primary" type="button" onClick={this.login}>Log in with Github</button>
+          <button className="btn btn-primary btn-lg p-x-3" type="button" onClick={this.login} title="Click to login in via your Github account">Log in</button>
         </div>
       )
     }

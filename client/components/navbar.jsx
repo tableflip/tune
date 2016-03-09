@@ -12,7 +12,7 @@ export const Navbar = React.createClass({
     return (
       <div>
         <div className="navbar navbar-full navbar-dark bg-inverse">
-          <a className="navbar-text pull-xs-right h4" href="/">
+          <a className="pull-xs-right" href="/">
             <Icon beep="logo-table" />
           </a>
         </div>

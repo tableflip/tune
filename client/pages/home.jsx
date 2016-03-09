@@ -10,21 +10,27 @@ export default React.createClass({
   getMeteorData () {
     var projectSub = Meteor.subscribe('projects')
     return {
+      user: Meteor.user(),
+      loggingIn: Meteor.loggingIn(),
       projectsReady: projectSub.ready(),
       projects: Projects.find({}).fetch()
     }
   },
 
   render () {
-    return (
-      <div>
-        <div className="jumbotron bg-inverse">
-          <p className="h2">Please log in<br/>to edit your site</p>
+    if (!this.data.user) {
+      return (
+        <div className="container-fluid bg-inverse h-100 text-xs-center">
+          <p className="h4 p-t-3">Please log in<br/>to edit your site</p>
           <LoginWithGithub />
         </div>
-        <div className="container">
-          {this.data.projectsReady ? <ProjectsList projects={this.data.projects} /> : <Loader loaded={false} />}
-        </div>
+      )
+    }
+    return (
+      <div className="container-fluid">
+        <p className="lead m-t-1">Pick a site</p>
+        {this.data.projectsReady ? <ProjectsList projects={this.data.projects} /> : <Loader loaded={false} />}
+        <LoginWithGithub />
       </div>
     )
   }
@@ -35,7 +41,7 @@ let ProjectsList = React.createClass({
     return (
       <div className="row">
         {this.props.projects.map(project => (
-          <div className="col-sm-6 col-md-4" key={project._id}>
+          <div className="col-md-6 col-xl-4" key={project._id}>
             <ProjectCard project={project} />
           </div>
         ))}
