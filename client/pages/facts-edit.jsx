@@ -77,15 +77,13 @@ var ProjectField = React.createClass({
         ]} />
         <div className="container">
           <h3 className="m-t-1 m-b-2">{this.props.field}</h3>
-          <form>
-            <div className="m-y-1">
-              { field }
-            </div>
-            <div>
-              <button type='submit' className='btn btn-primary' onClick={this.props.save}>Save</button>
-              <a href={`/project/${this.props.project._id}`} className="btn btn-link">Cancel</a>
-            </div>
-          </form>
+          <div className="m-y-1">
+            { field }
+          </div>
+          <div>
+            <button type='submit' className='btn btn-primary' onClick={this.props.save}>Save</button>
+            <a href={`/project/${this.props.project._id}`} className="btn btn-link">Cancel</a>
+          </div>
         </div>
       </div>
     )

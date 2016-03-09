@@ -83,15 +83,13 @@ var PageField = React.createClass({
         ]} />
         <div className="container">
           <h3 className="m-t-1 m-b-2">{this.props.field}</h3>
-          <form>
-            <div className="m-y-1">
-              { field }
-            </div>
-            <div>
-              <button onClick={ this.props.save } className='btn btn-primary'>Save</button>
-              <a href={`/page/${this.props.page._id}`} className="btn btn-link">Cancel</a>
-            </div>
-          </form>
+          <div className="m-y-1">
+            { field }
+          </div>
+          <div>
+            <button onClick={ this.props.save } className='btn btn-primary'>Save</button>
+            <a href={`/page/${this.props.page._id}`} className="btn btn-link">Cancel</a>
+          </div>
         </div>
       </div>
     )

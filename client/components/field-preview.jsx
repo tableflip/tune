@@ -67,7 +67,7 @@ let ListPreview = React.createClass({
   render () {
     return (
       <div>
-        {this.props.list.map(entry => (<div>{entry}</div>))}
+        {this.props.list.map((entry, i) => (<div key={i}>{entry}</div>))}
       </div>
     )
   }
