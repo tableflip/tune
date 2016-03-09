@@ -1,6 +1,7 @@
 import React from 'react'
 import Loader from 'react-loader'
-import { Breadcrumbs } from '../components/breadcrumbs'
+import OverlayLoader from '../components/overlay-loader'
+import Breadcrumbs from '../components/breadcrumbs'
 import fields from '../components/field-lookup'
 
 export default React.createClass({
@@ -19,7 +20,7 @@ export default React.createClass({
     }
   },
   getInitialState () {
-    return null
+    return { saving: false }
   },
   update (value) {
     this.setState({payload: value})
@@ -31,7 +32,9 @@ export default React.createClass({
       key: this.props.field,
       newValue: this.state.payload
     }
+    this.setState({ saving: true })
     Meteor.call('pages/updateContent', payload, (err, res) => {
+      this.setState({ saving: false })
       if (err) return console.error(err)
       FlowRouter.go('page', { pageId: this.props.pageId })
     })
@@ -45,7 +48,12 @@ export default React.createClass({
       update: this.update,
       save: this.save
     }
-    return (<PageField {...props} />)
+    return (
+      <div>
+        <PageField {...props} />
+        <OverlayLoader loaded={!this.state.saving} />
+      </div>
+    )
   }
 })
 
@@ -76,13 +84,13 @@ var PageField = React.createClass({
         <div className="container">
           <h3 className="m-t-1 m-b-2">{this.props.field}</h3>
           <form>
-            <p>
+            <div className="m-y-1">
               { field }
-            </p>
-            <p>
+            </div>
+            <div>
               <button onClick={ this.props.save } className='btn btn-primary'>Save</button>
               <a href={`/page/${this.props.page._id}`} className="btn btn-link">Cancel</a>
-            </p>
+            </div>
           </form>
         </div>
       </div>

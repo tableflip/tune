@@ -1,6 +1,7 @@
 import React from 'react'
 import Loader from 'react-loader'
-import { Breadcrumbs } from '../components/breadcrumbs'
+import Breadcrumbs from '../components/breadcrumbs'
+import FieldPreview from '../components/field-preview'
 
 export default React.createClass({
   mixins: [ReactMeteorData],
@@ -28,12 +29,19 @@ export default React.createClass({
         <div className="container">
           <h3 className="m-t-1 m-b-2">{this.data.page.name}</h3>
           <ul className="list-group">
-            {content.map((field, ind) => (
-              <a className="list-group-item" key={ind} href={`/page/${this.data.page._id}?field=${field}`}>
-                <h5 className="list-group-item-heading">{field}</h5>
-                <p className="list-group-item-text"><em>{this.data.page.content.json[field]}</em></p>
-              </a>
-            ))}
+            {content.map((field, ind) => {
+              let schema = this.data.page.schema[field]
+              let type = schema && schema.type
+              let value = this.data.page.content.json[field]
+              return (
+                <a className='list-group-item' key={ind} href={`/page/${this.data.page._id}?field=${field}`}>
+                  <h5 className="list-group-item-heading">{field}</h5>
+                  <div className="list-group-item-text"><em>
+                    <FieldPreview type={type} value={value} />
+                  </em></div>
+                </a>
+              )}
+            )}
           </ul>
         </div>
       </div>

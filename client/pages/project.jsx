@@ -1,6 +1,6 @@
 import React from 'react'
 import Loader from 'react-loader'
-import { Breadcrumbs } from '../components/breadcrumbs'
+import Breadcrumbs from '../components/breadcrumbs'
 
 export default React.createClass({
   mixins: [ReactMeteorData],

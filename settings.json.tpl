@@ -7,5 +7,10 @@
   "uploadcare": {
     "publicKey": "",
     "privateKey": ""
+  },
+  "public": {
+    "mapbox": {
+      "accessToken": "ACCESS_TOKEN"
+    }
   }
 }

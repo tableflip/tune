@@ -12,7 +12,7 @@ let LinkPage = React.createClass({
   }
 })
 
-export const Breadcrumbs = React.createClass({
+export default React.createClass({
   render () {
     return (
       <ol className="breadcrumb">

@@ -1,6 +1,7 @@
 import React from 'react'
 import Loader from 'react-loader'
-import { Breadcrumbs } from '../components/breadcrumbs'
+import Breadcrumbs from '../components/breadcrumbs'
+import FieldPreview from '../components/field-preview'
 
 export default React.createClass({
   propTypes: {
@@ -28,12 +29,19 @@ export default React.createClass({
         <div className="container">
           <h3 className="m-t-1 m-b-2">{this.data.project.name}</h3>
           <ul className='list-group'>
-            {facts.map((fact, ind) => (
-              <a className='list-group-item' key={ind} href={`/project/${this.props.projectId}/facts?field=${fact}`}>
-                <h5 className="list-group-item-heading">{fact}</h5>
-                <p className="list-group-item-text"><em>{this.data.project.facts.json[fact]}</em></p>
-              </a>
-            ))}
+            {facts.map((fact, ind) => {
+              let schema = this.data.project.schema[fact]
+              let type = schema && schema.type
+              let value = this.data.project.facts.json[fact]
+              return (
+                <a className='list-group-item' key={ind} href={`/project/${this.props.projectId}/facts?field=${fact}`}>
+                  <h5 className="list-group-item-heading">{fact}</h5>
+                  <div className="list-group-item-text"><em>
+                    <FieldPreview type={type} value={value} />
+                  </em></div>
+                </a>
+              )}
+            )}
           </ul>
         </div>
       </div>
