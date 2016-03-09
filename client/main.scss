@@ -5,6 +5,7 @@ $brand-primary: #18C8A0;
 $font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 
 @import 'bootstrap/scss/bootstrap';
+@import './components/page-transitions';
 
 #map {
   width: 98%;

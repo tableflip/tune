@@ -34,7 +34,7 @@ export default React.createClass({
               let type = schema && schema.type
               let value = this.data.page.content.json[field]
               return (
-                <a className='list-group-item' key={ind} href={`/page/${this.data.page._id}?field=${field}`}>
+                <a className='list-group-item' key={ind} href={`/page/${this.data.page._id}/edit?field=${field}`}>
                   <h5 className="list-group-item-heading">{field}</h5>
                   <div className="list-group-item-text"><em>
                     <FieldPreview type={type} value={value} />
