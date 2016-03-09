@@ -1,0 +1,35 @@
+.slide-left-enter {
+  left: 100%;
+
+  &.slide-left-enter-active {
+    left: 0;
+    transition: left 250ms ease-in-out;
+  }
+}
+
+.slide-left-leave {
+  left: 0;
+
+  &.slide-left-leave-active {
+    left: -100%;
+    transition: left 250ms ease-in-out;
+  }
+}
+
+.slide-right-enter {
+  left: -100%;
+
+  &.slide-right-enter-active {
+    left: 0;
+    transition: left 250ms ease-in-out;
+  }
+}
+
+.slide-right-leave {
+  left: 0;
+
+  &.slide-right-leave-active {
+    left: 100%;
+    transition: left 250ms ease-in-out;
+  }
+}

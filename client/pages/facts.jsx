@@ -34,7 +34,7 @@ export default React.createClass({
               let type = schema && schema.type
               let value = this.data.project.facts.json[fact]
               return (
-                <a className='list-group-item' key={ind} href={`/project/${this.props.projectId}/facts?field=${fact}`}>
+                <a className='list-group-item' key={ind} href={`/project/${this.props.projectId}/facts/edit?field=${fact}`}>
                   <h5 className="list-group-item-heading">{fact}</h5>
                   <div className="list-group-item-text"><em>
                     <FieldPreview type={type} value={value} />

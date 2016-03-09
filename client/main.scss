@@ -19,6 +19,7 @@ $brand-danger:              #d9534f;
 $body-bg:                   #FAFAFA;
 
 @import 'bootstrap/scss/bootstrap';
+@import './components/page-transitions';
 
 .h-100 {
   min-height:100vh;
