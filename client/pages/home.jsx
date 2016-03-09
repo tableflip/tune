@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import Loader from 'react-loader'
+import Loader from '../components/loader'
 import { LoginWithGithub } from '../components/login-with-github'
 import { ProjectCard } from '../components/project-card'
 
@@ -18,8 +18,8 @@ export default React.createClass({
   render () {
     return (
       <div>
-        <div className="jumbotron">
-          <p className="lead">TABLEFLIP Automated Build System</p>
+        <div className="jumbotron bg-inverse">
+          <p className="h2">Please log in<br/>to edit your site</p>
           <LoginWithGithub />
         </div>
         <div className="container">

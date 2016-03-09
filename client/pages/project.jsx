@@ -1,5 +1,5 @@
 import React from 'react'
-import Loader from 'react-loader'
+import Loader from '../components/loader'
 import Breadcrumbs from '../components/breadcrumbs'
 
 export default React.createClass({
