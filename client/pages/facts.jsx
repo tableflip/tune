@@ -1,4 +1,7 @@
 import React from 'react'
+import Loader from '../components/loader'
+import Breadcrumbs from '../components/breadcrumbs'
+import FieldPreview from '../components/field-preview'
 
 export default React.createClass({
   propTypes: {
@@ -14,23 +17,31 @@ export default React.createClass({
     }
   },
   render () {
-    if (!this.data.projectReady) return (<div>Fetching your project...</div>)
-    let facts = this.data.project.facts.json
-    let keys = _.keys(facts)
+    if (!this.data.projectReady) return (<Loader loaded={false} />)
+    let facts = Object.keys(this.data.project.facts.json)
     return (
       <div>
-        <h1>{this.data.project.name}</h1>
-        <ul className='list-group'>
-          {
-            keys.map((key) => {
-              return <li className='list-group-item' key={ key }>
-                <a href={`/project/${this.props.projectId}/facts?field=${key}`}>{ key }</a><br />
-                <small><i>{ facts[key] }</i></small>
-              </li>
-            })
-          }
-        </ul>
-        <a href={ `/project/${this.props.projectId}` }>back</a>
+        <Breadcrumbs pages={[
+          { text: 'Home', href: '/' },
+          { text: 'Site', href: `/project/${this.data.project._id}` },
+          { text: 'Settings', active: true }
+        ]} />
+        <div className="container">
+          <p className="lead m-t-1">Pick a setting</p>
+          <ul className='list-group'>
+            {facts.map((fact, ind) => {
+              let schema = this.data.project.schema[fact]
+              let type = schema && schema.type
+              let value = this.data.project.facts.json[fact]
+              return (
+                <a className='list-group-item' key={ind} href={`/project/${this.props.projectId}/facts/edit?field=${fact}`}>
+                  <p><code>{fact}</code></p>
+                  <div><em><FieldPreview type={type} value={value} /></em></div>
+                </a>
+              )}
+            )}
+          </ul>
+        </div>
       </div>
     )
   }

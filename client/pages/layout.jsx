@@ -1,11 +1,20 @@
 import React from 'react'
+import { Navbar } from '../components/navbar'
+import PageTransition from '../components/page-transition'
+import Footer from '../components/footer'
 
-export default ({content}) => (
-  <div className="container">
-    <div className="row">
-      <div className="col-md-12">
+let pageBack = function () {
+  window.history.back()
+}
+
+export default ({ content, dir }) => (
+  <div className="full-height">
+    <Navbar />
+    <div className="content">
+      <PageTransition dir={dir} pageBack={pageBack}>
         {content}
-      </div>
+      </PageTransition>
     </div>
+    <Footer />
   </div>
 )

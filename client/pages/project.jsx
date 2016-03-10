@@ -1,4 +1,6 @@
 import React from 'react'
+import Loader from '../components/loader'
+import Breadcrumbs from '../components/breadcrumbs'
 
 export default React.createClass({
   mixins: [ReactMeteorData],
@@ -13,14 +15,20 @@ export default React.createClass({
   },
 
   render () {
-    if (!this.data.projectReady) return (<div>Loading...</div>)
+    if (!this.data.projectReady) return (<Loader loaded={false} />)
     return (
       <div>
-        <h1>{this.data.project.name}</h1>
-        <ul className='list-group'>
-          <li className='list-group-item'><a href={`/project/${this.props.projectId}/facts`}>Website facts</a></li>
-          {this.data.pages.map(page => (<li className='list-group-item' key={page._id}><a href={`/page/${page._id}`}>{page.name}</a></li>))}
-        </ul>
+        <Breadcrumbs pages={[
+          { text: 'Home', href: '/' },
+          { text: 'Site', active:true }
+        ]} />
+        <div className="container">
+          <p className="lead m-t-1">Pick a page</p>
+          <div className='list-group'>
+            <a className='list-group-item' href={`/project/${this.props.projectId}/facts`}>Website settings</a>
+            {this.data.pages.map(page => (<a className='list-group-item' key={page._id} href={`/page/${page._id}`}>Page - {page.name}</a>))}
+          </div>
+        </div>
       </div>
     )
   }

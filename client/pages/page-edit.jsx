@@ -1,5 +1,8 @@
 import React from 'react'
-import fields from '../lib/field-lookup'
+import Loader from '../components/loader'
+import OverlayLoader from '../components/overlay-loader'
+import Breadcrumbs from '../components/breadcrumbs'
+import fields from '../components/field-lookup'
 
 export default React.createClass({
   mixins: [ReactMeteorData],
@@ -9,13 +12,15 @@ export default React.createClass({
   },
   getMeteorData () {
     var pageSub = Meteor.subscribe('page', this.props.pageId)
+    let page = Pages.findOne({ _id: this.props.pageId })
     return {
       pageReady: pageSub.ready(),
-      page: Pages.findOne({ _id: this.props.pageId })
+      page: page,
+      project: Projects.findOne({ _id: page && page.project._id })
     }
   },
   getInitialState () {
-    return null
+    return { saving: false }
   },
   update (value) {
     this.setState({payload: value})
@@ -27,26 +32,35 @@ export default React.createClass({
       key: this.props.field,
       newValue: this.state.payload
     }
+    this.setState({ saving: true })
     Meteor.call('pages/updateContent', payload, (err, res) => {
+      this.setState({ saving: false })
       if (err) return console.error(err)
       FlowRouter.go('page', { pageId: this.props.pageId })
     })
   },
   render () {
-    if (!this.data.pageReady) return (<div>Fetching content ...</div>)
+    if (!this.data.pageReady) return (<Loader loaded={false} />)
     var props = {
       page: this.data.page,
+      project: this.data.project,
       field: this.props.field,
       update: this.update,
       save: this.save
     }
-    return (<PageField {...props} />)
+    return (
+      <div>
+        <PageField {...props} />
+        <OverlayLoader loaded={!this.state.saving} />
+      </div>
+    )
   }
 })
 
 var PageField = React.createClass({
   propTypes: {
     page: React.PropTypes.object,
+    project: React.PropTypes.object,
     field: React.PropTypes.string,
     update: React.PropTypes.func,
     save: React.PropTypes.func
@@ -61,10 +75,23 @@ var PageField = React.createClass({
   render () {
     let field = fields(this.state.type, this.state.content, this.props.update)
     return (
-      <form>
-        { field }
-        <button onClick={ this.props.save } className='btn btn-primary'>Save</button>
-      </form>
+      <div>
+        <Breadcrumbs pages={[
+          { text: 'Home', href: '/' },
+          { text: 'Site', href: `/project/${this.props.project._id}` },
+          { text: this.props.page.name, href: `/page/${this.props.page._id}` }
+        ]} />
+        <div className="container">
+          <p>Edit <code>{this.props.field}</code></p>
+          <div className="m-y-1">
+            { field }
+          </div>
+          <div>
+            <button onClick={ this.props.save } className='btn btn-primary'>Save</button>
+            <a href={`/page/${this.props.page._id}`} className="btn btn-link">Cancel</a>
+          </div>
+        </div>
+      </div>
     )
   }
 })

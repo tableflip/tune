@@ -1,4 +1,5 @@
 import React from 'react'
+import { Icon } from './icon'
 
 export const Navbar = React.createClass({
   componentDidMount () {
@@ -9,8 +10,12 @@ export const Navbar = React.createClass({
   },
   render () {
     return (
-      <div className="navbar navbar-light bg-primary">
-        <div className="navbar-brand">TABLEFLIP</div>
+      <div>
+        <div className="navbar navbar-full navbar-dark bg-inverse">
+          <a className="pull-xs-right" href="/">
+            <Icon beep="logo-table" />
+          </a>
+        </div>
       </div>
     )
   }

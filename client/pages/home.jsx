@@ -1,7 +1,8 @@
 import React from 'react'
 import moment from 'moment'
+import Loader from '../components/loader'
 import { LoginWithGithub } from '../components/login-with-github'
-import { Navbar } from '../components/navbar'
+import { ProjectCard } from '../components/project-card'
 
 export default React.createClass({
   mixins: [ReactMeteorData],
@@ -9,22 +10,41 @@ export default React.createClass({
   getMeteorData () {
     var projectSub = Meteor.subscribe('projects')
     return {
+      user: Meteor.user(),
+      loggingIn: Meteor.loggingIn(),
       projectsReady: projectSub.ready(),
       projects: Projects.find({}).fetch()
     }
   },
 
   render () {
-    return (
-      <div>
-        <Navbar />
-        <div className="jumbotron">
-          <a className="btn btn-lnk pull-xs-right" href="/dashboard">Dashboard</a>
+    if (!this.data.user) {
+      return (
+        <div className="container-fluid bg-inverse h-100 text-xs-center">
+          <p className="h4 p-t-3">Please log in<br/>to edit your site</p>
           <LoginWithGithub />
         </div>
-        {this.data.projects.map(project => {
-          return (<h4 key={project._id}><a href={`/project/${project._id}`}>{project.full_name} - Last commit at {moment(project.lastCommit.dateTime).format('HH:mm on ddd DD MMM YYYY')}</a></h4>)
-        })}
+      )
+    }
+    return (
+      <div className="container-fluid">
+        <p className="lead m-t-1">Pick a site</p>
+        {this.data.projectsReady ? <ProjectsList projects={this.data.projects} /> : <Loader loaded={false} />}
+        <LoginWithGithub />
+      </div>
+    )
+  }
+})
+
+let ProjectsList = React.createClass({
+  render() {
+    return (
+      <div className="row">
+        {this.props.projects.map(project => (
+          <div className="col-md-6 col-xl-4" key={project._id}>
+            <ProjectCard project={project} />
+          </div>
+        ))}
       </div>
     )
   }

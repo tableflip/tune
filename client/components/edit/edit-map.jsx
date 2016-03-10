@@ -23,7 +23,7 @@ export default React.createClass({
   },
   render () {
     return (
-      <Map center={ this.props.content } zoom={ 17 } id='map' onClick={ this.changePosition }>
+      <Map center={ this.props.content } zoom={ 13 } id='map' onClick={ this.changePosition }>
         <TileLayer
           url='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         />

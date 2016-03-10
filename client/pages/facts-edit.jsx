@@ -1,5 +1,8 @@
 import React from 'react'
-import fields from '../lib/field-lookup'
+import Loader from '../components/loader'
+import OverlayLoader from '../components/overlay-loader'
+import Breadcrumbs from '../components/breadcrumbs'
+import fields from '../components/field-lookup'
 
 export default React.createClass({
   mixins: [ReactMeteorData],
@@ -15,7 +18,7 @@ export default React.createClass({
     }
   },
   getInitialState () {
-    return null
+    return { saving: false }
   },
   update (newValue) {
     this.setState({ payload: newValue })
@@ -27,20 +30,25 @@ export default React.createClass({
       key: this.props.field,
       newValue: this.state.payload
     }
+    this.setState({ saving: true })
     Meteor.call('projects/updateFact', payload, (err) => {
+      this.setState({ saving: false })
       if (err) return console.error('Error calling "projects/updateFact"', err)
       FlowRouter.go('project', { projectId: this.props.projectId })
     })
   },
   render () {
-    if (!this.data.projectReady) return (<div>Fetching facts...</div>)
+    if (!this.data.projectReady) return (<Loader loaded={false} />)
     var props = {
       project: this.data.project,
       field: this.props.field,
       update: this.update,
       save: this.save
     }
-    return (<ProjectField {...props} />)
+    return (<div>
+      <ProjectField {...props} />
+      <OverlayLoader loaded={!this.state.saving} />
+    </div>)
   }
 })
 
@@ -61,10 +69,23 @@ var ProjectField = React.createClass({
   render () {
     let field = fields(this.state.type, this.state.content, this.props.update)
     return (
-      <form>
-        { field }
-        <button type='submit' className='btn btn-primary' onClick={this.props.save}>Save</button>
-      </form>
+      <div>
+        <Breadcrumbs pages={[
+          { text: 'Home', href: '/' },
+          { text: 'Site', href: `/project/${this.props.project._id}` },
+          { text: 'Facts', href: `/project/${this.props.project._id}/facts` }
+        ]} />
+        <div className="container">
+          <p className="lead m-t-1">Edit <code>{this.props.field}</code></p>
+          <div className="m-y-1">
+            { field }
+          </div>
+          <div>
+            <button type='submit' className='btn btn-primary' onClick={this.props.save}>Save</button>
+            <a href={`/project/${this.props.project._id}`} className="btn btn-link">Cancel</a>
+          </div>
+        </div>
+      </div>
     )
   }
 })
