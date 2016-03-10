@@ -20,7 +20,7 @@ export const LoginWithGithub = React.createClass({
   render () {
     if (this.data.user) {
       return (
-        <div>
+        <div className="m-b-1">
           <p>Logged in as {this.data.user.profile.name}</p>
           <button className="btn btn-primary-outline" type="button" onClick={this.logout}>Log out</button>
         </div>
