@@ -7,16 +7,12 @@ export default React.createClass({
     parentState: React.PropTypes.func
   },
   getInitialState: function () {
-    return {
-      color: this.props.content
-    }
-  },
-  update: function () {
-    this.props.parentState(this.state.color)
+    return { color: this.props.content }
   },
   changeColor: function (colorData) {
     let newColor = '#' + colorData.hex
-    this.setState({color: newColor}, this.update())
+    this.setState({color: newColor})
+    this.props.parentState(newColor)
   },
   render () {
     return (

@@ -1,4 +1,5 @@
 import { putPageContent } from '../imports/github-methods'
+import * as validator from '/lib/imports/validator'
 
 var putPageContentAsync = Meteor.wrapAsync(putPageContent)
 
@@ -15,6 +16,12 @@ Meteor.methods({
       throw new Meteor.Error('A user can only update a project of which they are a member')
     }
     if (!page.content.json.hasOwnProperty(key)) throw new Meteor.Error('You cannot add a key to page content')
+    var validation = validator.validateDocField({
+      doc: page,
+      field: key,
+      newValue: newValue
+    })
+    if (validation) throw new Meteor.Error(validation.message)
     var update = {}
     update[`content.json.${key}`] = newValue
     Pages.update(page._id, { $set: update })

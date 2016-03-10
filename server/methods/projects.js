@@ -1,5 +1,6 @@
 import { putFacts } from '../imports/github-methods'
 import { syncAll } from '../imports/github-sync'
+import * as validator from '/lib/imports/validator'
 
 var putFactsAsync = Meteor.wrapAsync(putFacts)
 var syncAllAsync = Meteor.wrapAsync(syncAll)
@@ -15,6 +16,12 @@ Meteor.methods({
       throw new Meteor.Error('A user can only update a project of which they are a member')
     }
     if (!project.facts.json.hasOwnProperty(key)) throw new Meteor.Error('You cannot add a key to project facts')
+    var validation = validator.validateDocField({
+      doc: project,
+      field: key,
+      newValue: newValue
+    })
+    if (validation) throw new Meteor.Error(validation.message)
     var update = {}
     update[`facts.json.${key}`] = newValue
     Projects.update(projectId, { $set: update })
@@ -26,7 +33,7 @@ Meteor.methods({
     }
     return Projects.update(project._id, { $set: githubProjectUpdate })
   },
-  
+
   'projects/sync': function () {
     if (!this.userId) throw new Meteor.Error('Only a logged in user can sync projects')
     return syncAllAsync(this.userId)
