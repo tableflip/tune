@@ -8,11 +8,13 @@ let pageBack = function () {
 }
 
 export default ({ content, dir }) => (
-  <div>
+  <div className="full-height">
     <Navbar />
-    <PageTransition dir={dir} pageBack={pageBack}>
-      {content}
-    </PageTransition>
+    <div className="content">
+      <PageTransition dir={dir} pageBack={pageBack}>
+        {content}
+      </PageTransition>
+    </div>
     <Footer />
   </div>
 )
