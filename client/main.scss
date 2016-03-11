@@ -48,9 +48,17 @@ html, body, #react-root {
   flex-direction: column;
 
   .content {
+    display: flex;
     position: relative;
     overflow-y: scroll;
     flex: 1 1;
+    > * {
+      display: flex;
+      width: 100%;
+    }
+    > * > * {
+      width: 100%;
+    }
   }
   .navbar, .footer {
     flex: none;

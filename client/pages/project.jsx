@@ -26,7 +26,7 @@ export default React.createClass({
           <p className="lead m-t-1">Pick a page</p>
           <div className='list-group'>
             <a className='list-group-item' href={`/project/${this.props.projectId}/facts`}>Website settings</a>
-            {this.data.pages.map(page => (<a className='list-group-item' key={page._id} href={`/page/${page._id}`}>Page - {page.name}</a>))}
+            {this.data.pages.map(page => (<a className='list-group-item' key={page._id} href={`/project/${this.data.project._id}/page/${page._id}`}>Page - {page.name}</a>))}
           </div>
         </div>
       </div>

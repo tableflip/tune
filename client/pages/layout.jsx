@@ -4,7 +4,10 @@ import PageTransition from '../components/page-transition'
 import Footer from '../components/footer'
 
 let pageBack = function () {
-  window.history.back()
+  let current = FlowRouter.current()
+  let parent = current.route.options.parent
+  if (!parent) return
+  FlowRouter.go(parent, current.params, current.queryParams)
 }
 
 export default ({ content, dir }) => (

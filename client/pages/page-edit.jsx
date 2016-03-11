@@ -91,7 +91,7 @@ var PageField = React.createClass({
         <Breadcrumbs pages={[
           { text: 'Home', href: '/' },
           { text: 'Site', href: `/project/${this.props.project._id}` },
-          { text: this.props.page.name, href: `/page/${this.props.page._id}` }
+          { text: this.props.page.name, href: `/project/${this.props.project._id}/page/${this.props.page._id}` }
         ]} />
         <div className="container">
           <p>Edit <code>{this.props.field}</code></p>
@@ -101,7 +101,7 @@ var PageField = React.createClass({
           <ValidationError message={this.state.validationError} />
           <div className="m-b-1">
             <button onClick={ this.save } className='btn btn-primary'>Save</button>
-            <a href={`/page/${this.props.page._id}`} className="btn btn-link">Cancel</a>
+            <a href={`/project/${this.props.project._id}/page/${this.props.page._id}`} className="btn btn-link">Cancel</a>
           </div>
         </div>
         <OverlayLoader loaded={!this.state.saving} />
