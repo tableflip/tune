@@ -3,7 +3,8 @@ import React from 'react'
 export default React.createClass({
   propTypes: {
     content: React.PropTypes.string,
-    parentState: React.PropTypes.func
+    update: React.PropTypes.func,
+    save: React.PropTypes.func
   },
   getInitialState: function () {
     return {
@@ -14,7 +15,7 @@ export default React.createClass({
     this.update()
   },
   update: function () {
-    this.props.parentState(this.refs.img.src)
+    this.props.update(this.refs.img.src)
   },
   uploadcare: function (e) {
     e.preventDefault()

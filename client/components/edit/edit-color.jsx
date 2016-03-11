@@ -4,7 +4,8 @@ import ColorPicker from 'react-color'
 export default React.createClass({
   propTypes: {
     content: React.PropTypes.string,
-    parentState: React.PropTypes.func
+    update: React.PropTypes.func,
+    save: React.PropTypes.func
   },
   getInitialState: function () {
     return { color: this.props.content }
@@ -12,7 +13,7 @@ export default React.createClass({
   changeColor: function (colorData) {
     let newColor = '#' + colorData.hex
     this.setState({color: newColor})
-    this.props.parentState(newColor)
+    this.props.update(newColor)
   },
   render () {
     return (

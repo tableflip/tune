@@ -8,11 +8,13 @@ export default React.createClass({
     var projectSub = Subs.subscribe('project', this.props.projectId)
     return {
       project: Projects.findOne({ _id: this.props.projectId }),
-      pages: Pages.find({ 'project._id': this.props.projectId }).fetch()
+      pages: Pages.find({ 'project._id': this.props.projectId }).fetch(),
+      subsReady: Subs.ready()
     }
   },
 
   render () {
+    if (!this.data.subsReady) return false
     return (
       <div>
         <Breadcrumbs pages={[

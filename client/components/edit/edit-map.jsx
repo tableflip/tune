@@ -4,7 +4,8 @@ import { Map, TileLayer, Marker } from 'react-leaflet'
 export default React.createClass({
   propTypes: {
     content: React.PropTypes.array,
-    parentState: React.PropTypes.func
+    update: React.PropTypes.func,
+    save: React.PropTypes.func
   },
   getInitialState: function () {
     return {
@@ -16,7 +17,7 @@ export default React.createClass({
     this.setState({position: [e.latlng.lat, e.latlng.lng]}, this.update)
   },
   update: function () {
-    this.props.parentState(this.state.position)
+    this.props.update(this.state.position)
   },
   componentDidMount: function () {
     this.update()

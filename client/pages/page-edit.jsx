@@ -17,10 +17,12 @@ export default React.createClass({
     return {
       pageReady: pageSub.ready(),
       page: page,
-      project: Projects.findOne({ _id: page && page.project._id })
+      project: Projects.findOne({ _id: page && page.project._id }),
+      subsReady: Subs.ready()
     }
   },
   render () {
+    if (!this.data.subsReady) return false
     var props = {
       page: this.data.page,
       project: this.data.project,
@@ -79,11 +81,11 @@ var PageField = React.createClass({
         this.setState({ validationError: 'Cannot update page data' })
         return console.error(err)
       }
-      FlowRouter.go('page', { pageId: this.props.page._id })
+      FlowRouter.go('page', { pageId: this.props.page._id, projectId: this.props.project._id })
     })
   },
   render () {
-    let field = fields(this.state.type, this.state.content, this.update)
+    let field = fields(this.state.type, this.state.content, this.update, this.save)
     return (
       <div>
         <Breadcrumbs pages={[

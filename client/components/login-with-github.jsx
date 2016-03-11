@@ -1,5 +1,5 @@
 import React from 'react'
-import Loader from './loader'
+import OverlayLoader from './overlay-loader'
 
 export const LoginWithGithub = React.createClass({
   mixins: [ReactMeteorData],
@@ -7,12 +7,15 @@ export const LoginWithGithub = React.createClass({
   getMeteorData () {
     var user = Meteor.user()
     return {
-      user: Meteor.user(),
-      loggingIn: Meteor.loggingIn()
+      user: Meteor.user()
     }
   },
+  getInitialState () {
+    return { loginSpinner: false }
+  },
   login () {
-    Meteor.loginWithGithub({ requestPermissions: ['repo'] })
+    this.setState({ loginSpinner: true })
+    Meteor.loginWithGithub({ requestPermissions: ['repo'] }, this.setState.bind(this, { loginSpinner: false }))
   },
   logout () {
     Meteor.logout()
@@ -25,8 +28,8 @@ export const LoginWithGithub = React.createClass({
           <button className="btn btn-primary-outline" type="button" onClick={this.logout}>Log out</button>
         </div>
       )
-    } else if (this.data.loggingIn) {
-      return (<Loader loaded={false}/>)
+    } else if (this.state.loginSpinner) {
+      return (<OverlayLoader color='#ddd' position='relative' />)
     } else {
       return (
         <div>

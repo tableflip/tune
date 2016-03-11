@@ -11,11 +11,13 @@ export default React.createClass({
     return {
       pageReady: pageSub.ready(),
       page: page,
-      project: Projects.findOne({ _id: page && page.project._id })
+      project: Projects.findOne({ _id: page && page.project._id }),
+      subsReady: Subs.ready()
     }
   },
 
   render () {
+    if (!this.data.subsReady) return false
     let content = Object.keys(this.data.page.content.json)
     return (
       <div>

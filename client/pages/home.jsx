@@ -1,5 +1,6 @@
 import React from 'react'
 import moment from 'moment'
+import Loader from '../components/loader'
 import { LoginWithGithub } from '../components/login-with-github'
 import { ProjectCard } from '../components/project-card'
 
@@ -23,6 +24,8 @@ export default React.createClass({
           <LoginWithGithub />
         </div>
       )
+    } else if (this.data.loggingIn) {
+      return <Loader loaded={false} color='#ddd' />
     }
     return (
       <div className="container-fluid">

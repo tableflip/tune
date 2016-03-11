@@ -20,6 +20,7 @@ export default React.createClass({
     }
   },
   render () {
+    if (!Subs.ready()) return false
     var props = {
       project: this.data.project,
       field: this.props.field
@@ -78,7 +79,7 @@ var ProjectField = React.createClass({
     })
   },
   render () {
-    let fieldComponent = fields(this.state.type, this.state.content, this.update)
+    let fieldComponent = fields(this.state.type, this.state.content, this.update, this.save)
     return (
       <div>
         <Breadcrumbs pages={[

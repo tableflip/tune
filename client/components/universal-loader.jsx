@@ -20,7 +20,7 @@ export const UniversalLoader = React.createClass({
   }
 })
 
-export const showLoader = function(state) {
+export const showLoader = function (state) {
   loaderShown = state
   instanceUpdaters.forEach(updater => updater())
 }

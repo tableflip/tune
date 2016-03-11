@@ -11,10 +11,12 @@ export default React.createClass({
   getMeteorData () {
     var projectSub = Subs.subscribe('project', this.props.projectId)
     return {
-      project: Projects.findOne({ _id: this.props.projectId })
+      project: Projects.findOne({ _id: this.props.projectId }),
+      subsReady: Subs.ready()
     }
   },
   render () {
+    if (!this.data.subsReady) return false
     let facts = Object.keys(this.data.project.facts.json)
     return (
       <div>
