@@ -2,6 +2,7 @@ import React from 'react'
 import { mount } from 'react-mounter'
 import * as pages from './pages'
 import pageCount from './components/page-count'
+import './subs-manager'
 
 FlowRouter.triggers.enter([
   function (ctx) {

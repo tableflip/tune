@@ -1,5 +1,4 @@
 import React from 'react'
-import Loader from '../components/loader'
 import OverlayLoader from '../components/overlay-loader'
 import Breadcrumbs from '../components/breadcrumbs'
 import ValidationError from '../components/validation-error'
@@ -13,7 +12,7 @@ export default React.createClass({
     field: React.PropTypes.string
   },
   getMeteorData () {
-    var pageSub = Meteor.subscribe('page', this.props.pageId)
+    var pageSub = Subs.subscribe('page', this.props.pageId)
     let page = Pages.findOne({ _id: this.props.pageId })
     return {
       pageReady: pageSub.ready(),
@@ -22,7 +21,6 @@ export default React.createClass({
     }
   },
   render () {
-    if (!this.data.pageReady) return (<Loader loaded={false} />)
     var props = {
       page: this.data.page,
       project: this.data.project,

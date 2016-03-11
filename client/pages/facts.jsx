@@ -1,5 +1,4 @@
 import React from 'react'
-import Loader from '../components/loader'
 import Breadcrumbs from '../components/breadcrumbs'
 import FieldPreview from '../components/field-preview'
 
@@ -10,14 +9,12 @@ export default React.createClass({
   },
   mixins: [ReactMeteorData],
   getMeteorData () {
-    var projectSub = Meteor.subscribe('project', this.props.projectId)
+    var projectSub = Subs.subscribe('project', this.props.projectId)
     return {
-      projectReady: projectSub.ready(),
       project: Projects.findOne({ _id: this.props.projectId })
     }
   },
   render () {
-    if (!this.data.projectReady) return (<Loader loaded={false} />)
     let facts = Object.keys(this.data.project.facts.json)
     return (
       <div>

@@ -27,6 +27,6 @@ const options = {
 
 export default React.createClass({
   render() {
-    return <ReactLoader {...this.props} options={options} />
+    return <ReactLoader options={options} {...this.props} />
   }
 })

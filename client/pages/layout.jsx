@@ -2,6 +2,7 @@ import React from 'react'
 import { Navbar } from '../components/navbar'
 import PageTransition from '../components/page-transition'
 import Footer from '../components/footer'
+import { UniversalLoader } from '../components/universal-loader'
 
 let pageBack = function () {
   let current = FlowRouter.current()
@@ -17,6 +18,7 @@ export default ({ content, dir }) => (
       <PageTransition dir={dir} pageBack={pageBack}>
         {content}
       </PageTransition>
+      <UniversalLoader></UniversalLoader>
     </div>
     <Footer />
   </div>
