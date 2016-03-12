@@ -1,8 +1,9 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import Breadcrumbs from '../components/breadcrumbs'
 import FieldPreview from '../components/field-preview'
 
-export default React.createClass({
+const Page = React.createClass({
   mixins: [ReactMeteorData],
 
   getMeteorData () {
@@ -11,13 +12,12 @@ export default React.createClass({
     return {
       pageReady: pageSub.ready(),
       page: page,
-      project: Projects.findOne({ _id: page && page.project._id }),
-      subsReady: Subs.ready()
+      project: Projects.findOne({ _id: page && page.project._id })
     }
   },
 
   render () {
-    if (!this.data.subsReady) return false
+    if (this.props.spinnerVisible) return false
     let content = Object.keys(this.data.page.content.json)
     return (
       <div>
@@ -48,3 +48,5 @@ export default React.createClass({
     )
   }
 })
+
+export default connect(state => state)(Page)

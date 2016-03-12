@@ -1,20 +1,20 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import Breadcrumbs from '../components/breadcrumbs'
 
-export default React.createClass({
+const Project = React.createClass({
   mixins: [ReactMeteorData],
 
   getMeteorData () {
     var projectSub = Subs.subscribe('project', this.props.projectId)
     return {
       project: Projects.findOne({ _id: this.props.projectId }),
-      pages: Pages.find({ 'project._id': this.props.projectId }).fetch(),
-      subsReady: Subs.ready()
+      pages: Pages.find({ 'project._id': this.props.projectId }).fetch()
     }
   },
 
   render () {
-    if (!this.data.subsReady) return false
+    if (this.props.spinnerVisible) return false
     return (
       <div>
         <Breadcrumbs pages={[
@@ -32,3 +32,5 @@ export default React.createClass({
     )
   }
 })
+
+export default connect(state => state)(Project)

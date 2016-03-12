@@ -1,8 +1,9 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import Breadcrumbs from '../components/breadcrumbs'
 import FieldPreview from '../components/field-preview'
 
-export default React.createClass({
+const Facts = React.createClass({
   propTypes: {
     projectId: React.PropTypes.string,
     field: React.PropTypes.string || null
@@ -11,12 +12,11 @@ export default React.createClass({
   getMeteorData () {
     var projectSub = Subs.subscribe('project', this.props.projectId)
     return {
-      project: Projects.findOne({ _id: this.props.projectId }),
-      subsReady: Subs.ready()
+      project: Projects.findOne({ _id: this.props.projectId })
     }
   },
   render () {
-    if (!this.data.subsReady) return false
+    if (this.props.spinnerVisible) return false
     let facts = Object.keys(this.data.project.facts.json)
     return (
       <div>
@@ -45,3 +45,5 @@ export default React.createClass({
     )
   }
 })
+
+export default connect(state => state)(Facts)
