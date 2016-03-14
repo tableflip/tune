@@ -1,12 +1,12 @@
-import * as ActionCreators from './redux/action-creators'
+import { setSpinnerVisible } from './redux/action-creators'
 import store from './redux/store'
 
 Subs = new SubsManager()
 
 Tracker.autorun(() => {
   if (Subs.ready()) {
-    store.dispatch(ActionCreators.setSpinnerVisible(false))
+    store.dispatch(setSpinnerVisible(false))
   } else {
-    store.dispatch(ActionCreators.setSpinnerVisible(true))
+    store.dispatch(setSpinnerVisible(true))
   }
 });
