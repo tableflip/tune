@@ -6,7 +6,7 @@ var getReposSync = Meteor.wrapAsync(githubMethods.getRepos)
 export function syncAll (userId, cb) {
   var projects = getReposSync(userId)
   async.mapLimit(projects, 3, (project, cb) => {
-    syncProject(userId, project.full_name, cb)
+    syncProject(userId, { fullName: project.full_name, name: project.name }, cb)
   }, (err, res) => {
     if (err) return cb(err)
     cb(null, res.reduce((memo, obj) => {
@@ -16,7 +16,7 @@ export function syncAll (userId, cb) {
   })
 }
 
-export function syncProject (userId, fullName, cb) {
+export function syncProject (userId, { fullName, name }, cb) {
   async.parallel({
     lastCommit: cb => {
       githubMethods.getLastCommit(userId, fullName, cb)
@@ -32,6 +32,7 @@ export function syncProject (userId, fullName, cb) {
     }
     var project = {
       full_name: fullName,
+      name: name,
       lastCommit: {
         sha: res.lastCommit[0].sha,
         dateTime: res.lastCommit[0].commit.committer.date

@@ -85,7 +85,7 @@ const ProjectField = React.createClass({
       <div>
         <Breadcrumbs pages={[
           { text: 'Home', href: '/' },
-          { text: 'Site', href: `/project/${this.props.project._id}` },
+          { text: this.props.project.name, href: `/project/${this.props.project._id}` },
           { text: 'Facts', href: `/project/${this.props.project._id}/facts` }
         ]} />
         <div className="container">

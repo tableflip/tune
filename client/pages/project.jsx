@@ -19,9 +19,10 @@ const Project = React.createClass({
       <div>
         <Breadcrumbs pages={[
           { text: 'Home', href: '/' },
-          { text: 'Site', active:true }
+          { text: this.data.project.name, active:true }
         ]} />
         <div className="container">
+          <h3 className="m-y-1 text-muted">{this.data.project.name}</h3>
           <p className="lead m-t-1">Pick a page</p>
           <div className='list-group'>
             <a className='list-group-item' href={`/project/${this.props.projectId}/facts`}>Website settings</a>
