@@ -51,8 +51,8 @@ var ProjectField = React.createClass({
       field: this.props.field,
       newValue: this.state.newContent
     })
-    if (invalid) {
-      this.setState({ validationError: invalid.message })
+    if (invalid.error) {
+      this.setState({ validationError: invalid.error })
     } else {
       this.setState({ validationError: null })
     }

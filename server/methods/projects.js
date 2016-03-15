@@ -21,7 +21,7 @@ Meteor.methods({
       field: key,
       newValue: newValue
     })
-    if (validation) throw new Meteor.Error(validation.message)
+    if (validation.error) throw new Meteor.Error(validation.error)
     var update = {}
     update[`facts.json.${key}`] = newValue
     Projects.update(projectId, { $set: update })
