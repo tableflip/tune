@@ -1,5 +1,5 @@
 import React from 'react'
-import Loader from 'react-loader'
+import Loader from './loader'
 
 export default React.createClass({
   render () {

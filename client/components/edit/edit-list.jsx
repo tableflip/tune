@@ -18,7 +18,7 @@ export default React.createClass({
     e.preventDefault()
     let list = Array.from(this.state.list)
     let el = list.splice(index, 1)
-    list.splice(Math.max(index + dir, 0), 0, el)
+    list.splice(Math.max(index + dir, 0), 0, el[0])
     this.setState({ list: list, lastMoved: index + dir, lastDir: dir }, this.update)
   },
   addItem: function (e) {
@@ -54,7 +54,7 @@ export default React.createClass({
 
       case 40:
       this.setState({ lastMoved: (this.state.lastMoved + 1) % this.state.list.length })
-      return      
+      return
     }
   },
   render () {

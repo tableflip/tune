@@ -2,7 +2,9 @@ import React from 'react'
 import Loader from '../components/loader'
 import OverlayLoader from '../components/overlay-loader'
 import Breadcrumbs from '../components/breadcrumbs'
+import ValidationError from '../components/validation-error'
 import fields from '../components/field-lookup'
+import * as validator from '/lib/imports/validator'
 
 export default React.createClass({
   mixins: [ReactMeteorData],
@@ -19,39 +21,16 @@ export default React.createClass({
       project: Projects.findOne({ _id: page && page.project._id })
     }
   },
-  getInitialState () {
-    return { saving: false }
-  },
-  update (value) {
-    this.setState({payload: value})
-  },
-  save (e) {
-    e.preventDefault()
-    let payload = {
-      pageId: this.props.pageId,
-      key: this.props.field,
-      newValue: this.state.payload
-    }
-    this.setState({ saving: true })
-    Meteor.call('pages/updateContent', payload, (err, res) => {
-      this.setState({ saving: false })
-      if (err) return console.error(err)
-      FlowRouter.go('page', { pageId: this.props.pageId })
-    })
-  },
   render () {
     if (!this.data.pageReady) return (<Loader loaded={false} />)
     var props = {
       page: this.data.page,
       project: this.data.project,
-      field: this.props.field,
-      update: this.update,
-      save: this.save
+      field: this.props.field
     }
     return (
       <div>
         <PageField {...props} />
-        <OverlayLoader loaded={!this.state.saving} />
       </div>
     )
   }
@@ -61,19 +40,52 @@ var PageField = React.createClass({
   propTypes: {
     page: React.PropTypes.object,
     project: React.PropTypes.object,
-    field: React.PropTypes.string,
-    update: React.PropTypes.func,
-    save: React.PropTypes.func
+    field: React.PropTypes.string
   },
   getInitialState () {
     let page = this.props.page
     let field = this.props.field
     let type = (page.schema[field] && page.schema[field].type) || 'text'
     let content = page.content.json[field]
-    return { type, content }
+    let newContent = (content instanceof Object) ? Object.assign({}, content) : content
+    return { type, content, newContent }
+  },
+  isValid () {
+    let validation = validator.validateDocField({
+      doc: this.props.page,
+      field: this.props.field,
+      newValue: this.state.newContent
+    })
+    if (validation.error) {
+      this.setState({ validationError: validation.error })
+    } else {
+      this.setState({ validationError: null })
+    }
+    return !validation.error
+  },
+  update (newContent) {
+    this.setState({ newContent })
+  },
+  save (e) {
+    e.preventDefault()
+    if (!this.isValid()) return
+    let payload = {
+      pageId: this.props.page._id,
+      key: this.props.field,
+      newValue: this.state.newContent
+    }
+    this.setState({ saving: true })
+    Meteor.call('pages/updateContent', payload, (err, res) => {
+      this.setState({ saving: false })
+      if (err) {
+        this.setState({ validationError: 'Cannot update page data' })
+        return console.error(err)
+      }
+      FlowRouter.go('page', { pageId: this.props.page._id })
+    })
   },
   render () {
-    let field = fields(this.state.type, this.state.content, this.props.update)
+    let field = fields(this.state.type, this.state.content, this.update)
     return (
       <div>
         <Breadcrumbs pages={[
@@ -86,11 +98,13 @@ var PageField = React.createClass({
           <div className="m-y-1">
             { field }
           </div>
-          <div>
-            <button onClick={ this.props.save } className='btn btn-primary'>Save</button>
+          <ValidationError message={this.state.validationError} />
+          <div className="m-b-1">
+            <button onClick={ this.save } className='btn btn-primary'>Save</button>
             <a href={`/page/${this.props.page._id}`} className="btn btn-link">Cancel</a>
           </div>
         </div>
+        <OverlayLoader loaded={!this.state.saving} />
       </div>
     )
   }

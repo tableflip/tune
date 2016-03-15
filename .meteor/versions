@@ -1,7 +1,6 @@
 accounts-base@1.2.3-beta.16
 accounts-github@1.0.6-beta.16
 accounts-oauth@1.1.9-beta.16
-aldeed:simple-schema@1.5.3
 allow-deny@1.0.1-beta.16
 autoupdate@1.2.5-beta.16
 babel-compiler@6.5.0-beta.16
@@ -46,7 +45,6 @@ livedata@1.0.15-beta.16
 localstorage@1.0.6-beta.16
 logging@1.0.9-beta.16
 maximdubrovin:uploadcare@1.5.1_1
-mdg:validation-error@0.2.0
 meteor@1.1.11-beta.16
 meteor-base@1.0.1-beta.16
 meteor-env-dev@0.0.2-beta.16
