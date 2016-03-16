@@ -14,6 +14,7 @@ export default function (userId) {
     opts.headers.Authorization = `token ${token}`
     opts.headers.Accept = opts.headers.Accept || 'application/vnd.github.v3+json'
     opts.headers['User-Agent'] = Meteor.settings.appName
+    console.log(method, url, opts)
     if (cb) return HTTP.call(method, url, opts, cb)
     return HTTP.call(method, url, opts)
   }
@@ -42,15 +43,24 @@ export default function (userId) {
       }
     },
 
-    getLastCommit: function (fullName, cb) {
-      var res = githubCall({
+    getLastCommit: function (fullName, opts, cb) {
+      if (!cb) {
+        cb = opts
+        opts = cb
+      }
+
+      opts = opts || {}
+
+      let params = {per_page: 1}
+
+      // Commit or branch to get last commits from
+      // Default: the repository’s default branch (usually master)
+      if (opts.sha) params.sha = opts.sha
+
+      let res = githubCall({
         method: 'GET',
         url: `${baseUrl}/repos/${fullName}/commits`,
-        opts: {
-          params: {
-            per_page: 1
-          }
-        }
+        opts: {params}
       }, pluckFromResponse('data', cb))
       if (!cb) return res.data
     },
@@ -89,6 +99,18 @@ export default function (userId) {
         url: `${baseUrl}/repos/${fullName}/contents/${path}`,
         opts: opts
       }, cb)
+      if (!cb) return res
+    },
+
+    postRef: function (fullName, ref, sha, cb) {
+      let data = {ref, sha}
+
+      let res = githubCall({
+        method: 'POST',
+        url: `${baseUrl}/repos/${fullName}/git/refs`,
+        opts: {data}
+      }, cb)
+
       if (!cb) return res
     }
   }

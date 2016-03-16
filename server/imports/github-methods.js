@@ -10,9 +10,9 @@ export function getRepos (userId, cb) {
   })
 }
 
-export function getLastCommit (userId, fullName, cb) {
+export function getLastCommit (userId, fullName, opts, cb) {
   var github = githubInterface(userId)
-  return github.getLastCommit(fullName, cb)
+  return github.getLastCommit(fullName, opts, cb)
 }
 
 export function getFacts (userId, fullName, cb) {
@@ -132,4 +132,34 @@ export function putPageContent (userId, fullName, pageName, cb) {
     sha: page.content.sha
   }, cb)
 
+}
+
+export function tagGhPages (userId, fullName, cb) {
+  let github = githubInterface(userId)
+
+  async.waterfall([
+    // Get current project version
+    Meteor.bindEnvironment(function (cb) {
+      github.getFileContents(fullName, 'package.json', cb)
+    }),
+    // Build tag name
+    (pkgJson, cb) => {
+      let version = JSON.parse(pkgJson).version
+      let tag = /(^[0-9]+\.[0-9]+\.[0-9]+)/.exec(version)[1] + '-' + Date.now()
+      cb(null, tag)
+    },
+    // Get commit sha to tag
+    Meteor.bindEnvironment(function (tag, cb) {
+      github.getLastCommit(fullName, {sha: 'gh-pages'}, (err, commits) => {
+        if (err) return cb(err)
+        if (!commits || !commits.length) return cb(new Error('No commits to tag'))
+        console.log('last commit is', commits[0].sha)
+        cb(null, tag, commits[0].sha)
+      })
+    }),
+    // Create tag
+    Meteor.bindEnvironment(function (tag, sha, cb) {
+      github.postRef(fullName, `refs/tags/${tag}`, sha, cb)
+    })
+  ], cb)
 }
