@@ -14,7 +14,6 @@ export default function (userId) {
     opts.headers.Authorization = `token ${token}`
     opts.headers.Accept = opts.headers.Accept || 'application/vnd.github.v3+json'
     opts.headers['User-Agent'] = Meteor.settings.appName
-    console.log(method, url, opts)
     if (cb) return HTTP.call(method, url, opts, cb)
     return HTTP.call(method, url, opts)
   }
