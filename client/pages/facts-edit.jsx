@@ -44,25 +44,25 @@ var ProjectField = React.createClass({
     let newContent = (content instanceof Object) ? Object.assign({}, content) : content
     return { type, content, newContent }
   },
-  isInvalid () {
-    let invalid = validator.validateDocField({
+  isValid () {
+    let validation = validator.validateDocField({
       doc: this.props.project,
       field: this.props.field,
       newValue: this.state.newContent
     })
-    if (invalid) {
-      this.setState({ validationError: invalid.message })
+    if (validation.error) {
+      this.setState({ validationError: validation.error })
     } else {
       this.setState({ validationError: null })
     }
-    return !!invalid
+    return validation.error
   },
   update (newContent) {
     this.setState({ newContent })
   },
   save: function (e) {
     e.preventDefault()
-    if (this.isInvalid()) return
+    if (!this.isValid()) return
     let payload = {
       projectId: this.props.project._id,
       key: this.props.field,
