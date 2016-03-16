@@ -21,7 +21,7 @@ Meteor.methods({
       field: key,
       newValue: newValue
     })
-    if (validation) throw new Meteor.Error(validation.message)
+    if (validation.error) throw new Meteor.Error(validation.error)
     var update = {}
     update[`content.json.${key}`] = newValue
     Pages.update(page._id, { $set: update })

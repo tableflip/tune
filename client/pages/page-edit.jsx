@@ -50,25 +50,25 @@ const PageField = React.createClass({
     let newContent = (content instanceof Object) ? Object.assign({}, content) : content
     return { type, content, newContent }
   },
-  isInvalid () {
-    let invalid = validator.validateDocField({
+  isValid () {
+    let validation = validator.validateDocField({
       doc: this.props.page,
       field: this.props.field,
       newValue: this.state.newContent
     })
-    if (invalid) {
-      this.setState({ validationError: invalid.message })
+    if (validation.error) {
+      this.setState({ validationError: validation.error })
     } else {
       this.setState({ validationError: null })
     }
-    return !!invalid
+    return !validation.error
   },
   update (newContent) {
     this.setState({ newContent })
   },
   save (e) {
     e.preventDefault()
-    if (this.isInvalid()) return
+    if (!this.isValid()) return
     let payload = {
       pageId: this.props.page._id,
       key: this.props.field,
