@@ -1,5 +1,4 @@
 import React from 'react'
-import Loader from '../components/loader'
 import OverlayLoader from '../components/overlay-loader'
 import Breadcrumbs from '../components/breadcrumbs'
 import ValidationError from '../components/validation-error'
@@ -13,16 +12,17 @@ export default React.createClass({
     field: React.PropTypes.string
   },
   getMeteorData () {
-    var pageSub = Meteor.subscribe('page', this.props.pageId)
+    var pageSub = Subs.subscribe('page', this.props.pageId)
     let page = Pages.findOne({ _id: this.props.pageId })
     return {
       pageReady: pageSub.ready(),
       page: page,
-      project: Projects.findOne({ _id: page && page.project._id })
+      project: Projects.findOne({ _id: page && page.project._id }),
+      subsReady: Subs.ready()
     }
   },
   render () {
-    if (!this.data.pageReady) return (<Loader loaded={false} />)
+    if (!this.data.subsReady) return false
     var props = {
       page: this.data.page,
       project: this.data.project,
@@ -81,17 +81,17 @@ var PageField = React.createClass({
         this.setState({ validationError: 'Cannot update page data' })
         return console.error(err)
       }
-      FlowRouter.go('page', { pageId: this.props.page._id })
+      FlowRouter.go('page', { pageId: this.props.page._id, projectId: this.props.project._id })
     })
   },
   render () {
-    let field = fields(this.state.type, this.state.content, this.update)
+    let field = fields(this.state.type, this.state.content, this.update, this.save)
     return (
       <div>
         <Breadcrumbs pages={[
           { text: 'Home', href: '/' },
           { text: 'Site', href: `/project/${this.props.project._id}` },
-          { text: this.props.page.name, href: `/page/${this.props.page._id}` }
+          { text: this.props.page.name, href: `/project/${this.props.project._id}/page/${this.props.page._id}` }
         ]} />
         <div className="container">
           <p>Edit <code>{this.props.field}</code></p>
@@ -101,7 +101,7 @@ var PageField = React.createClass({
           <ValidationError message={this.state.validationError} />
           <div className="m-b-1">
             <button onClick={ this.save } className='btn btn-primary'>Save</button>
-            <a href={`/page/${this.props.page._id}`} className="btn btn-link">Cancel</a>
+            <a href={`/project/${this.props.project._id}/page/${this.props.page._id}`} className="btn btn-link">Cancel</a>
           </div>
         </div>
         <OverlayLoader loaded={!this.state.saving} />

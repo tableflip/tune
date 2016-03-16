@@ -1,5 +1,4 @@
 import React from 'react'
-import Loader from '../components/loader'
 import OverlayLoader from '../components/overlay-loader'
 import Breadcrumbs from '../components/breadcrumbs'
 import ValidationError from '../components/validation-error'
@@ -13,7 +12,7 @@ export default React.createClass({
     field: React.PropTypes.string || null
   },
   getMeteorData () {
-    var projectSub = Meteor.subscribe('project', this.props.projectId)
+    var projectSub = Subs.subscribe('project', this.props.projectId)
     let project = Projects.findOne({ _id: this.props.projectId })
     return {
       projectReady: projectSub.ready(),
@@ -21,7 +20,7 @@ export default React.createClass({
     }
   },
   render () {
-    if (!this.data.projectReady) return (<Loader loaded={false} />)
+    if (!Subs.ready()) return false
     var props = {
       project: this.data.project,
       field: this.props.field
@@ -80,7 +79,7 @@ var ProjectField = React.createClass({
     })
   },
   render () {
-    let fieldComponent = fields(this.state.type, this.state.content, this.update)
+    let fieldComponent = fields(this.state.type, this.state.content, this.update, this.save)
     return (
       <div>
         <Breadcrumbs pages={[

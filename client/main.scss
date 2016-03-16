@@ -51,6 +51,15 @@ html, body, #react-root {
     position: relative;
     overflow-y: scroll;
     flex: 1 1;
+    > * {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+    > * > * {
+      width: 100%;
+      height: 100%;
+    }
   }
   .navbar, .footer {
     flex: none;

@@ -2,9 +2,13 @@ import React from 'react'
 import { Navbar } from '../components/navbar'
 import PageTransition from '../components/page-transition'
 import Footer from '../components/footer'
+import { UniversalLoader } from '../components/universal-loader'
 
 let pageBack = function () {
-  window.history.back()
+  let current = FlowRouter.current()
+  let parent = current.route.options.parent
+  if (!parent) return
+  FlowRouter.go(parent, current.params, current.queryParams)
 }
 
 export default ({ content, dir }) => (
@@ -14,6 +18,7 @@ export default ({ content, dir }) => (
       <PageTransition dir={dir} pageBack={pageBack}>
         {content}
       </PageTransition>
+      <UniversalLoader></UniversalLoader>
     </div>
     <Footer />
   </div>

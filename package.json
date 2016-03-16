@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "npm-run-all build:* --parallel watch:* meteor",
+    "start-android": "npm-run-all build:* --parallel watch:* meteor-android",
     "meteor": "meteor --settings settings.json",
+    "meteor-android": "meteor run android-device --settings settings.json",
     "build:css": "node-sass --output-style compact --include-path node_modules client/main.scss | postcss --local-plugins --use autoprefixer --output client/bundle.css",
     "watch:css": "nodemon -w client -e scss -x npm run build:css"
   },

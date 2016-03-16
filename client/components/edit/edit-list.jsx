@@ -3,7 +3,8 @@ import React from 'react'
 export default React.createClass({
   propTypes: {
     content: React.PropTypes.array,
-    parentState: React.PropTypes.func
+    update: React.PropTypes.func,
+    save: React.PropTypes.func
   },
   getInitialState: function () {
     return { list: this.props.content, lastMoved: -1, lastDir: 0 }
@@ -12,7 +13,7 @@ export default React.createClass({
     this.update()
   },
   update: function () {
-    this.props.parentState(this.state.list)
+    this.props.update(this.state.list)
   },
   move: function (index, dir, e) {
     e.preventDefault()
@@ -90,6 +91,6 @@ export default React.createClass({
     )
   },
   componentDidUpdate () {
-    this._focusButton && this._focusButton.focus()
+    this._focusButton && this._focusButton.focus() && this._focusButton.select()
   }
 })

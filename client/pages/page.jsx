@@ -1,5 +1,4 @@
 import React from 'react'
-import Loader from '../components/loader'
 import Breadcrumbs from '../components/breadcrumbs'
 import FieldPreview from '../components/field-preview'
 
@@ -7,17 +6,18 @@ export default React.createClass({
   mixins: [ReactMeteorData],
 
   getMeteorData () {
-    var pageSub = Meteor.subscribe('page', this.props.pageId)
+    var pageSub = Subs.subscribe('page', this.props.pageId)
     let page = Pages.findOne({ _id: this.props.pageId })
     return {
       pageReady: pageSub.ready(),
       page: page,
-      project: Projects.findOne({ _id: page && page.project._id })
+      project: Projects.findOne({ _id: page && page.project._id }),
+      subsReady: Subs.ready()
     }
   },
 
   render () {
-    if (!this.data.pageReady) return (<Loader loaded={false} />)
+    if (!this.data.subsReady) return false
     let content = Object.keys(this.data.page.content.json)
     return (
       <div>
@@ -34,7 +34,7 @@ export default React.createClass({
               let type = schema && schema.type
               let value = this.data.page.content.json[field]
               return (
-                <a className='list-group-item' key={ind} href={`/page/${this.data.page._id}/edit?field=${field}`}>
+                <a className='list-group-item' key={ind} href={`/project/${this.data.project._id}/page/${this.data.page._id}/edit?field=${field}`}>
                   <p><code>{field}</code></p>
                   <div><em>
                     <FieldPreview type={type} value={value} />

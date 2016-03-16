@@ -25,3 +25,4 @@ service-configuration
 maximdubrovin:uploadcare
 http
 check
+meteorhacks:subs-manager

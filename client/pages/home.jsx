@@ -8,11 +8,10 @@ export default React.createClass({
   mixins: [ReactMeteorData],
 
   getMeteorData () {
-    var projectSub = Meteor.subscribe('projects')
+    var projectSub = Subs.subscribe('projects')
     return {
       user: Meteor.user(),
       loggingIn: Meteor.loggingIn(),
-      projectsReady: projectSub.ready(),
       projects: Projects.find({}).fetch()
     }
   },
@@ -25,11 +24,13 @@ export default React.createClass({
           <LoginWithGithub />
         </div>
       )
+    } else if (this.data.loggingIn) {
+      return <Loader loaded={false} color='#ddd' />
     }
     return (
       <div className="container-fluid">
         <p className="lead m-t-1">Pick a site</p>
-        {this.data.projectsReady ? <ProjectsList projects={this.data.projects} /> : <Loader loaded={false} />}
+          <ProjectsList projects={this.data.projects} />
         <LoginWithGithub />
       </div>
     )
