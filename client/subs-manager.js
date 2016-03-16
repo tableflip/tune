@@ -1,11 +1,12 @@
-import { showLoader } from './components/universal-loader'
+import { setSpinnerVisible } from './redux/action-creators'
+import store from './redux/store'
 
 Subs = new SubsManager()
 
 Tracker.autorun(() => {
   if (Subs.ready()) {
-    showLoader(false)
+    store.dispatch(setSpinnerVisible(false))
   } else {
-    showLoader(true)
+    store.dispatch(setSpinnerVisible(true))
   }
 });

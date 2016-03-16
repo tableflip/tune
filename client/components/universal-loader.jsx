@@ -1,26 +1,11 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import Loader from './loader'
 
-var loaderShown = false
-var instanceUpdaters = []
-var index = 1
-
-export const UniversalLoader = React.createClass({
-  componentWillMount () {
-    instanceUpdaters.push(this.forceUpdate.bind(this))
-  },
-  componentWillUnmount () {
-    instanceUpdaters = instanceUpdaters.filter(updater => updater !== this.forceUpdate)
-  },
-  getInitialState () {
-    return { show: false }
-  },
+const UniversalLoader = React.createClass({
   render () {
-    return loaderShown ? (<Loader options={{position: 'relative'}} {...this.props} />) : null
+    return this.props.spinnerVisible ? (<Loader options={{position: 'relative'}} {...this.props} />) : null
   }
 })
 
-export const showLoader = function (state) {
-  loaderShown = state
-  instanceUpdaters.forEach(updater => updater())
-}
+export default connect(state => state)(UniversalLoader)

@@ -1,19 +1,27 @@
 import React from 'react'
 import { mount } from 'react-mounter'
+import store from './redux/store'
+import { setFooterVisible } from './redux/action-creators'
 import * as pages from './pages'
 import pageCount from './components/page-count'
 import './subs-manager'
 
 FlowRouter.triggers.enter([
-  function (ctx) {
+  function () {
     pageCount.inc()
+  },
+  function (ctx) {
     ctx.params._dir = (ctx.oldRoute && ctx.oldRoute.options.index > ctx.route.options.index) ? 'right' : 'left'
+  },
+  function (ctx) {
+    store.dispatch(setFooterVisible(!!ctx.route.options.footerVisible))
   }
 ])
 
 FlowRouter.route('/', {
   name: 'home',
   index: 0,
+  footerVisible: true,
   action (params) {
     mount(pages.Layout, {
       content: React.createElement(pages.Home),

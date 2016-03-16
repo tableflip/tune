@@ -1,11 +1,12 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import OverlayLoader from '../components/overlay-loader'
 import Breadcrumbs from '../components/breadcrumbs'
 import ValidationError from '../components/validation-error'
 import fields from '../components/field-lookup'
 import * as validator from '/lib/imports/validator'
 
-export default React.createClass({
+const PageEdit = React.createClass({
   mixins: [ReactMeteorData],
   propTypes: {
     pageId: React.PropTypes.string,
@@ -17,12 +18,11 @@ export default React.createClass({
     return {
       pageReady: pageSub.ready(),
       page: page,
-      project: Projects.findOne({ _id: page && page.project._id }),
-      subsReady: Subs.ready()
+      project: Projects.findOne({ _id: page && page.project._id })
     }
   },
   render () {
-    if (!this.data.subsReady) return false
+    if (this.props.spinnerVisible) return false
     var props = {
       page: this.data.page,
       project: this.data.project,
@@ -36,7 +36,7 @@ export default React.createClass({
   }
 })
 
-var PageField = React.createClass({
+const PageField = React.createClass({
   propTypes: {
     page: React.PropTypes.object,
     project: React.PropTypes.object,
@@ -90,7 +90,7 @@ var PageField = React.createClass({
       <div>
         <Breadcrumbs pages={[
           { text: 'Home', href: '/' },
-          { text: 'Site', href: `/project/${this.props.project._id}` },
+          { text: this.props.project.name, href: `/project/${this.props.project._id}` },
           { text: this.props.page.name, href: `/project/${this.props.project._id}/page/${this.props.page._id}` }
         ]} />
         <div className="container">
@@ -109,3 +109,5 @@ var PageField = React.createClass({
     )
   }
 })
+
+export default connect(state => state)(PageEdit)

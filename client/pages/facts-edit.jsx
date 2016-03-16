@@ -1,11 +1,12 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import OverlayLoader from '../components/overlay-loader'
 import Breadcrumbs from '../components/breadcrumbs'
 import ValidationError from '../components/validation-error'
 import fields from '../components/field-lookup'
 import * as validator from '/lib/imports/validator'
 
-export default React.createClass({
+const FactsEdit = React.createClass({
   mixins: [ReactMeteorData],
   propTypes: {
     projectId: React.PropTypes.string,
@@ -20,7 +21,7 @@ export default React.createClass({
     }
   },
   render () {
-    if (!Subs.ready()) return false
+    if (this.props.spinnerVisible) return false
     var props = {
       project: this.data.project,
       field: this.props.field
@@ -31,7 +32,7 @@ export default React.createClass({
   }
 })
 
-var ProjectField = React.createClass({
+const ProjectField = React.createClass({
   propTypes: {
     project: React.PropTypes.object,
     field: React.PropTypes.string
@@ -84,7 +85,7 @@ var ProjectField = React.createClass({
       <div>
         <Breadcrumbs pages={[
           { text: 'Home', href: '/' },
-          { text: 'Site', href: `/project/${this.props.project._id}` },
+          { text: this.props.project.name, href: `/project/${this.props.project._id}` },
           { text: 'Facts', href: `/project/${this.props.project._id}/facts` }
         ]} />
         <div className="container">
@@ -103,3 +104,5 @@ var ProjectField = React.createClass({
     )
   }
 })
+
+export default connect(state => state)(FactsEdit)
