@@ -6,12 +6,17 @@ Client for the TABLEFLIP static site generator
 
 - Copy `settings.json.tpl` to `settings.json`
 - Grab the `clientId` & `clientSecret` from: https://github.com/organizations/tableflip/settings/applications/313932
+- Install dependencies
 
-Now start it up with a
+    ```sh
+    npm install
+    ```
 
-```sh
-meteor --settings setting.json
-```
+- Start it up
+
+    ```sh
+    npm start
+    ```
 
 ## Client-side structure
 
