@@ -145,7 +145,7 @@ export function tagGhPages (userId, fullName, cb) {
     // Build tag name
     (pkgJson, cb) => {
       let version = JSON.parse(pkgJson).version
-      let tag = /(^[0-9]+\.[0-9]+\.[0-9]+)/.exec(version)[1] + '-' + Date.now()
+      let tag = 'v' + (/(^[0-9]+\.[0-9]+\.[0-9]+)/.exec(version)[1]) + '-' + Date.now()
       cb(null, tag)
     },
     // Get commit sha to tag
