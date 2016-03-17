@@ -1,6 +1,8 @@
 import parseGithubHeaders from 'parse-link-header'
 import async from 'async'
 import isPlatformProject from './is-platform-project'
+import base64 from './base64'
+
 var baseUrl = 'https://api.github.com'
 
 export default function (userId) {
@@ -76,20 +78,15 @@ export default function (userId) {
       var res = githubCall({
         method: 'GET',
         url: `${baseUrl}/repos/${fullName}/contents/${path}`,
-        opts: {
-          headers: {
-            Accept: 'application/vnd.github.v3.raw'
-          }
-        }
-      }, pluckFromResponse('content', cb))
-      if (!cb) return res.content
+      }, pluckFromResponse('data', cb))
+      if (!cb) return res.data
     },
 
     putFileContents: function (fullName, path, { commitMsg, json, sha }, cb) {
       var opts = {
         data: {
           message: commitMsg,
-          content: base64Encode(json),
+          content: base64.encode(json),
           sha: sha
         }
       }
@@ -123,8 +120,4 @@ function pluckFromResponse (key, cb) {
     if (res) return cb(err, res[key])
     cb(err)
   }
-}
-
-function base64Encode (json) {
-  return new Buffer(JSON.stringify(json, null, '\t')).toString('base64')
 }
