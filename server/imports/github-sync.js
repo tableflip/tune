@@ -36,17 +36,35 @@ export function syncProject (userId, { fullName, name }, cb) {
       lastCommit: {
         sha: res.lastCommit[0].sha,
         dateTime: res.lastCommit[0].commit.committer.date
-      },
-      'facts.json': res.facts.content,
-      'facts.sha': res.facts.sha,
-      schema: res.facts.schema
+      }
     }
     Projects.upsert({ full_name: fullName }, { $set: project, $addToSet: { users: userId } }, {}, e => {
       if (e) {
         console.error(`Cannot sync project "${project.full_name}"`, e)
         return cb(e)
       }
-      syncPages(userId, fullName, cb)
+      var projectId = Projects.findOne({ full_name: fullName })._id
+      var page = {
+        project: {
+          full_name: project.full_name,
+          _id: projectId
+        },
+        content: {
+          json: res.facts.content,
+          sha: res.facts.sha
+        },
+        lastCommit: {
+          sha: res.lastCommit[0].sha
+        },
+        schema: res.facts.schema
+      }
+      Pages.upsert({ name: 'Site Settings', 'project.full_name': project.full_name }, { $set: page }, {}, e => {
+        if (e) {
+          console.error(`Cannot sync page "Site Settings" in project "${project.full_name}"`, e)
+          return cb(e)
+        }
+        syncPages(userId, fullName, cb)
+      })
     })
   })
 }
