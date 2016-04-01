@@ -8,3 +8,8 @@ Meteor.startup(() => {
     }
   })
 })
+
+// DELETE ME
+import * as Github from './imports/github-methods'
+
+GithubGlobal = Github

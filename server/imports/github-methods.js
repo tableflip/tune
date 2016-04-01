@@ -121,13 +121,14 @@ export function putFacts (userId, fullName, cb) {
   }, cb)
 }
 
-export function putPageContent (userId, fullName, pageName, cb) {
+export function putPageContent (userId, fullName, pageName, isRoot, cb) {
   var github = githubInterface(userId)
   var project = Projects.findOne({ full_name: fullName })
   if (!project) return cb('Cannot find project')
   var page = Pages.findOne({ 'project._id': project._id, name: pageName })
   if (!page) return cb('Cannot find page')
-  github.putFileContents(project.full_name, `pages/${pageName}/content.json`, {
+  var filename = isRoot ? 'facts.json' : `pages/${pageName}/content.json`
+  github.putFileContents(project.full_name, filename, {
     commitMsg: `${pageName} updated via ${Meteor.settings.appName}`,
     json: page.content.json,
     sha: page.content.sha
