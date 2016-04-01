@@ -1,6 +1,7 @@
 import async from 'async'
 import githubInterface from './github-interface'
 import isPlatformProject from './is-platform-project'
+import base64 from './base64'
 
 export function getRepos (userId, cb) {
   var github = githubInterface(userId)
@@ -10,9 +11,9 @@ export function getRepos (userId, cb) {
   })
 }
 
-export function getLastCommit (userId, fullName, cb) {
+export function getLastCommit (userId, fullName, opts, cb) {
   var github = githubInterface(userId)
-  return github.getLastCommit(fullName, cb)
+  return github.getLastCommit(fullName, opts, cb)
 }
 
 export function getFacts (userId, fullName, cb) {
@@ -24,7 +25,7 @@ export function getFacts (userId, fullName, cb) {
     function getFacts (res, cb) {
       var factsJson = res.find(obj => obj.type === 'file' && obj.name === 'facts.json')
       github.getFileContents(fullName, 'facts.json', (err, res) => {
-        cb(err, { sha: factsJson.sha, content: res })
+        cb(err, { sha: factsJson.sha, content: res.content })
       })
     },
     function getSchema (data, cb) {
@@ -36,7 +37,7 @@ export function getFacts (userId, fullName, cb) {
             return cb(err)
           }
         } else {
-          data.schema = res
+          data.schema = res.content
         }
         cb(null, data)
       })
@@ -45,8 +46,8 @@ export function getFacts (userId, fullName, cb) {
     if (err) return cb(err)
     cb(null, {
       sha: data.sha,
-      content: JSON.parse(data.content),
-      schema: JSON.parse(data.schema)
+      content: JSON.parse(base64.decode(data.content)),
+      schema: JSON.parse(base64.decode(data.schema))
     })
   })
 }
@@ -80,7 +81,7 @@ export function getPageContents (userId, fullName, page, cb) {
       var contentJson = res.find(obj => obj.type === 'file' && obj.name === 'content.json')
       if (!contentJson) return cb('Missing content.json')
       github.getFileContents(fullName, `pages/${page}/${contentJson.name}`, (err, res) => {
-        cb(err, { sha: contentJson.sha, content: res })
+        cb(err, { sha: contentJson.sha, content: res.content })
       })
     },
     function getPageSchemaJson (data, cb) {
@@ -92,7 +93,7 @@ export function getPageContents (userId, fullName, page, cb) {
             return cb(err)
           }
         } else {
-          data.schema = res
+          data.schema = res.content
         }
         cb(null, data)
       })
@@ -103,8 +104,8 @@ export function getPageContents (userId, fullName, page, cb) {
       name: page,
       sha: data.sha,
       dateTime: new Date(),
-      content: JSON.parse(data.content),
-      schema: JSON.parse(data.schema)
+      content: JSON.parse(base64.decode(data.content)),
+      schema: JSON.parse(base64.decode(data.schema))
     })
   })
 }
@@ -132,4 +133,43 @@ export function putPageContent (userId, fullName, pageName, cb) {
     sha: page.content.sha
   }, cb)
 
+}
+
+export function tagGhPages (userId, fullName, cb) {
+  let github = githubInterface(userId)
+
+  async.waterfall([
+    // Get current project version
+    Meteor.bindEnvironment(function (cb) {
+      github.getFileContents(fullName, 'package.json', cb)
+    }),
+    // Increment version
+    Meteor.bindEnvironment(function (res, cb) {
+      let pkg = JSON.parse(base64.decode(res.content))
+      pkg.version = incrementPatch(pkg.version)
+      cb(null, pkg, res.sha)
+    }),
+    // Get commit sha to tag
+    Meteor.bindEnvironment(function (pkg, pkgSha, cb) {
+      github.getLastCommit(fullName, {sha: 'gh-pages'}, (err, commits) => {
+        if (err) return cb(err)
+        if (!commits || !commits.length) return cb(new Error('No commits to tag'))
+        cb(null, pkg, pkgSha, commits[0])
+      })
+    }),
+    // Update package.json
+    Meteor.bindEnvironment(function (pkg, pkgSha, commit, cb) {
+      let params = {commitMsg: pkg.version, sha: pkgSha, json: pkg}
+      github.putFileContents(fullName, 'package.json', params, (err) => cb(err, pkg, commit))
+    }),
+    // Create tag
+    Meteor.bindEnvironment(function (pkg, commit, cb) {
+      github.postRef(fullName, `refs/tags/v${pkg.version}`, commit.sha, cb)
+    })
+  ], cb)
+}
+
+function incrementPatch (version) {
+  let numbers = /^([0-9]+)\.([0-9]+)\.([0-9]+)/.exec(version)
+  return `${numbers[1]}.${numbers[2]}.${parseInt(numbers[3], 10) + 1}`
 }
