@@ -110,17 +110,6 @@ export function getPageContents (userId, fullName, page, cb) {
   })
 }
 
-export function putFacts (userId, fullName, cb) {
-  var github = githubInterface(userId)
-  var project = Projects.findOne({ full_name: fullName })
-  if (!project) return cb('Cannot find project')
-  github.putFileContents(project.full_name, 'facts.json', {
-    commitMsg: `facts.json updated via ${Meteor.settings.appName}`,
-    json: project.facts.json,
-    sha: project.facts.sha
-  }, cb)
-}
-
 export function putPageContent (userId, fullName, pageName, isRoot, cb) {
   var github = githubInterface(userId)
   var project = Projects.findOne({ full_name: fullName })
@@ -133,7 +122,6 @@ export function putPageContent (userId, fullName, pageName, isRoot, cb) {
     json: page.content.json,
     sha: page.content.sha
   }, cb)
-
 }
 
 export function tagGhPages (userId, fullName, cb) {
