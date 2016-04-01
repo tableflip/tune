@@ -1,11 +1,6 @@
 import { combineReducers } from 'redux'
 import * as Actions from './actions'
 
-const initialState = {
-  spinnerVisible: false,
-  footerVisible: true
-}
-
 function spinnerVisible (state = false, action) {
   switch (action.type) {
     case Actions.SET_SPINNER_VISIBLE:
@@ -24,9 +19,29 @@ function footerVisible (state = true, action) {
   }
 }
 
+function routeParams (params = {}, action) {
+  switch (action.type) {
+    case Actions.SET_ROUTE_PARAMS:
+      return action.params || {}
+    default:
+      return params
+  }
+}
+
+function routeQueryParams (queryParams = {}, action) {
+  switch (action.type) {
+    case Actions.SET_ROUTE_QUERY_PARAMS:
+      return action.queryParams || {}
+    default:
+      return queryParams
+  }
+}
+
 const app = combineReducers({
   spinnerVisible,
-  footerVisible
+  footerVisible,
+  routeParams,
+  routeQueryParams
 })
 
 export default app
