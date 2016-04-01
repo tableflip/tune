@@ -1,6 +1,8 @@
 import parseGithubHeaders from 'parse-link-header'
 import async from 'async'
 import isPlatformProject from './is-platform-project'
+import base64 from './base64'
+
 var baseUrl = 'https://api.github.com'
 
 export default function (userId) {
@@ -42,15 +44,24 @@ export default function (userId) {
       }
     },
 
-    getLastCommit: function (fullName, cb) {
-      var res = githubCall({
+    getLastCommit: function (fullName, opts, cb) {
+      if (!cb) {
+        cb = opts
+        opts = cb
+      }
+
+      opts = opts || {}
+
+      let params = {per_page: 1}
+
+      // Commit or branch to get last commits from
+      // Default: the repository’s default branch (usually master)
+      if (opts.sha) params.sha = opts.sha
+
+      let res = githubCall({
         method: 'GET',
         url: `${baseUrl}/repos/${fullName}/commits`,
-        opts: {
-          params: {
-            per_page: 1
-          }
-        }
+        opts: {params}
       }, pluckFromResponse('data', cb))
       if (!cb) return res.data
     },
@@ -67,20 +78,15 @@ export default function (userId) {
       var res = githubCall({
         method: 'GET',
         url: `${baseUrl}/repos/${fullName}/contents/${path}`,
-        opts: {
-          headers: {
-            Accept: 'application/vnd.github.v3.raw'
-          }
-        }
-      }, pluckFromResponse('content', cb))
-      if (!cb) return res.content
+      }, pluckFromResponse('data', cb))
+      if (!cb) return res.data
     },
 
     putFileContents: function (fullName, path, { commitMsg, json, sha }, cb) {
       var opts = {
         data: {
           message: commitMsg,
-          content: base64Encode(json),
+          content: base64.encode(json),
           sha: sha
         }
       }
@@ -89,6 +95,18 @@ export default function (userId) {
         url: `${baseUrl}/repos/${fullName}/contents/${path}`,
         opts: opts
       }, cb)
+      if (!cb) return res
+    },
+
+    postRef: function (fullName, ref, sha, cb) {
+      let data = {ref, sha}
+
+      let res = githubCall({
+        method: 'POST',
+        url: `${baseUrl}/repos/${fullName}/git/refs`,
+        opts: {data}
+      }, cb)
+
       if (!cb) return res
     }
   }
@@ -102,8 +120,4 @@ function pluckFromResponse (key, cb) {
     if (res) return cb(err, res[key])
     cb(err)
   }
-}
-
-function base64Encode (json) {
-  return new Buffer(JSON.stringify(json, null, '\t')).toString('base64')
 }
