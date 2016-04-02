@@ -1,6 +1,6 @@
 import async from 'async'
 import githubInterface from './github-interface'
-import isPlatformProject from './is-platform-project'
+import extractContent from './content-schema-transform'
 import base64 from './base64'
 
 export function getRepos (userId, cb) {
@@ -119,7 +119,7 @@ export function putPageContent (userId, fullName, pageName, isRoot, cb) {
   var filename = isRoot ? 'facts.json' : `pages/${pageName}/content.json`
   github.putFileContents(project.full_name, filename, {
     commitMsg: `${pageName} updated via ${Meteor.settings.appName}`,
-    json: page.content.json,
+    json: extractContent(page.content.json),
     sha: page.content.sha
   }, cb)
 }
