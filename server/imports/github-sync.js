@@ -1,6 +1,6 @@
 import async from 'async'
 import * as githubMethods from './github-methods'
-import mergeSchema from './content-schema-transform'
+import { mergeSchema } from './content-schema-transform'
 
 var getReposSync = Meteor.wrapAsync(githubMethods.getRepos)
 
@@ -53,13 +53,12 @@ export function syncProject (userId, { fullName, name }, cb) {
         },
         isRoot: true,
         content: {
-          json: res.facts.content,
+          json: mergeSchema(res.facts.content, res.facts.schema),
           sha: res.facts.sha
         },
         directory: {
           sha: null
-        },
-        schema: res.facts.schema
+        }
       }
       Pages.upsert({ name: Pages.rootName, 'project.full_name': project.full_name }, { $set: page }, {}, e => {
         if (e) {
@@ -113,7 +112,7 @@ export function syncPages (userId, fullName, done) {
           },
           content: {
             sha: pageDetails.sha,
-            json: mergeSchema(pageDetails.content. pageDetails.schema)
+            json: mergeSchema(pageDetails.content, pageDetails.schema)
           }
         }
         Pages.upsert({ name: pageDetails.name, 'project.full_name': project.full_name }, { $set: page }, {}, e => {

@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { get as getObjectPath } from 'object-path'
 import OverlayLoader from '../components/overlay-loader'
 import Breadcrumbs from '../components/breadcrumbs'
 import ValidationError from '../components/validation-error'
@@ -10,7 +11,7 @@ const PageEdit = React.createClass({
   mixins: [ReactMeteorData],
   propTypes: {
     pageId: React.PropTypes.string,
-    field: React.PropTypes.string
+    fieldPath: React.PropTypes.string
   },
   getMeteorData () {
     var pageSub = Subs.subscribe('page', this.props.pageId)
@@ -18,14 +19,16 @@ const PageEdit = React.createClass({
     return {
       pageReady: pageSub.ready(),
       page: page,
-      project: Projects.findOne({ _id: page && page.project._id })
+      project: Projects.findOne({ _id: page && page.project._id }),
+      field: getObjectPath(page, `content.json.${fieldPath}`)
     }
   },
   render () {
-    if (this.props.spinnerVisible) return false
+    if (this.props.spinnerVisible || !this.data.page) return false
     var props = {
       page: this.data.page,
       project: this.data.project,
+      fieldPath: this.props.fieldPath,
       field: this.props.field
     }
     return (
@@ -40,20 +43,20 @@ const PageField = React.createClass({
   propTypes: {
     page: React.PropTypes.object,
     project: React.PropTypes.object,
-    field: React.PropTypes.string
+    fieldPath: React.PropTypes.string,
+    field: React.PropTypes.object
   },
   getInitialState () {
-    let page = this.props.page
     let field = this.props.field
-    let type = (page.schema[field] && page.schema[field].type) || 'text'
-    let content = page.content.json[field]
+    let type = field.schema.type || 'text'
+    let content = field.value
     let newContent = (content instanceof Object) ? Object.assign({}, content) : content
     return { type, content, newContent }
   },
   isValid () {
     let validation = validator.validateDocField({
       doc: this.props.page,
-      field: this.props.field,
+      fieldPath: this.props.fieldPath,
       newValue: this.state.newContent
     })
     if (validation.error) {
@@ -71,7 +74,7 @@ const PageField = React.createClass({
     if (!this.isValid()) return
     let payload = {
       pageId: this.props.page._id,
-      key: this.props.field,
+      fieldPath: this.props.fieldPath,
       newValue: this.state.newContent
     }
     this.setState({ saving: true })

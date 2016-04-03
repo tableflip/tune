@@ -63,7 +63,7 @@ FlowRouter.route('/project/:projectId/page/:pageId/edit', {
       FlowRouter.go('page')
     } else {
       mount(pages.Layout, {
-        content: React.createElement(pages.PageEdit, {pageId: params.pageId, field: queryParams.field}),
+        content: React.createElement(pages.PageEdit, {pageId: params.pageId, fieldPath: queryParams.field}),
         dir: params._dir
       })
     }

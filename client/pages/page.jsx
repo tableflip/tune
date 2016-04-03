@@ -18,7 +18,7 @@ const Page = React.createClass({
 
   render () {
     if (this.props.spinnerVisible) return false
-    let content = Object.keys(this.data.page.content.json)
+    let fieldNames = Object.keys(this.data.page.content.json)
     return (
       <div>
         <Breadcrumbs pages={[
@@ -29,13 +29,14 @@ const Page = React.createClass({
         <div className="container">
           <p className="lead m-t-1">Pick an item</p>
           <ul className="list-group">
-            {content.map((field, ind) => {
-              let schema = this.data.page.schema[field]
+            {fieldNames.map((fieldName, ind) => {
+              let fieldObj = this.data.page.content.json[fieldName]
+              let schema = fieldObj.schema
               let type = schema && schema.type
-              let value = this.data.page.content.json[field]
+              let value = fieldObj.value
               return (
-                <a className='list-group-item' key={ind} href={`/project/${this.data.project._id}/page/${this.data.page._id}/edit?field=${field}`}>
-                  <p><code>{field}</code></p>
+                <a className='list-group-item' key={ind} href={`/project/${this.data.project._id}/page/${this.data.page._id}/edit?field=${fieldName}`}>
+                  <p><code>{fieldName}</code></p>
                   <div><em>
                     <FieldPreview type={type} value={value} />
                   </em></div>
