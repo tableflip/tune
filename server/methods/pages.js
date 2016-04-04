@@ -1,6 +1,10 @@
 import { putPageContent, getPages } from '../imports/github-methods'
 import * as validator from '/lib/imports/validator'
+import convertPath from '/lib/imports/convert-path'
 import * as objectPath from 'object-path'
+import { extractContent } from '../imports/content-schema-transform'
+
+globalExtractContent = extractContent
 
 var putPageContentAsync = Meteor.wrapAsync(putPageContent)
 var getPagesAsync = Meteor.wrapAsync(getPages)
