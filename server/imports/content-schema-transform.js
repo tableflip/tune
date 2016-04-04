@@ -3,16 +3,17 @@ export function mergeSchema (content = {}, schema = {}) {
 }
 
 function mergeLayer (content, schema) {
+  var isArray = content instanceof Array
   return Object.keys(content).reduce((merged, key) => {
     let val = content[key]
-    let schemaKey = schema.type === 'collection' ? schema.itemSchema : (schema[key] || {})
-    if (val instanceof Object && (!schemaKey.type || schemaKey.type === 'collection')) {
-      merged[key] = mergeLayer(val, schemaKey)
+    let schemaKey = isArray ? schema.itemSchema : (schema[key] || {})
+    if (val instanceof Object && schemaKey.type === 'collection') {
+      merged[key] = { value: mergeLayer(val, schemaKey), schema: schemaKey }
     } else {
       merged[key] = { value: val, schema: schemaKey }
     }
     return merged
-  }, (content instanceof Array) ? [] : {})
+  }, isArray ? [] : {})
 }
 
 export function extractContent (merged = {}) {
@@ -20,10 +21,9 @@ export function extractContent (merged = {}) {
 }
 
 function extractContentLayer(merged) {
-  if (!merged) return
-  if (merged.value) return merged.value
-  return Object.keys(merged).reduce((content, key) => {
-    content[key] = extractContentLayer(merged[key])
+  if (!merged || !merged.value) return
+  return Object.keys(merged.value).reduce((content, key) => {
+    content[key] = extractContentLayer(merged.value[key])
     return content
   }, (merged instanceof Array) ? [] : {})
 }
