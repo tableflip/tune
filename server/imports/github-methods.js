@@ -1,6 +1,6 @@
 import async from 'async'
 import githubInterface from './github-interface'
-import isPlatformProject from './is-platform-project'
+import { extractContent } from './content-schema-transform'
 import base64 from './base64'
 
 export function getRepos (userId, cb) {
@@ -110,29 +110,18 @@ export function getPageContents (userId, fullName, page, cb) {
   })
 }
 
-export function putFacts (userId, fullName, cb) {
-  var github = githubInterface(userId)
-  var project = Projects.findOne({ full_name: fullName })
-  if (!project) return cb('Cannot find project')
-  github.putFileContents(project.full_name, 'facts.json', {
-    commitMsg: `facts.json updated via ${Meteor.settings.appName}`,
-    json: project.facts.json,
-    sha: project.facts.sha
-  }, cb)
-}
-
-export function putPageContent (userId, fullName, pageName, cb) {
+export function putPageContent (userId, fullName, pageName, isRoot, cb) {
   var github = githubInterface(userId)
   var project = Projects.findOne({ full_name: fullName })
   if (!project) return cb('Cannot find project')
   var page = Pages.findOne({ 'project._id': project._id, name: pageName })
   if (!page) return cb('Cannot find page')
-  github.putFileContents(project.full_name, `pages/${pageName}/content.json`, {
+  var filename = isRoot ? 'facts.json' : `pages/${pageName}/content.json`
+  github.putFileContents(project.full_name, filename, {
     commitMsg: `${pageName} updated via ${Meteor.settings.appName}`,
-    json: page.content.json,
+    json: extractContent(page.content.json),
     sha: page.content.sha
   }, cb)
-
 }
 
 export function tagGhPages (userId, fullName, cb) {

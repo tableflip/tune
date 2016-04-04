@@ -42,34 +42,6 @@ FlowRouter.route('/project/:projectId', {
   }
 })
 
-FlowRouter.route('/project/:projectId/facts', {
-  name: 'project-facts',
-  index: 2,
-  parent: 'project',
-  action (params) {
-    mount(pages.Layout, {
-      content: React.createElement(pages.Facts, {projectId: params.projectId}),
-      dir: params._dir
-    })
-  }
-})
-
-FlowRouter.route('/project/:projectId/facts/edit', {
-  name: 'project-facts-edit',
-  index: 3,
-  parent: 'project-facts',
-  action (params, queryParams) {
-    if (!queryParams || !queryParams.field) {
-      FlowRouter.go('project-facts')
-    } else {
-      mount(pages.Layout, {
-        content: React.createElement(pages.FactsEdit, {projectId: params.projectId, field: queryParams.field}),
-        dir: params._dir
-      })
-    }
-  }
-})
-
 FlowRouter.route('/project/:projectId/page/:pageId', {
   name: 'page',
   index: 2,
@@ -91,7 +63,7 @@ FlowRouter.route('/project/:projectId/page/:pageId/edit', {
       FlowRouter.go('page')
     } else {
       mount(pages.Layout, {
-        content: React.createElement(pages.PageEdit, {pageId: params.pageId, field: queryParams.field}),
+        content: React.createElement(pages.PageEdit, {pageId: params.pageId, fieldPath: queryParams.field}),
         dir: params._dir
       })
     }
