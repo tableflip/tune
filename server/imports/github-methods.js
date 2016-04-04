@@ -1,6 +1,6 @@
 import async from 'async'
 import githubInterface from './github-interface'
-import extractContent from './content-schema-transform'
+import { extractContent } from './content-schema-transform'
 import base64 from './base64'
 
 export function getRepos (userId, cb) {

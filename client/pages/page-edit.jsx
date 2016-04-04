@@ -20,7 +20,7 @@ const PageEdit = React.createClass({
       pageReady: pageSub.ready(),
       page: page,
       project: Projects.findOne({ _id: page && page.project._id }),
-      field: getObjectPath(page, `content.json.${fieldPath}`)
+      field: getObjectPath(page, `content.json.${this.props.fieldPath}`)
     }
   },
   render () {
@@ -29,7 +29,7 @@ const PageEdit = React.createClass({
       page: this.data.page,
       project: this.data.project,
       fieldPath: this.props.fieldPath,
-      field: this.props.field
+      field: this.data.field
     }
     return (
       <div>
@@ -54,10 +54,9 @@ const PageField = React.createClass({
     return { type, content, newContent }
   },
   isValid () {
-    let validation = validator.validateDocField({
-      doc: this.props.page,
-      fieldPath: this.props.fieldPath,
-      newValue: this.state.newContent
+    let validation = validator.validateField({
+      schema: this.props.field.schema,
+      val: this.state.newContent
     })
     if (validation.error) {
       this.setState({ validationError: validation.error })
@@ -97,7 +96,7 @@ const PageField = React.createClass({
           { text: this.props.page.name, href: `/project/${this.props.project._id}/page/${this.props.page._id}` }
         ]} />
         <div className="container">
-          <p>Edit <code>{this.props.field}</code></p>
+          <p>Edit <code>{this.props.fieldPath}</code></p>
           <div className="m-y-1">
             { field }
           </div>

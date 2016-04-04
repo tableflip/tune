@@ -26,8 +26,7 @@ Meteor.methods({
       newValue: newValue
     })
     if (validation.error) throw new Meteor.Error(validation.error)
-    var update = {}
-    objectPath.set(update, `content.json.${fieldPath}.value`, newValue)
+    var update = { [`content.json.${fieldPath}.value`]: newValue }
     Pages.update(page._id, { $set: update })
     var response = putPageContentAsync(this.userId, project.full_name, page.name, page.isRoot)
     var githubProjectUpdate = {
