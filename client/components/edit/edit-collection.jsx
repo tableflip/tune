@@ -1,6 +1,8 @@
 import React from 'react'
+import jsen from 'jsen'
+import { connect } from 'react-redux'
 
-export default React.createClass({
+let EditCollection = React.createClass({
   propTypes: {
     field: React.PropTypes.string,
     schema: React.PropTypes.any,
@@ -9,7 +11,7 @@ export default React.createClass({
     save: React.PropTypes.func
   },
   getInitialState: function () {
-    return { list: this.props.content, lastMoved: -1, lastDir: 0 }
+    return { list: this.props.content, lastMoved: -1, lastDir: 0, listLength: this.props.content.length }
   },
   componentDidMount: function () {
     this.update()
@@ -26,10 +28,9 @@ export default React.createClass({
   },
   addItem: function (e) {
     e.preventDefault()
-    if (this.refs.addItem.value === '') return
     let newList = this.state.list
-    newList.push(this.refs.addItem.value)
-    this.refs.addItem.value = ''
+    var defaultBuilder = jsen({ default: {}, properties: this.props.schema[0] })
+    newList.push(defaultBuilder.build())
     this.setState({ list: newList, lastMoved: newList.length - 1, lastDir: -1 }, this.update)
   },
   remove: function (index, e) {
@@ -69,6 +70,12 @@ export default React.createClass({
     return (
       <ul className='list-group' onKeyDown={this.refocus}>
         { this.state.list.map((item, i) => {
+          let editLink = FlowRouter.path('collection-item', {
+            projectId: this.props.routeParams.projectId,
+            pageId: this.props.routeParams.pageId,
+            collectionName: this.props.field,
+            index: i.toString()
+          })
           return (
             <li key={i} className='list-group-item'>
               <div className="row">
@@ -81,7 +88,7 @@ export default React.createClass({
                       <i className="fa fa-arrow-down"></i>
                     </button>
                   </div>
-                  <a className='btn btn-primary' href={`${window.location.pathname}?field=${this.props.field}.${i}`}>Edit</a>
+                  <a className='btn btn-primary' disabled={i > this.state.listLength} href={editLink}>Edit</a>
                   <button className='pull-right btn btn-danger' onClick={ this.remove.bind(null, i) }><i className="fa fa-remove"></i></button>
                 </div>
                 <div className="col-xs-12">
@@ -91,17 +98,8 @@ export default React.createClass({
             </li>
           )
         })}
-        <li className="list-group-item">
-          <form onSubmit={ this.addItem }>
-            <div className="form-group row m-y-0">
-              <div className="col-xs-10">
-                <input className='form-control' type='text' placeholder='Add an Item' ref='addItem' />
-              </div>
-              <div className="col-xs-2 text-right">
-                <span className='pull-right btn btn-primary' onClick={ this.addItem }><i className="fa fa-plus"></i></span>
-              </div>
-            </div>
-          </form>
+        <li className="list-group-item text-xs-center">
+          <button className="btn btn-secondary" onClick={this.addItem}><i className="fa fa-plus"></i> Add an item</button>
         </li>
       </ul>
     )
@@ -110,3 +108,5 @@ export default React.createClass({
     this._focusButton && this._focusButton.focus() && this._focusButton.select()
   }
 })
+
+export default connect(state => state)(EditCollection)

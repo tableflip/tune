@@ -1,3 +1,4 @@
+import { get as getObjectPath } from 'object-path'
 import { putPageContent, getPages } from '../imports/github-methods'
 import * as validator from '/lib/imports/validator'
 
@@ -16,7 +17,7 @@ Meteor.methods({
     if (project.users.indexOf(this.userId) < 0) {
       throw new Meteor.Error('A user can only update a project of which they are a member')
     }
-    if (!page.content.json.hasOwnProperty(key)) throw new Meteor.Error('You cannot add a key to page content')
+    if (getObjectPath(page.content.json, key) === undefined) throw new Meteor.Error('You cannot add a key to page content')
     var validation = validator.validateDocField({
       doc: page,
       field: key,
