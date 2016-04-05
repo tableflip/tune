@@ -1,4 +1,5 @@
 import React from 'react'
+import getPrimaryField from '/lib/imports/get-primary-field'
 
 export default React.createClass({
   propTypes: {
@@ -81,16 +82,13 @@ let ListPreview = React.createClass({
 
 let CollectionPreview = React.createClass({
   render () {
-    let headlineField = Object.keys(this.props.schema).find(key => {
-      var schemaKey = this.props.schema[key]
-      return schemaKey && schemaKey.type === 'text'
-    }) || Object.keys(this.props.schema)[0]
+    let primaryField = getPrimaryField(this.props.schema)
     return (
       <ul className="list-group">
         {
           this.props.collection.length ?
             this.props.collection.map((entry, ind) => (
-              <li className="list-group-item" key={ind}><span className="text-muted">{headlineField}:</span> {entry[headlineField]}</li>
+              <li className="list-group-item" key={ind}><span className="text-muted">{primaryField}:</span> {entry[primaryField]}</li>
             )) :
             (<li className="list-group-item text-xs-center text-muted">No entries</li>)
         }

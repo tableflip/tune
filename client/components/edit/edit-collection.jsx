@@ -1,6 +1,7 @@
 import React from 'react'
 import jsen from 'jsen'
 import { connect } from 'react-redux'
+import getPrimaryField from '/lib/imports/get-primary-field'
 
 let EditCollection = React.createClass({
   propTypes: {
@@ -67,10 +68,7 @@ let EditCollection = React.createClass({
   },
   render () {
     let schema = this.props.schema[0]
-    let headlineField = Object.keys(schema).find(key => {
-      var schemaKey = schema[key]
-      return schemaKey && schemaKey.type === 'text'
-    }) || Object.keys(schema)[0]
+    let primaryField = getPrimaryField(schema)
     return (
       <ul className='list-group' onKeyDown={this.refocus}>
         { this.state.list.length ?
@@ -97,7 +95,7 @@ let EditCollection = React.createClass({
                       <button className='pull-right btn btn-danger' onClick={ this.remove.bind(null, i) }><i className="fa fa-remove"></i></button>
                     </div>
                     <div className="col-xs-12">
-                      <div className="m-t-1"><span className="text-muted">{headlineField}:</span> {item[headlineField]}</div>
+                      <div className="m-t-1"><span className="text-muted">{primaryField}:</span> {item[primaryField]}</div>
                     </div>
                   </div>
                 </li>

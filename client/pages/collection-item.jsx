@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { get as getObjectPath } from 'object-path'
 import Breadcrumbs from '../components/breadcrumbs'
 import FieldPreview from '../components/field-preview'
+import getPrimaryField from '/lib/imports/get-primary-field'
 
 const CollectionItem = React.createClass({
   mixins: [ReactMeteorData],
@@ -20,6 +21,7 @@ const CollectionItem = React.createClass({
   render () {
     if (this.props.spinnerVisible) return false
     let itemContent = getObjectPath(this.data.page.content.json, `${this.props.collectionName}.${this.props.index}`)
+    let schema = getObjectPath(this.data.page.content.json, `${this.props.collectionName}.0`)
     let itemKeys = Object.keys(itemContent)
     return (
       <div>
@@ -28,7 +30,7 @@ const CollectionItem = React.createClass({
           { text: this.data.project.name, href: `/project/${this.data.project._id}` },
           { text: this.data.page.name, href: `/project/${this.data.project._id}/page/${this.data.page._id}` },
           { text: this.props.collectionName, href: `/project/${this.data.project._id}/page/${this.data.page._id}/edit?field=${this.props.collectionName}` },
-          { text: this.props.index, active: true }
+          { text: itemContent[getPrimaryField(schema)] || this.props.index, active: true }
         ]} />
         <div className="container">
           <p className="lead m-t-1">Pick an item</p>
