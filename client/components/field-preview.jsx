@@ -1,8 +1,14 @@
 import React from 'react'
 
 export default React.createClass({
+  propTypes: {
+    schema: React.PropTypes.any,
+    value: React.PropTypes.any
+  },
   render () {
-    switch (this.props.type) {
+    if (this.props.schema instanceof Array) return (<CollectionPreview collection={this.props.value} schema={this.props.schema[0]} />)
+    let type = this.props.schema && this.props.schema.type
+    switch (type) {
       case 'img':
       return (<ImagePreview url={this.props.value} />)
 
@@ -68,6 +74,22 @@ let ListPreview = React.createClass({
     return (
       <div>
         {this.props.list.map((entry, i) => (<div key={i}>{entry}</div>))}
+      </div>
+    )
+  }
+})
+
+let CollectionPreview = React.createClass({
+  render () {
+    let headlineField = Object.keys(this.props.schema).find(key => {
+      var schemaKey = this.props.schema[key]
+      return schemaKey && schemaKey.type === 'text'
+    }) || Object.keys(this.props.schema)[0]
+    return (
+      <div>
+        {this.props.collection.map((entry, ind) => (
+          <div key={ind}>{headlineField}: {entry[headlineField]}</div>
+        ))}
       </div>
     )
   }

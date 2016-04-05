@@ -1,9 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { get as getObjectPath } from 'object-path'
 import OverlayLoader from '../components/overlay-loader'
 import Breadcrumbs from '../components/breadcrumbs'
 import ValidationError from '../components/validation-error'
-import fields from '../components/field-lookup'
+import fieldLookup from '../components/field-lookup'
 import * as validator from '/lib/imports/validator'
 
 const PageEdit = React.createClass({
@@ -45,10 +46,10 @@ const PageField = React.createClass({
   getInitialState () {
     let page = this.props.page
     let field = this.props.field
-    let type = (page.schema[field] && page.schema[field].type) || 'text'
-    let content = page.content.json[field]
+    let schema = page.schema[field]
+    let content = getObjectPath(page.content.json, field)
     let newContent = (content instanceof Object) ? Object.assign({}, content) : content
-    return { type, content, newContent }
+    return { schema, content, newContent }
   },
   isValid () {
     let validation = validator.validateDocField({
@@ -85,7 +86,7 @@ const PageField = React.createClass({
     })
   },
   render () {
-    let field = fields(this.state.type, this.state.content, this.update, this.save)
+    let field = fieldLookup(this.state.schema, this.state.content, this.update, this.save)
     return (
       <div>
         <Breadcrumbs pages={[

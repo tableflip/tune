@@ -31,13 +31,12 @@ const Page = React.createClass({
           <ul className="list-group">
             {content.map((field, ind) => {
               let schema = this.data.page.schema[field]
-              let type = schema && schema.type
               let value = this.data.page.content.json[field]
               return (
                 <a className='list-group-item' key={ind} href={`/project/${this.data.project._id}/page/${this.data.page._id}/edit?field=${field}`}>
                   <p><code>{field}</code></p>
                   <div><em>
-                    <FieldPreview type={type} value={value} />
+                    <FieldPreview schema={schema} value={value} />
                   </em></div>
                 </a>
               )}

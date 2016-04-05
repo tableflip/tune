@@ -1,8 +1,14 @@
 import React from 'react'
 import * as Components from './edit'
 
-module.exports = function (type, content, update, save) {
+module.exports = function (schema, content, update, save) {
+  let type = getType(schema)
   let Component = Components[`${type}`]
-  let props = { content, update, save }
+  let props = { schema, content, update, save }
   return (<Component {...props} />)
+}
+
+function getType(schema) {
+  if (schema instanceof Array) return 'collection'
+  return (schema && schema.type) || 'text'
 }
