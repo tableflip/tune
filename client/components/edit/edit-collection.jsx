@@ -2,6 +2,7 @@ import React from 'react'
 
 export default React.createClass({
   propTypes: {
+    field: React.PropTypes.string,
     schema: React.PropTypes.any,
     content: React.PropTypes.array,
     update: React.PropTypes.func,
@@ -80,7 +81,7 @@ export default React.createClass({
                       <i className="fa fa-arrow-down"></i>
                     </button>
                   </div>
-                  <a className='btn btn-primary' href="#">Edit</a>
+                  <a className='btn btn-primary' href={`${window.location.pathname}?field=${this.props.field}.${i}`}>Edit</a>
                   <button className='pull-right btn btn-danger' onClick={ this.remove.bind(null, i) }><i className="fa fa-remove"></i></button>
                 </div>
                 <div className="col-xs-12">

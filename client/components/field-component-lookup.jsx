@@ -1,10 +1,10 @@
 import React from 'react'
 import * as Components from './edit'
 
-module.exports = function (schema, content, update, save) {
+module.exports = function ({ field, schema, content, update, save }) {
   let type = getType(schema)
   let Component = Components[`${type}`]
-  let props = { schema, content, update, save }
+  let props = { field, schema, content, update, save }
   return (<Component {...props} />)
 }
 

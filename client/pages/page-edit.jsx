@@ -4,7 +4,7 @@ import { get as getObjectPath } from 'object-path'
 import OverlayLoader from '../components/overlay-loader'
 import Breadcrumbs from '../components/breadcrumbs'
 import ValidationError from '../components/validation-error'
-import fieldLookup from '../components/field-lookup'
+import fieldComponentLookup from '../components/field-component-lookup'
 import * as validator from '/lib/imports/validator'
 
 const PageEdit = React.createClass({
@@ -86,7 +86,13 @@ const PageField = React.createClass({
     })
   },
   render () {
-    let field = fieldLookup(this.state.schema, this.state.content, this.update, this.save)
+    let fieldComponent = fieldComponentLookup({
+      field: this.props.field,
+      schema: this.state.schema,
+      content: this.state.content,
+      update: this.update,
+      save: this.save
+    })
     return (
       <div>
         <Breadcrumbs pages={[
@@ -97,7 +103,7 @@ const PageField = React.createClass({
         <div className="container">
           <p>Edit <code>{this.props.field}</code></p>
           <div className="m-y-1">
-            { field }
+            { fieldComponent }
           </div>
           <ValidationError message={this.state.validationError} />
           <div className="m-b-1">
@@ -111,4 +117,4 @@ const PageField = React.createClass({
   }
 })
 
-export default connect(state => state)(PageEdit)
+export default connect(({ spinnerVisible }) => ({ spinnerVisible }))(PageEdit)

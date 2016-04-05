@@ -69,3 +69,23 @@ FlowRouter.route('/project/:projectId/page/:pageId/edit', {
     }
   }
 })
+
+FlowRouter.route('/project/:projectId/page/:pageId/collection/:collectionName/:index', {
+  name: 'collection-item',
+  index: 4,
+  parent: 'page-edit',
+  action (params) {
+    if (!params || !params.collectionName) {
+      FlowRouter.go('page')
+    } else {
+      mount(pages.Layout, {
+        content: React.createElement(pages.CollectionItem, {
+          pageId: params.pageId,
+          collectionName: params.collectionName,
+          index: params.index
+        }),
+        dir: params._dir
+      })
+    }
+  }
+})
