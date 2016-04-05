@@ -37,11 +37,30 @@ function routeQueryParams (queryParams = {}, action) {
   }
 }
 
+function pageIndices (indices = { current: 0, previous: -1 }, action) {
+  switch (action.type) {
+    case Actions.SET_PAGE_INDICES:
+      return Object.assign({}, indices, action.indices)
+    default:
+      return indices
+  }
+}
+
+function slideDirection (direction = 'left', action) {
+  switch (action.type) {
+    case Actions.SET_SLIDE_DIRECTION:
+      return action.direction
+    default:
+      return direction
+  }
+}
 const app = combineReducers({
   spinnerVisible,
   footerVisible,
   routeParams,
-  routeQueryParams
+  routeQueryParams,
+  pageIndices,
+  slideDirection
 })
 
 export default app

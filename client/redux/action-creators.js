@@ -15,3 +15,11 @@ export function setRouteParams (params) {
 export function setRouteQueryParams (queryParams) {
   return { type: Actions.SET_ROUTE_QUERY_PARAMS, queryParams }
 }
+
+export function setPageIndices (indices) {
+  return { type: Actions.SET_PAGE_INDICES, indices }
+}
+
+export function setSlideDirection (direction) {
+  return { type: Actions.SET_SLIDE_DIRECTION, direction }
+}
