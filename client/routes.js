@@ -4,6 +4,7 @@ import store from './redux/store'
 import { setFooterVisible, setRouteParams, setRouteQueryParams } from './redux/action-creators'
 import * as pages from './pages'
 import pageCount from './components/page-count'
+import { collectionKeyRegex } from '/lib/imports/validator'
 import './subs-manager'
 
 FlowRouter.triggers.enter([

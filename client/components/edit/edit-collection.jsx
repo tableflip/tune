@@ -7,8 +7,7 @@ let EditCollection = React.createClass({
     field: React.PropTypes.string,
     schema: React.PropTypes.any,
     content: React.PropTypes.array,
-    update: React.PropTypes.func,
-    save: React.PropTypes.func
+    update: React.PropTypes.func
   },
   getInitialState: function () {
     return { list: this.props.content, lastMoved: -1, lastDir: 0, listLength: this.props.content.length }
@@ -44,6 +43,11 @@ let EditCollection = React.createClass({
     return (index === this.state.lastMoved && dir === this.state.lastDir) ?
       button => this._focusButton = button :
       () => {}
+  },
+  saveAndFollowLink (link, e) {
+    this.props.save(e, () => {
+      FlowRouter.go(link)
+    })
   },
   refocus (e) {
     switch (e.keyCode) {
@@ -88,11 +92,11 @@ let EditCollection = React.createClass({
                       <i className="fa fa-arrow-down"></i>
                     </button>
                   </div>
-                  <a className='btn btn-primary' disabled={i > this.state.listLength} href={editLink}>Edit</a>
+                  <button className='btn btn-primary' onClick={this.saveAndFollowLink.bind(null, editLink)}>Edit</button>
                   <button className='pull-right btn btn-danger' onClick={ this.remove.bind(null, i) }><i className="fa fa-remove"></i></button>
                 </div>
                 <div className="col-xs-12">
-                  <div>{headlineField}: {item[headlineField]}</div>
+                  <div className="m-t-1"><span className="text-muted">{headlineField}:</span> {item[headlineField]}</div>
                 </div>
               </div>
             </li>

@@ -86,11 +86,11 @@ let CollectionPreview = React.createClass({
       return schemaKey && schemaKey.type === 'text'
     }) || Object.keys(this.props.schema)[0]
     return (
-      <div>
+      <ul className="list-group">
         {this.props.collection.map((entry, ind) => (
-          <div key={ind}>{headlineField}: {entry[headlineField]}</div>
+          <li className="list-group-item" key={ind}><span className="text-muted">{headlineField}:</span> {entry[headlineField]}</li>
         ))}
-      </div>
+      </ul>
     )
   }
 })

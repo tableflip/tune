@@ -67,7 +67,7 @@ const PageField = React.createClass({
   update (newContent) {
     this.setState({ newContent })
   },
-  save (e) {
+  save (e, cb) {
     e.preventDefault()
     if (!this.isValid()) return
     let payload = {
@@ -82,6 +82,14 @@ const PageField = React.createClass({
         this.setState({ validationError: 'Cannot update page data' })
         return console.error(err)
       }
+      if (cb instanceof Function) return cb()
+      let collectionDetails = validator.collectionKeyRegex.exec(this.props.field)
+      if (collectionDetails) return FlowRouter.go('collection-item', {
+        pageId: this.props.page._id,
+        projectId: this.props.project._id,
+        collectionName: collectionDetails[1],
+        index: collectionDetails[2]
+      })
       FlowRouter.go('page', { pageId: this.props.page._id, projectId: this.props.project._id })
     })
   },
