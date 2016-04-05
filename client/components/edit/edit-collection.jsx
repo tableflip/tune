@@ -73,35 +73,38 @@ let EditCollection = React.createClass({
     }) || Object.keys(schema)[0]
     return (
       <ul className='list-group' onKeyDown={this.refocus}>
-        { this.state.list.map((item, i) => {
-          let editLink = FlowRouter.path('collection-item', {
-            projectId: this.props.routeParams.projectId,
-            pageId: this.props.routeParams.pageId,
-            collectionName: this.props.field,
-            index: i.toString()
-          })
-          return (
-            <li key={i} className='list-group-item'>
-              <div className="row">
-                <div className="col-xs-12">
-                  <div className="btn-group m-r-1" role="group">
-                    <button type="button" className="btn btn-secondary" onClick={ this.move.bind(null, i, -1) } ref={this.storeButton(i, -1)}>
-                      <i className="fa fa-arrow-up"></i>
-                    </button>
-                    <button type="button" className="btn btn-secondary" onClick={ this.move.bind(null, i, 1) } ref={this.storeButton(i, 1)}>
-                      <i className="fa fa-arrow-down"></i>
-                    </button>
+        { this.state.list.length ?
+            this.state.list.map((item, i) => {
+              let editLink = FlowRouter.path('collection-item', {
+                projectId: this.props.routeParams.projectId,
+                pageId: this.props.routeParams.pageId,
+                collectionName: this.props.field,
+                index: i.toString()
+              })
+              return (
+                <li key={i} className='list-group-item'>
+                  <div className="row">
+                    <div className="col-xs-12">
+                      <div className="btn-group m-r-1" role="group">
+                        <button type="button" className="btn btn-secondary" onClick={ this.move.bind(null, i, -1) } ref={this.storeButton(i, -1)}>
+                          <i className="fa fa-arrow-up"></i>
+                        </button>
+                        <button type="button" className="btn btn-secondary" onClick={ this.move.bind(null, i, 1) } ref={this.storeButton(i, 1)}>
+                          <i className="fa fa-arrow-down"></i>
+                        </button>
+                      </div>
+                      <button className='btn btn-primary' onClick={this.saveAndFollowLink.bind(null, editLink)}>Edit</button>
+                      <button className='pull-right btn btn-danger' onClick={ this.remove.bind(null, i) }><i className="fa fa-remove"></i></button>
+                    </div>
+                    <div className="col-xs-12">
+                      <div className="m-t-1"><span className="text-muted">{headlineField}:</span> {item[headlineField]}</div>
+                    </div>
                   </div>
-                  <button className='btn btn-primary' onClick={this.saveAndFollowLink.bind(null, editLink)}>Edit</button>
-                  <button className='pull-right btn btn-danger' onClick={ this.remove.bind(null, i) }><i className="fa fa-remove"></i></button>
-                </div>
-                <div className="col-xs-12">
-                  <div className="m-t-1"><span className="text-muted">{headlineField}:</span> {item[headlineField]}</div>
-                </div>
-              </div>
-            </li>
-          )
-        })}
+                </li>
+              )
+            })  :
+          (<li className="list-group-item text-xs-center text-muted">No entries</li>)
+        }
         <li className="list-group-item text-xs-center">
           <button className="btn btn-secondary" onClick={this.addItem}><i className="fa fa-plus"></i> Add an item</button>
         </li>

@@ -87,9 +87,13 @@ let CollectionPreview = React.createClass({
     }) || Object.keys(this.props.schema)[0]
     return (
       <ul className="list-group">
-        {this.props.collection.map((entry, ind) => (
-          <li className="list-group-item" key={ind}><span className="text-muted">{headlineField}:</span> {entry[headlineField]}</li>
-        ))}
+        {
+          this.props.collection.length ?
+            this.props.collection.map((entry, ind) => (
+              <li className="list-group-item" key={ind}><span className="text-muted">{headlineField}:</span> {entry[headlineField]}</li>
+            )) :
+            (<li className="list-group-item text-xs-center text-muted">No entries</li>)
+        }
       </ul>
     )
   }
