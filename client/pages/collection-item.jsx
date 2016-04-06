@@ -2,17 +2,21 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { createContainer } from 'meteor/react-meteor-data';
 import { get as getObjectPath } from 'object-path'
+import isEqual from 'is-equal'
 import Breadcrumbs from '../components/breadcrumbs'
 import FieldPreview from '../components/field-preview'
 import ValidationError from '../components/validation-error'
 import OverlayLoader from '../components/overlay-loader'
 import getPrimaryField from '/lib/imports/get-primary-field'
 import store from '../redux/store'
-import { setPreferredSlideDirection } from '../redux/action-creators'
+import { setPreferredSlideDirection, preventChildSwipe } from '../redux/action-creators'
 
 const CollectionItem = connect(state => state)(React.createClass({
   propTypes: {
+    pageReady: React.PropTypes.bool,
     pageId: React.PropTypes.string,
+    page: React.PropTypes.object,
+    project: React.PropTypes.object,
     collectionName: React.PropTypes.string,
     index: React.PropTypes.string
   },
@@ -46,7 +50,7 @@ const CollectionItem = connect(state => state)(React.createClass({
   },
 
   navAction (n) {
-    let items = getObjectPath(this.props.page.content.json, `${this.props.collectionName}`)
+    let items = this.props.page.content.json[this.props.collectionName]
     let index = parseInt(this.props.index, 10)
     if (items[index + n]) {
       return {
@@ -66,6 +70,21 @@ const CollectionItem = connect(state => state)(React.createClass({
         action: () => {}
       }
     }
+  },
+
+  checkForwardButton (prevProps) {
+    if (!this.props.pageReady) return
+    if (prevProps && isEqual(prevProps.page, this.props.page)) return
+    let itemContent = this.props.page.content.json[this.props.collectionName]
+    if (!itemContent[parseInt(this.props.index, 10) + 1]) {
+      store.dispatch(preventChildSwipe())
+    }
+  },
+  componentWillMount () {
+    this.checkForwardButton()
+  },
+  componentWillReceivePops (prevProps) {
+    this.checkForwardButton(prevProps)
   },
 
   // don't rerender whilst we're saving state (i.e. removing an element)

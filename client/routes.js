@@ -12,6 +12,7 @@ FlowRouter.triggers.enter([
   function updatePageDetails (ctx) {
     store.dispatch(actionCreators.updatePageDetails(ctx))
   },
+  // This should probably be done in the updatePageDetails reducer.
   function setSlideDirection () {
     let state = store.getState()
     let dir = (state.pageDetails.current.index > state.pageDetails.previous.index) ? 'left' : 'right'

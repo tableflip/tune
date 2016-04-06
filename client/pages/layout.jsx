@@ -5,10 +5,12 @@ import PageTransition from '../components/page-transition'
 import Footer from '../components/footer'
 import UniversalLoader from '../components/universal-loader'
 import store from '../redux/store'
+import { setPreferredSlideDirection } from '../redux/action-creators'
 
 let pageBack = function () {
   let details = store.getState().pageDetails
   if (details.parent && details.parent.name) {
+    store.dispatch(setPreferredSlideDirection('right'))
     FlowRouter.go(details.parent.name, details.parent.params, details.parent.queryParams)
   }
 }
@@ -16,6 +18,7 @@ let pageBack = function () {
 let pageForward = function () {
   let details = store.getState().pageDetails
   if (details.child && details.child.name) {
+    store.dispatch(setPreferredSlideDirection('left'))
     FlowRouter.go(details.child.name, details.child.params, details.child.queryParams)
   }
 }

@@ -69,12 +69,15 @@ function pageDetails (details = defaultPageDetails, action) {
     left: -0.1,
     right: 0.1
   }
+  let newDetails = Object.assign({}, details)
   switch (action.type) {
     case Actions.UPDATE_PAGE_DETAILS:
-      return Object.assign({}, details, getPageDetails(action.ctx, details))
+      return Object.assign(newDetails, getPageDetails(action.ctx, details))
     case Actions.SET_PREFERRED_SLIDE_DIRECTION:
-      let newDetails = Object.assign({}, details)
       newDetails.current.index += offset[action.direction]
+      return newDetails
+    case Actions.PREVENT_CHILD_SWIPE:
+      newDetails.child = null
       return newDetails
     default:
       return details
@@ -130,6 +133,34 @@ function getPageDetails (ctx, details) {
 
   // Special cases from here
   var collectionDetails = collectionKeyRegex.exec(ctx.queryParams.field)
-  if (ctx.route.name === 'page-edit' && collectionDetails) newDetails.current.index = 5
+
+  if (newDetails.current.name === 'page-edit' && collectionDetails) newDetails.current.index = 5
+
+  if (newDetails.current.name === 'collection-item') {
+    let currentIndex = parseInt(newDetails.current.params.index, 10)
+    if (newDetails.current.params.index > 0) {
+      newDetails.parent = {
+        name: newDetails.current.name,
+        index: newDetails.current.index,
+        params: Object.assign({}, newDetails.current.params),
+        queryParams: Object.assign({}, newDetails.current.queryParams)
+      }
+      newDetails.parent.params.index = (currentIndex - 1).toString()
+    } else {
+      newDetails.parent.queryParams = {
+        field: newDetails.parent.params.collectionName
+      }
+    }
+    if (true) {
+      newDetails.child = {
+        name: newDetails.current.name,
+        index: newDetails.current.index,
+        params: Object.assign({}, newDetails.current.params),
+        queryParams: Object.assign({}, newDetails.current.queryParams)
+      }
+      newDetails.child.params.index = (currentIndex + 1).toString()
+    }
+  }
+
   return newDetails
 }

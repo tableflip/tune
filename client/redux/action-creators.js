@@ -31,3 +31,7 @@ export function incrementPageCount () {
 export function setPreferredSlideDirection (direction) {
   return { type: Actions.SET_PREFERRED_SLIDE_DIRECTION, direction: direction }
 }
+
+export function preventChildSwipe () {
+  return { type: Actions.PREVENT_CHILD_SWIPE }
+}
