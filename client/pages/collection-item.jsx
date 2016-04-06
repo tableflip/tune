@@ -86,8 +86,6 @@ const CollectionItem = connect(state => state)(React.createClass({
     return (
       <div>
         <Breadcrumbs pages={[
-          { text: 'Home', href: '/' },
-          { text: this.props.project.name, href: `/project/${this.props.project._id}` },
           { text: this.props.page.name, href: `/project/${this.props.project._id}/page/${this.props.page._id}` },
           { text: this.props.collectionName, href: `/project/${this.props.project._id}/page/${this.props.page._id}/edit?field=${this.props.collectionName}` },
           { text: itemContent[getPrimaryField(schema)] || this.props.index, active: true }
