@@ -49,6 +49,10 @@ const CollectionItem = React.createClass({
               )}
             )}
           </ul>
+          <nav className="m-t-1">
+            <button className="btn btn-lg btn-secondary pull-left">&laquo;</button>
+            <button className="btn btn-lg btn-secondary pull-right">&raquo;</button>
+          </nav>
         </div>
       </div>
     )
