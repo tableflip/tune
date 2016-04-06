@@ -46,7 +46,7 @@ const PageField = React.createClass({
   getInitialState () {
     let page = this.props.page
     let field = this.props.field
-    let schema = page.schema[field]
+    let schema = getObjectPath(page.schema, validator.schemaKey(field))
     let content = getObjectPath(page.content.json, field)
     let newContent = (content instanceof Object) ? Object.assign({}, content) : content
     return { schema, content, newContent }
