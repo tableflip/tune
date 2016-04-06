@@ -22,8 +22,6 @@ const Page = React.createClass({
     return (
       <div>
         <Breadcrumbs pages={[
-          { text: 'Home', href: '/' },
-          { text: this.data.project.name, href: `/project/${this.data.project._id}` },
           { text: this.data.page.name, active: true }
         ]} />
         <div className="container">

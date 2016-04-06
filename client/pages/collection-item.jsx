@@ -123,7 +123,7 @@ const CollectionItem = connect(state => state)(React.createClass({
   }
 }))
 
-const CollectionItemWrapper = createContainer(props => {
+const CollectionItemContainer = createContainer(props => {
   var pageSub = Subs.subscribe('page', props.pageId)
   let page = Pages.findOne({ _id: props.pageId })
   return Object.assign({}, props, {
@@ -133,4 +133,4 @@ const CollectionItemWrapper = createContainer(props => {
   })
 }, CollectionItem)
 
-export default CollectionItemWrapper
+export default CollectionItemContainer

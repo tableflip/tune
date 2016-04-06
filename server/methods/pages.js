@@ -1,3 +1,4 @@
+import isEqual from 'is-equal'
 import { get as getObjectPath } from 'object-path'
 import { putPageContent, getPages } from '../imports/github-methods'
 import * as validator from '/lib/imports/validator'
@@ -17,13 +18,15 @@ Meteor.methods({
     if (project.users.indexOf(this.userId) < 0) {
       throw new Meteor.Error('A user can only update a project of which they are a member')
     }
-    if (getObjectPath(page.content.json, key) === undefined) throw new Meteor.Error('You cannot add a key to page content')
+    var currentValue = getObjectPath(page.content.json, key)
+    if (currentValue === undefined) throw new Meteor.Error('You cannot add a key to page content')
     var validation = validator.validateDocField({
       doc: page,
       field: key,
       newValue: newValue
     })
     if (validation.error) throw new Meteor.Error(validation.error)
+    if (isEqual(currentValue, newValue)) return 0
     var update = {}
     update[`content.json.${key}`] = newValue
     Pages.update(page._id, { $set: update })

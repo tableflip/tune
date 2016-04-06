@@ -1,6 +1,6 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import { Navbar } from '../components/navbar'
+import Navbar from '../components/navbar'
 import PageTransition from '../components/page-transition'
 import Footer from '../components/footer'
 import UniversalLoader from '../components/universal-loader'
