@@ -23,3 +23,7 @@ export function setPageIndices (indices) {
 export function setSlideDirection (direction) {
   return { type: Actions.SET_SLIDE_DIRECTION, direction }
 }
+
+export function incrementPageCount () {
+  return { type: Actions.INCREMENT_PAGE_COUNT, count: 1 }
+}

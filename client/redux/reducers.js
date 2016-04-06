@@ -54,13 +54,24 @@ function slideDirection (direction = 'left', action) {
       return direction
   }
 }
+
+function pageCount (count = 0, action) {
+  switch (action.type) {
+    case Actions.INCREMENT_PAGE_COUNT:
+      return count + action.count
+    default:
+      return count
+  }
+}
+
 const app = combineReducers({
   spinnerVisible,
   footerVisible,
   routeParams,
   routeQueryParams,
   pageIndices,
-  slideDirection
+  slideDirection,
+  pageCount
 })
 
 export default app

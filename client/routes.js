@@ -3,13 +3,12 @@ import { mount } from 'react-mounter'
 import store from './redux/store'
 import * as actionCreators from './redux/action-creators'
 import * as pages from './pages'
-import pageCount from './components/page-count'
 import { collectionKeyRegex } from '/lib/imports/validator'
 import './subs-manager'
 
 FlowRouter.triggers.enter([
   function incrementPageCount () {
-    pageCount.inc()
+    store.dispatch(actionCreators.incrementPageCount())
   },
   function updatePageIndices (ctx) {
     let state = store.getState()
