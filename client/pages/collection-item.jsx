@@ -18,11 +18,35 @@ const CollectionItem = React.createClass({
     }
   },
 
+  navAction (n) {
+    let items = getObjectPath(this.data.page.content.json, `${this.props.collectionName}`)
+    let index = parseInt(this.props.index, 10)
+    if (items[index + n]) {
+      return {
+        action: () => {
+          FlowRouter.go('collection-item', {
+            projectId: this.data.project && this.data.project._id,
+            pageId: this.props.pageId,
+            collectionName: this.props.collectionName,
+            index: (index + n).toString()
+          })
+        }
+      }
+    } else {
+      return {
+        disabled: true,
+        action: () => {}
+      }
+    }
+  },
+
   render () {
     if (this.props.spinnerVisible) return false
     let itemContent = getObjectPath(this.data.page.content.json, `${this.props.collectionName}.${this.props.index}`)
     let schema = getObjectPath(this.data.page.content.json, `${this.props.collectionName}.0`)
     let itemKeys = Object.keys(itemContent)
+    let navLeft = this.navAction(-1)
+    let navRight = this.navAction(1)
     return (
       <div>
         <Breadcrumbs pages={[
@@ -50,8 +74,8 @@ const CollectionItem = React.createClass({
             )}
           </ul>
           <nav className="m-t-1">
-            <button className="btn btn-lg btn-secondary pull-left">&laquo;</button>
-            <button className="btn btn-lg btn-secondary pull-right">&raquo;</button>
+            <button disabled={navLeft.disabled} onClick={navLeft.action} className="btn btn-lg btn-secondary pull-left">&laquo;</button>
+            <button disabled={navRight.disabled} onClick={navRight.action} className="btn btn-lg btn-secondary pull-right">&raquo;</button>
           </nav>
         </div>
       </div>
