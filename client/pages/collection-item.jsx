@@ -4,6 +4,8 @@ import { get as getObjectPath } from 'object-path'
 import Breadcrumbs from '../components/breadcrumbs'
 import FieldPreview from '../components/field-preview'
 import getPrimaryField from '/lib/imports/get-primary-field'
+import store from '../redux/store'
+import { setPreferredSlideDirection } from '../redux/action-creators'
 
 const CollectionItem = React.createClass({
   mixins: [ReactMeteorData],
@@ -24,6 +26,7 @@ const CollectionItem = React.createClass({
     if (items[index + n]) {
       return {
         action: () => {
+          store.dispatch(setPreferredSlideDirection(n > 0 ? 'left' : 'right'))
           FlowRouter.go('collection-item', {
             projectId: this.data.project && this.data.project._id,
             pageId: this.props.pageId,

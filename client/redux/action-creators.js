@@ -27,3 +27,7 @@ export function setSlideDirection (direction) {
 export function incrementPageCount () {
   return { type: Actions.INCREMENT_PAGE_COUNT, count: 1 }
 }
+
+export function setPreferredSlideDirection (direction) {
+  return { type: Actions.SET_PREFERRED_SLIDE_DIRECTION, direction: direction }
+}

@@ -38,9 +38,18 @@ function routeQueryParams (queryParams = {}, action) {
 }
 
 function pageIndices (indices = { current: 0, previous: -1 }, action) {
+  let offset = {
+    left: -0.1,
+    right: 0.1
+  }
   switch (action.type) {
     case Actions.SET_PAGE_INDICES:
       return Object.assign({}, indices, action.indices)
+    case Actions.SET_PREFERRED_SLIDE_DIRECTION:
+      return {
+        current: indices.current + offset[action.direction],
+        previous: indices.previous
+      }
     default:
       return indices
   }
