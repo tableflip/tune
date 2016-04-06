@@ -33,13 +33,6 @@ let EditCollection = React.createClass({
     newList.push(defaultBuilder.build())
     this.setState({ list: newList, lastMoved: newList.length - 1, lastDir: -1 }, this.update)
   },
-  remove: function (index, e) {
-    e.preventDefault()
-    let top = this.state.list.slice(0, index)
-    let bottom = this.state.list.slice(index, this.state.list.length)
-    bottom.shift()
-    this.setState({list: _.union(top, bottom)}, this.update)
-  },
   storeButton (index, dir) {
     return (index === this.state.lastMoved && dir === this.state.lastDir) ?
       button => this._focusButton = button :
@@ -91,8 +84,7 @@ let EditCollection = React.createClass({
                           <i className="fa fa-arrow-down"></i>
                         </button>
                       </div>
-                      <button className='btn btn-primary' onClick={this.saveAndFollowLink.bind(null, editLink)}>Edit</button>
-                      <button className='pull-right btn btn-danger' onClick={ this.remove.bind(null, i) }><i className="fa fa-remove"></i></button>
+                      <button className='pull-right btn btn-primary' onClick={this.saveAndFollowLink.bind(null, editLink)}>Edit</button>
                     </div>
                     <div className="col-xs-12">
                       <div className="m-t-1"><span className="text-muted">{primaryField}:</span> {item[primaryField]}</div>
