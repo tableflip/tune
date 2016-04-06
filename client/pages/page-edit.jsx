@@ -93,6 +93,22 @@ const PageField = React.createClass({
       FlowRouter.go('page', { pageId: this.props.page._id, projectId: this.props.project._id })
     })
   },
+  getCancelLink () {
+    let fieldDetails = validator.collectionKeyRegex.exec(this.props.field)
+    if (fieldDetails) {
+      return FlowRouter.path('collection-item', {
+        pageId: this.props.page._id,
+        projectId: this.props.project._id,
+        collectionName: fieldDetails[1],
+        index: fieldDetails[2]
+      })
+    } else {
+      return FlowRouter.path('page', {
+        pageId: this.props.page._id,
+        projectId: this.props.project._id
+      })
+    }
+  },
   render () {
     let fieldComponent = fieldComponentLookup({
       field: this.props.field,
@@ -101,6 +117,7 @@ const PageField = React.createClass({
       update: this.update,
       save: this.save
     })
+    let cancelLink = this.getCancelLink()
     return (
       <div>
         <Breadcrumbs pages={[
@@ -116,7 +133,7 @@ const PageField = React.createClass({
           <ValidationError message={this.state.validationError} />
           <div className="m-b-1">
             <button onClick={ this.save } className='btn btn-primary'>Save</button>
-            <a href={`/project/${this.props.project._id}/page/${this.props.page._id}`} className="btn btn-link">Cancel</a>
+            <a href={cancelLink} className="btn btn-link">Cancel</a>
           </div>
         </div>
         <OverlayLoader loaded={!this.state.saving} />
