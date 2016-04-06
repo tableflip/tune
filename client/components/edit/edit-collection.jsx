@@ -87,7 +87,7 @@ let EditCollection = React.createClass({
                       <button className='pull-right btn btn-primary' onClick={this.saveAndFollowLink.bind(null, editLink)}>Edit</button>
                     </div>
                     <div className="col-xs-12">
-                      <div className="m-t-1"><span className="text-muted">{primaryField}:</span> {item[primaryField]}</div>
+                      <div className="m-t-1">{item[primaryField]}</div>
                     </div>
                   </div>
                 </li>
