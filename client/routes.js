@@ -3,23 +3,18 @@ import { mount } from 'react-mounter'
 import store from './redux/store'
 import * as actionCreators from './redux/action-creators'
 import * as pages from './pages'
-import { collectionKeyRegex } from '/lib/imports/validator'
 import './subs-manager'
 
 FlowRouter.triggers.enter([
   function incrementPageCount () {
     store.dispatch(actionCreators.incrementPageCount())
   },
-  function updatePageIndices (ctx) {
-    let state = store.getState()
-    store.dispatch(actionCreators.setPageIndices({
-      current: getIndex(ctx),
-      previous: state.pageIndices.current
-    }))
+  function updatePageDetails (ctx) {
+    store.dispatch(actionCreators.updatePageDetails(ctx))
   },
   function setSlideDirection () {
     let state = store.getState()
-    let dir = (state.pageIndices.current > state.pageIndices.previous) ? 'left' : 'right'
+    let dir = (state.pageDetails.current.index > state.pageDetails.previous.index) ? 'left' : 'right'
     store.dispatch(actionCreators.setSlideDirection(dir))
   },
   function updateFooterVisible (ctx) {
@@ -37,14 +32,6 @@ function mountPage (content) {
     content: content,
     dir: state.slideDirection
   })
-}
-
-// This modifies the stored page index if a collection sub-field is being edited
-function getIndex(ctx) {
-  let index = ctx.route.options.index
-  var collectionDetails = collectionKeyRegex.exec(ctx.queryParams.field)
-  if (ctx.route.name === 'page-edit' && collectionDetails) return 5
-  return index
 }
 
 FlowRouter.route('/', {

@@ -16,8 +16,8 @@ export function setRouteQueryParams (queryParams) {
   return { type: Actions.SET_ROUTE_QUERY_PARAMS, queryParams }
 }
 
-export function setPageIndices (indices) {
-  return { type: Actions.SET_PAGE_INDICES, indices }
+export function updatePageDetails (ctx) {
+  return { type: Actions.UPDATE_PAGE_DETAILS, ctx }
 }
 
 export function setSlideDirection (direction) {

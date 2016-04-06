@@ -21,6 +21,9 @@ export default React.createClass({
     if (this.state.offset < -(swipeDistance * 0.9)) {
       transitionLength = transitionLengthLong
       this.setState({ transitionLength: transitionLengthLong }, this.props.pageBack)
+    } else if (this.state.offset > (swipeDistance * 0.9)) {
+      transitionLength = transitionLengthLong
+      this.setState({ transitionLength: transitionLengthLong }, this.props.pageForward)
     }
     this.setState({ transition: true }, () => setTimeout(() => {
       this.setState({ offset: 0 }, () => {
