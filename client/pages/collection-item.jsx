@@ -17,16 +17,6 @@ const CollectionItem = connect(state => state)(React.createClass({
     index: React.PropTypes.string
   },
 
-  getMeteorData () {
-    var pageSub = Subs.subscribe('page', this.props.pageId)
-    let page = Pages.findOne({ _id: this.props.pageId })
-    return {
-      pageReady: pageSub.ready(),
-      page: page,
-      project: Projects.findOne({ _id: page && page.project._id })
-    }
-  },
-
   getInitialState () {
     return {
       validationError: '',
