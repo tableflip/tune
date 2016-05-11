@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "standard",
     "start": "npm-run-all build:* --parallel watch:* meteor",
     "start-android": "npm-run-all build:* --parallel watch:* meteor-android",
     "meteor": "meteor --settings settings.json --port 4000",
@@ -39,11 +40,12 @@
     "util": "^0.10.3"
   },
   "devDependencies": {
+    "autoprefixer": "^6.3.3",
     "node-sass": "^3.4.2",
     "nodemon": "^1.9.1",
     "npm-run-all": "^1.5.1",
-    "autoprefixer": "^6.3.3",
-    "postcss-cli": "^2.5.1"
+    "postcss-cli": "^2.5.1",
+    "standard": "^7.0.1"
   },
   "repository": {
     "type": "git",
