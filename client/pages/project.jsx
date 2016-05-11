@@ -56,12 +56,12 @@ const ProjectInner = React.createClass({
   }
 })
 
-const Project = createContainer(({ props }) => {
+const Project = connect(state => state)(ProjectInner)
+
+export default createContainer((props) => {
   window.Subs.subscribe('project', props.projectId)
   return {
-    project: Projects.findOne({ _id: this.props.projectId }),
-    pages: Pages.find({ 'project._id': this.props.projectId }).fetch()
+    project: Projects.findOne({ _id: props.projectId }),
+    pages: Pages.find({ 'project._id': props.projectId }).fetch()
   }
-}, ProjectInner)
-
-export default connect(state => state)(Project)
+}, Project)

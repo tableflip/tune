@@ -40,7 +40,9 @@ const PageInner = React.createClass({
   }
 })
 
-const Page = createContainer(({ props }) => {
+const Page = connect(state => state)(PageInner)
+
+export default createContainer((props) => {
   const pageSub = window.Subs.subscribe('page', props.pageId)
   const page = Pages.findOne({ _id: props.pageId })
   return {
@@ -48,6 +50,4 @@ const Page = createContainer(({ props }) => {
     page: page,
     project: Projects.findOne({ _id: page && page.project._id })
   }
-}, PageInner)
-
-export default connect(state => state)(Page)
+}, Page)

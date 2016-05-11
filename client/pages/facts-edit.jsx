@@ -26,14 +26,7 @@ const FactsEditInner = React.createClass({
   }
 })
 
-const FactsEdit = createContainer(({ props }) => {
-  const projectSub = window.Subs.subscribe('project', props.projectId)
-  const project = Projects.findOne({ _id: props.projectId })
-  return {
-    projectReady: projectSub.ready(),
-    project: project
-  }
-}, FactsEditInner)
+const FactsEdit = connect(state => state)(FactsEditInner)
 
 const ProjectField = React.createClass({
   propTypes: {
@@ -108,4 +101,11 @@ const ProjectField = React.createClass({
   }
 })
 
-export default connect(state => state)(FactsEdit)
+export default createContainer((props) => {
+  const projectSub = window.Subs.subscribe('project', props.projectId)
+  const project = Projects.findOne({ _id: props.projectId })
+  return {
+    projectReady: projectSub.ready(),
+    project: project
+  }
+}, FactsEdit)

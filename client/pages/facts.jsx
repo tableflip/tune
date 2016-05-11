@@ -41,11 +41,11 @@ const FactsInner = React.createClass({
   }
 })
 
-const Facts = createContainer(({ props }) => {
+const Facts = connect(state => state)(FactsInner)
+
+export default createContainer((props) => {
   window.Subs.subscribe('project', props.projectId)
   return {
     project: Projects.findOne({ _id: props.projectId })
   }
-}, FactsInner)
-
-export default connect(state => state)(Facts)
+}, Facts)

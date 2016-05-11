@@ -30,15 +30,7 @@ const PageEditInner = React.createClass({
   }
 })
 
-const PageEdit = createContainer(({ props }) => {
-  const pageSub = window.Subs.subscribe('page', props.pageId)
-  const page = Pages.findOne({ _id: props.pageId })
-  return {
-    pageReady: pageSub.ready(),
-    page: page,
-    project: Projects.findOne({ _id: page && page.project._id })
-  }
-}, PageEditInner)
+const PageEdit = connect(state => state)(PageEditInner)
 
 const PageField = React.createClass({
   propTypes: {
@@ -114,4 +106,12 @@ const PageField = React.createClass({
   }
 })
 
-export default connect(state => state)(PageEdit)
+export default createContainer((props) => {
+  const pageSub = window.Subs.subscribe('page', props.pageId)
+  const page = Pages.findOne({ _id: props.pageId })
+  return {
+    pageReady: pageSub.ready(),
+    page: page,
+    project: Projects.findOne({ _id: page && page.project._id })
+  }
+}, PageEdit)
