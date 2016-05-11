@@ -1,7 +1,8 @@
-import { putPageContent } from '../imports/github-methods'
+import { putPageContent, getPages } from '../imports/github-methods'
 import * as validator from '/lib/imports/validator'
 
 var putPageContentAsync = Meteor.wrapAsync(putPageContent)
+var getPagesAsync = Meteor.wrapAsync(getPages)
 
 Meteor.methods({
   'pages/updateContent': function ({ pageId, key, newValue }) {
@@ -25,14 +26,15 @@ Meteor.methods({
     var update = {}
     update[`content.json.${key}`] = newValue
     Pages.update(page._id, { $set: update })
-    var response = putPageContentAsync(this.userId, project.full_name, page.name)
+    var response = putPageContentAsync(this.userId, project.full_name, page.name, page.isRoot)
     var githubProjectUpdate = {
       'lastCommit.sha': response.data.commit.sha,
       'lastCommit.dateTime': response.data.commit.committer.date
     }
+    var pageDir = getPagesAsync(this.userId, project.full_name).filter(item => item.name === page.name)
     var githubPageUpdate = {
       'content.sha': response.data.content.sha,
-      'lastCommit.sha': response.data.commit.sha
+      'directory.sha': pageDir.sha
     }
     Projects.update(project._id, { $set: githubProjectUpdate })
     return Pages.update(page._id, { $set: githubPageUpdate })

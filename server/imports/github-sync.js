@@ -36,17 +36,37 @@ export function syncProject (userId, { fullName, name }, cb) {
       lastCommit: {
         sha: res.lastCommit[0].sha,
         dateTime: res.lastCommit[0].commit.committer.date
-      },
-      'facts.json': res.facts.content,
-      'facts.sha': res.facts.sha,
-      schema: res.facts.schema
+      }
     }
     Projects.upsert({ full_name: fullName }, { $set: project, $addToSet: { users: userId } }, {}, e => {
       if (e) {
         console.error(`Cannot sync project "${project.full_name}"`, e)
         return cb(e)
       }
-      syncPages(userId, fullName, cb)
+      var projectId = Projects.findOne({ full_name: fullName })._id
+      var page = {
+        name: Pages.rootName,
+        project: {
+          full_name: project.full_name,
+          _id: projectId
+        },
+        isRoot: true,
+        content: {
+          json: res.facts.content,
+          sha: res.facts.sha
+        },
+        directory: {
+          sha: null
+        },
+        schema: res.facts.schema
+      }
+      Pages.upsert({ name: Pages.rootName, 'project.full_name': project.full_name }, { $set: page }, {}, e => {
+        if (e) {
+          console.error(`Cannot sync page "Site Settings" in project "${project.full_name}"`, e)
+          return cb(e)
+        }
+        syncPages(userId, fullName, cb)
+      })
     })
   })
 }
@@ -63,7 +83,7 @@ export function syncPages (userId, fullName, done) {
         return !Pages.find({
           'project.full_name': fullName,
           'name': page.name,
-          'lastCommit.sha': page.sha
+          'directory.sha': page.sha
         }).count()
       })
       cb(null, filteredPages)
@@ -86,7 +106,8 @@ export function syncPages (userId, fullName, done) {
             _id: project._id,
             full_name: project.full_name
           },
-          lastCommit: {
+          isRoot: false,
+          directory: {
             sha: pageDetails.commitSha
           },
           content: {
