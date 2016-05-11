@@ -1,3 +1,5 @@
+import { Meteor } from 'meteor/meteor'
+
 Meteor.startup(() => {
   ServiceConfiguration.configurations.upsert({
     service: 'github'

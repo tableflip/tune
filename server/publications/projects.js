@@ -1,3 +1,7 @@
+import { Meteor } from 'meteor/meteor'
+import Pages from '/lib/collections-global/pages'
+import Projects from '/lib/collections-global/projects'
+
 Meteor.publish('projects', function () {
   return Projects.find({ users: this.userId })
 })

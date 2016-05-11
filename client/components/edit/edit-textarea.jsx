@@ -11,8 +11,8 @@ export default React.createClass({
   },
   render () {
     return (
-      <form onSubmit={ this.props.save }>
-        <textarea ref='textarea' className='form-control' rows='8' defaultValue={ this.props.content } onChange={ this.update }/>
+      <form onSubmit={this.props.save}>
+        <textarea ref='textarea' className='form-control' rows='8' defaultValue={this.props.content} onChange={this.update} />
       </form>
     )
   }

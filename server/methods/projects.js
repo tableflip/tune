@@ -1,3 +1,6 @@
+import { Meteor } from 'meteor/meteor'
+import { check } from 'meteor/check'
+import Projects from '/lib/collections-global/projects'
 import { putFacts, tagGhPages } from '../imports/github-methods'
 import { syncAll } from '../imports/github-sync'
 import * as validator from '/lib/imports/validator'

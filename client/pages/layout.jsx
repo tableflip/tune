@@ -15,13 +15,13 @@ let pageBack = function () {
 
 export default ({ content, dir }) => (
   <Provider store={store}>
-    <div className="full-height">
+    <div className='full-height'>
       <Navbar />
-      <div className="content">
+      <div className='content'>
         <PageTransition dir={dir} pageBack={pageBack}>
           {content}
         </PageTransition>
-        <UniversalLoader></UniversalLoader>
+        <UniversalLoader />
       </div>
       <Footer />
     </div>

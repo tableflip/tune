@@ -1,3 +1,4 @@
+import { Accounts } from 'meteor/accounts'
 import { syncAll } from '../imports/github-sync'
 
 Accounts.onLogin(function (details) {

@@ -1,24 +1,18 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Meteor } from 'meteor/meteor'
+import { createContainer } from 'meteor/react-meteor-data'
+import Projects from '/lib/collections-global/projects'
 import OverlayLoader from '../components/overlay-loader'
 import Breadcrumbs from '../components/breadcrumbs'
 import ValidationError from '../components/validation-error'
 import fields from '../components/field-lookup'
 import * as validator from '/lib/imports/validator'
 
-const FactsEdit = React.createClass({
-  mixins: [ReactMeteorData],
+const FactsEditInner = React.createClass({
   propTypes: {
     projectId: React.PropTypes.string,
     field: React.PropTypes.string || null
-  },
-  getMeteorData () {
-    var projectSub = Subs.subscribe('project', this.props.projectId)
-    let project = Projects.findOne({ _id: this.props.projectId })
-    return {
-      projectReady: projectSub.ready(),
-      project: project
-    }
   },
   render () {
     if (this.props.spinnerVisible) return false
@@ -31,6 +25,15 @@ const FactsEdit = React.createClass({
     </div>)
   }
 })
+
+const FactsEdit = createContainer(({ props }) => {
+  const projectSub = window.Subs.subscribe('project', props.projectId)
+  const project = Projects.findOne({ _id: props.projectId })
+  return {
+    projectReady: projectSub.ready(),
+    project: project
+  }
+}, FactsEditInner)
 
 const ProjectField = React.createClass({
   propTypes: {
@@ -88,15 +91,15 @@ const ProjectField = React.createClass({
           { text: this.props.project.name, href: `/project/${this.props.project._id}` },
           { text: 'Facts', href: `/project/${this.props.project._id}/facts` }
         ]} />
-        <div className="container">
-          <p className="lead m-t-1">Edit <code>{this.props.field}</code></p>
-          <div className="m-y-1">
-            { fieldComponent }
+        <div className='container'>
+          <p className='lead m-t-1'>Edit <code>{this.props.field}</code></p>
+          <div className='m-y-1'>
+            {fieldComponent}
           </div>
           <ValidationError message={this.state.validationError} />
-          <div className="m-b-1">
+          <div className='m-b-1'>
             <button type='submit' className='btn btn-primary' onClick={this.save}>Save</button>
-            <a href={`/project/${this.props.project._id}/facts`} className="btn btn-link">Cancel</a>
+            <a href={`/project/${this.props.project._id}/facts`} className='btn btn-link'>Cancel</a>
           </div>
         </div>
         <OverlayLoader loaded={!this.state.saving} />

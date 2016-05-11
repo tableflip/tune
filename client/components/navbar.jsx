@@ -11,9 +11,9 @@ export const Navbar = React.createClass({
   render () {
     return (
       <div>
-        <div className="navbar navbar-full navbar-dark bg-inverse">
-          <a className="pull-xs-right" href="/">
-            <Icon beep="logo-table" />
+        <div className='navbar navbar-full navbar-dark bg-inverse'>
+          <a className='pull-xs-right' href='/'>
+            <Icon beep='logo-table' />
           </a>
         </div>
       </div>

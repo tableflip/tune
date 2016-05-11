@@ -1,13 +1,14 @@
 import React from 'react'
 import moment from 'moment'
+import { Meteor } from 'meteor/meteor'
 
 export const TimeNow = React.createClass({
   componentWillMount () {
-    this.setState({ time: new moment().format('hh:mm:ss') })
+    this.setState({ time: moment().format('hh:mm:ss') })
   },
   componentDidMount () {
     this.interval = Meteor.setInterval(() => {
-      this.setState({ time: new moment().format('hh:mm:ss') })
+      this.setState({ time: moment().format('hh:mm:ss') })
     }, 1000)
   },
   componentWillUnmount () {

@@ -18,11 +18,11 @@ export default React.createClass({
   render () {
     return (
       <div className='card'>
-        <div className='card-header' style={ {background: this.props.content} }>Old Color</div>
-        <div className='card-header' style={ {background: this.state.color} }>New Color</div>
+        <div className='card-header' style={{ background: this.props.content }}>Old Color</div>
+        <div className='card-header' style={{ background: this.state.color }}>New Color</div>
         <div className='card-block text-xs-center'>
           <div style={{display: 'inline-block'}}>
-            <ColorPicker type='sketch' color={ this.state.color } onChange={ this.changeColor } />
+            <ColorPicker type='sketch' color={this.state.color} onChange={this.changeColor} />
           </div>
         </div>
       </div>

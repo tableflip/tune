@@ -1,3 +1,7 @@
+import { Meteor } from 'meteor/meteor'
+import Pages from '/lib/collections-global/pages'
+import Projects from '/lib/collections-global/projects'
+
 Meteor.publish('page', function (pageId) {
   var page = Pages.findOne(pageId)
   if (!page) return this.ready()

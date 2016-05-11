@@ -1,28 +1,29 @@
 import React from 'react'
+import { Meteor } from 'meteor/meteor'
 
 export default React.createClass({
   render () {
     switch (this.props.type) {
       case 'img':
-      return (<ImagePreview url={this.props.value} />)
+        return (<ImagePreview url={this.props.value} />)
 
       case 'map':
-      return (<MapPreview center={this.props.value} />)
+        return (<MapPreview center={this.props.value} />)
 
       case 'color':
-      return (<ColorPreview color={this.props.value} />)
+        return (<ColorPreview color={this.props.value} />)
 
       case 'list':
-      return (<ListPreview list={this.props.value} />)
+        return (<ListPreview list={this.props.value} />)
 
       default:
-      return (<div>{this.props.value}</div>)
+        return (<div>{this.props.value}</div>)
     }
   }
 })
 
 let ImagePreview = React.createClass({
-  render() {
+  render () {
     let style = {
       borderRadius: '5px',
       border: '2px solid #444',
@@ -35,10 +36,10 @@ let ImagePreview = React.createClass({
 })
 
 let MapPreview = React.createClass({
-  render() {
+  render () {
     let style = {
       borderRadius: '5px',
-      border: '2px solid #444',
+      border: '2px solid #444'
     }
     let accessToken = Meteor.settings && Meteor.settings.public && Meteor.settings.public.mapbox && Meteor.settings.public.mapbox.accessToken
     let center = `${this.props.center[1]},${this.props.center[0]}`
@@ -49,7 +50,7 @@ let MapPreview = React.createClass({
 })
 
 let ColorPreview = React.createClass({
-  render() {
+  render () {
     let style = {
       borderRadius: '5px',
       border: '2px solid #444',

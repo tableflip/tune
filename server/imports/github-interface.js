@@ -1,5 +1,7 @@
 import parseGithubHeaders from 'parse-link-header'
 import async from 'async'
+import { Meteor } from 'meteor/meteor'
+import { HTTP } from 'meteor/http'
 import isTuneProject from './is-tune-project'
 import base64 from './base64'
 
@@ -32,6 +34,7 @@ export default function (userId) {
       let repos = []
       let q = async.queue(Meteor.bindEnvironment(function (url, done) {
         makeRepoRequest(url, function (err, res) {
+          if (err) return done(err)
           repos = _.union(repos, res.data.filter(isTuneProject))
           let headers = parseGithubHeaders(res.headers.link)
           if (headers.next) q.push(headers.next.url)
@@ -77,7 +80,7 @@ export default function (userId) {
     getFileContents: function (fullName, path, cb) {
       var res = githubCall({
         method: 'GET',
-        url: `${baseUrl}/repos/${fullName}/contents/${path}`,
+        url: `${baseUrl}/repos/${fullName}/contents/${path}`
       }, pluckFromResponse('data', cb))
       if (!cb) return res.data
     },

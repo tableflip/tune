@@ -11,8 +11,8 @@ const Footer = React.createClass({
       overflowY: 'hidden'
     }
     return (
-      <footer className="footer text-xs-center bg-inverse" style={style}>
-        <a className="tableflip" href="/">TABLEFLIP</a>
+      <footer className='footer text-xs-center bg-inverse' style={style}>
+        <a className='tableflip' href='/'>TABLEFLIP</a>
       </footer>
     )
   }

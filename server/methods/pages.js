@@ -1,3 +1,7 @@
+import { Meteor } from 'meteor/meteor'
+import { check } from 'meteor/check'
+import Pages from '/lib/collections-global/pages'
+import Projects from '/lib/collections-global/projects'
 import { putPageContent } from '../imports/github-methods'
 import * as validator from '/lib/imports/validator'
 

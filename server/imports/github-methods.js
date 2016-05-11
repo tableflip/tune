@@ -1,6 +1,8 @@
 import async from 'async'
+import { Meteor } from 'meteor/meteor'
+import Pages from '/lib/collections-global/pages'
+import Projects from '/lib/collections-global/projects'
 import githubInterface from './github-interface'
-import isTuneProject from './is-tune-project'
 import base64 from './base64'
 
 export function getRepos (userId, cb) {
@@ -132,7 +134,6 @@ export function putPageContent (userId, fullName, pageName, cb) {
     json: page.content.json,
     sha: page.content.sha
   }, cb)
-
 }
 
 export function tagGhPages (userId, fullName, cb) {

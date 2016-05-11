@@ -1,19 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { createContainer } from 'meteor/react-meteor-data'
+import Projects from '/lib/collections-global/projects'
 import Breadcrumbs from '../components/breadcrumbs'
 import FieldPreview from '../components/field-preview'
 
-const Facts = React.createClass({
+const FactsInner = React.createClass({
   propTypes: {
     projectId: React.PropTypes.string,
     field: React.PropTypes.string || null
-  },
-  mixins: [ReactMeteorData],
-  getMeteorData () {
-    var projectSub = Subs.subscribe('project', this.props.projectId)
-    return {
-      project: Projects.findOne({ _id: this.props.projectId })
-    }
   },
   render () {
     if (this.props.spinnerVisible) return false
@@ -25,8 +20,8 @@ const Facts = React.createClass({
           { text: this.data.project.name, href: `/project/${this.data.project._id}` },
           { text: 'Settings', active: true }
         ]} />
-        <div className="container">
-          <p className="lead m-t-1">Pick a setting</p>
+        <div className='container'>
+          <p className='lead m-t-1'>Pick a setting</p>
           <ul className='list-group'>
             {facts.map((fact, ind) => {
               let schema = this.data.project.schema[fact]
@@ -37,7 +32,7 @@ const Facts = React.createClass({
                   <p><code>{fact}</code></p>
                   <div><em><FieldPreview type={type} value={value} /></em></div>
                 </a>
-              )}
+              ) }
             )}
           </ul>
         </div>
@@ -45,5 +40,12 @@ const Facts = React.createClass({
     )
   }
 })
+
+const Facts = createContainer(({ props }) => {
+  window.Subs.subscribe('project', props.projectId)
+  return {
+    project: Projects.findOne({ _id: props.projectId })
+  }
+}, FactsInner)
 
 export default connect(state => state)(Facts)

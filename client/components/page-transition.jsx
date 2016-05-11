@@ -35,11 +35,11 @@ export default React.createClass({
       <div>
         <Swipeable onSwiping={this.swipe} onSwiped={this.swipeEnd}>
           <div style={{
-              position: 'relative',
-              right: `${this.state.offset}px`,
-              transition: this.state.transition ? `right ${this.state.transitionLength}ms ease-out` : null,
-              WebkitTransition: this.state.transition ? `right ${this.state.transitionLength}ms ease-out` : null,
-              msTransition: this.state.transition ? `right ${this.state.transitionLength}ms ease-out` : null,
+            position: 'relative',
+            right: `${this.state.offset}px`,
+            transition: this.state.transition ? `right ${this.state.transitionLength}ms ease-out` : null,
+            WebkitTransition: this.state.transition ? `right ${this.state.transitionLength}ms ease-out` : null,
+            msTransition: this.state.transition ? `right ${this.state.transitionLength}ms ease-out` : null
           }}>
             <ReactCSSTransitionGroup transitionName={`slide-${this.props.dir}`} transitionEnterTimeout={250} transitionLeaveTimeout={250}>
               <div key={pageCount.get()} style={{position: 'absolute', display: 'inline-block', width: '100%'}}>{this.props.children}</div>
