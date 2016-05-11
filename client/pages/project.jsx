@@ -18,14 +18,14 @@ const ProjectInner = React.createClass({
       <div>
         <Breadcrumbs pages={[
           { text: 'Home', href: '/' },
-          { text: this.data.project.name, active: true }
+          { text: this.props.project.name, active: true }
         ]} />
         <div className='container'>
-          <h3 className='m-y-1 text-muted'>{this.data.project.name}</h3>
+          <h3 className='m-y-1 text-muted'>{this.props.project.name}</h3>
           <p className='lead m-t-1'>Pick a page</p>
           <div className='list-group m-y-1'>
             <a className='list-group-item' href={`/project/${this.props.projectId}/facts`}>Website settings</a>
-            {this.data.pages.map(page => (<a className='list-group-item' key={page._id} href={`/project/${this.data.project._id}/page/${page._id}`}>Page - {page.name}</a>))}
+            {this.props.pages.map(page => (<a className='list-group-item' key={page._id} href={`/project/${this.props.project._id}/page/${page._id}`}>Page - {page.name}</a>))}
           </div>
           <button type='button' className='btn btn-danger-outline btn-block' onClick={this.onPublishClick}>Publish</button>
         </div>

@@ -12,21 +12,21 @@ const FactsInner = React.createClass({
   },
   render () {
     if (this.props.spinnerVisible) return false
-    let facts = Object.keys(this.data.project.facts.json)
+    let facts = Object.keys(this.props.project.facts.json)
     return (
       <div>
         <Breadcrumbs pages={[
           { text: 'Home', href: '/' },
-          { text: this.data.project.name, href: `/project/${this.data.project._id}` },
+          { text: this.props.project.name, href: `/project/${this.props.project._id}` },
           { text: 'Settings', active: true }
         ]} />
         <div className='container'>
           <p className='lead m-t-1'>Pick a setting</p>
           <ul className='list-group'>
             {facts.map((fact, ind) => {
-              let schema = this.data.project.schema[fact]
+              let schema = this.props.project.schema[fact]
               let type = schema && schema.type
-              let value = this.data.project.facts.json[fact]
+              let value = this.props.project.facts.json[fact]
               return (
                 <a className='list-group-item' key={ind} href={`/project/${this.props.projectId}/facts/edit?field=${fact}`}>
                   <p><code>{fact}</code></p>

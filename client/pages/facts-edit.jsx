@@ -17,7 +17,7 @@ const FactsEditInner = React.createClass({
   render () {
     if (this.props.spinnerVisible) return false
     var props = {
-      project: this.data.project,
+      project: this.props.project,
       field: this.props.field
     }
     return (<div>

@@ -8,20 +8,20 @@ import { ProjectCard } from '../components/project-card'
 
 const Home = React.createClass({
   render () {
-    if (!this.data.user) {
+    if (!this.props.user) {
       return (
         <div className='container-fluid bg-inverse h-100 text-xs-center'>
           <p className='h4 p-t-3'>Please log in<br />to edit your site</p>
           <LoginWithGithub />
         </div>
       )
-    } else if (this.data.loggingIn) {
+    } else if (this.props.loggingIn) {
       return <Loader loaded={false} color='#ddd' />
     }
     return (
       <div className='container-fluid'>
         <p className='lead m-t-1'>Pick a site</p>
-        <ProjectsList projects={this.data.projects} />
+        <ProjectsList projects={this.props.projects} />
         <LoginWithGithub />
       </div>
     )

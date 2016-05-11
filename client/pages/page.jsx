@@ -9,23 +9,23 @@ import FieldPreview from '../components/field-preview'
 const PageInner = React.createClass({
   render () {
     if (this.props.spinnerVisible) return false
-    let content = Object.keys(this.data.page.content.json)
+    let content = Object.keys(this.props.page.content.json)
     return (
       <div>
         <Breadcrumbs pages={[
           { text: 'Home', href: '/' },
-          { text: this.data.project.name, href: `/project/${this.data.project._id}` },
-          { text: this.data.page.name, active: true }
+          { text: this.props.project.name, href: `/project/${this.props.project._id}` },
+          { text: this.props.page.name, active: true }
         ]} />
         <div className='container'>
           <p className='lead m-t-1'>Pick an item</p>
           <ul className='list-group'>
             {content.map((field, ind) => {
-              let schema = this.data.page.schema[field]
+              let schema = this.props.page.schema[field]
               let type = schema && schema.type
-              let value = this.data.page.content.json[field]
+              let value = this.props.page.content.json[field]
               return (
-                <a className='list-group-item' key={ind} href={`/project/${this.data.project._id}/page/${this.data.page._id}/edit?field=${field}`}>
+                <a className='list-group-item' key={ind} href={`/project/${this.props.project._id}/page/${this.props.page._id}/edit?field=${field}`}>
                   <p><code>{field}</code></p>
                   <div><em>
                     <FieldPreview type={type} value={value} />

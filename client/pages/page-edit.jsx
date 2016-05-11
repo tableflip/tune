@@ -18,8 +18,8 @@ const PageEditInner = React.createClass({
   render () {
     if (this.props.spinnerVisible) return false
     var props = {
-      page: this.data.page,
-      project: this.data.project,
+      page: this.props.page,
+      project: this.props.project,
       field: this.props.field
     }
     return (
