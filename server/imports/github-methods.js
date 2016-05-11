@@ -1,6 +1,6 @@
 import async from 'async'
 import githubInterface from './github-interface'
-import isPlatformProject from './is-platform-project'
+import isTuneProject from './is-tune-project'
 import base64 from './base64'
 
 export function getRepos (userId, cb) {

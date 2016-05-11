@@ -1,6 +1,6 @@
 import parseGithubHeaders from 'parse-link-header'
 import async from 'async'
-import isPlatformProject from './is-platform-project'
+import isTuneProject from './is-tune-project'
 import base64 from './base64'
 
 var baseUrl = 'https://api.github.com'
@@ -32,7 +32,7 @@ export default function (userId) {
       let repos = []
       let q = async.queue(Meteor.bindEnvironment(function (url, done) {
         makeRepoRequest(url, function (err, res) {
-          repos = _.union(repos, res.data.filter(isPlatformProject))
+          repos = _.union(repos, res.data.filter(isTuneProject))
           let headers = parseGithubHeaders(res.headers.link)
           if (headers.next) q.push(headers.next.url)
           done()
