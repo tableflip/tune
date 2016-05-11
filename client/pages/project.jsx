@@ -30,8 +30,7 @@ const Project = React.createClass({
           <h3 className="m-y-1 text-muted">{this.data.project.name}</h3>
           <p className="lead m-t-1">Pick a page</p>
           <div className='list-group m-y-1'>
-            <a className='list-group-item' href={`/project/${this.props.projectId}/facts`}>Website settings</a>
-            {this.data.pages.map(page => (<a className='list-group-item' key={page._id} href={`/project/${this.data.project._id}/page/${page._id}`}>Page - {page.name}</a>))}
+            {this.data.pages.map(page => (<a className='list-group-item' key={page._id} href={`/project/${this.data.project._id}/page/${page._id}`}>{page.name}</a>))}
           </div>
           <button type="button" className="btn btn-danger-outline btn-block" onClick={this.onPublishClick}>Publish</button>
         </div>
