@@ -6,7 +6,7 @@ import OverlayLoader from '../components/overlay-loader'
 import Breadcrumbs from '../components/breadcrumbs'
 import ValidationError from '../components/validation-error'
 import fieldComponentLookup from '../components/field-component-lookup'
-import * as validator from '/lib/imports/validator'
+import * as validator from '/imports/lib/validation/validator'
 
 const PageEdit = React.createClass({
   mixins: [ReactMeteorData],

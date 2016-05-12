@@ -1,5 +1,5 @@
 import async from 'async'
-import * as githubMethods from './github-methods'
+import * as githubMethods from '/imports/api/github/methods'
 
 var getReposSync = Meteor.wrapAsync(githubMethods.getRepos)
 

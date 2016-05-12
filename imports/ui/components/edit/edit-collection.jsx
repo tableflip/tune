@@ -2,7 +2,7 @@ import React from 'react'
 import jsen from 'jsen'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import getPrimaryField from '/lib/imports/get-primary-field'
+import getPrimaryField from '/imports/lib/validation/get-primary-field'
 
 let EditCollection = React.createClass({
   propTypes: {

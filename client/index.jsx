@@ -6,7 +6,7 @@ import { browserHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import { Meteor } from 'meteor/meteor'
 import reducers from '/imports/ui/redux/reducers'
-import Routes from 'imports/ui/routes.jsx'
+import Routes from '/imports/ui/routes.jsx'
 
 let store = createStore(reducers)
 syncHistoryWithStore(browserHistory, store)

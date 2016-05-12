@@ -1,6 +1,6 @@
 import async from 'async'
-import githubInterface from '/imports/lib/github-interface'
-import base64 from '/imports/lib/base64'
+import githubInterface from '/imports/lib/github/github-interface'
+import base64 from '/imports/lib/github/base64'
 
 export function getRepos (userId, cb) {
   var github = githubInterface(userId)

@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux'
 import * as Actions from './actions'
-import { collectionKeyRegex } from '/lib/imports/validator'
-import store from './store'
+import { collectionKeyRegex } from '/imports/lib/validation/validator'
 
 function spinnerVisible (state = false, action) {
   switch (action.type) {

@@ -8,7 +8,7 @@ import Breadcrumbs from '../components/breadcrumbs'
 import FieldPreview from '../components/field-preview'
 import ValidationError from '../components/validation-error'
 import OverlayLoader from '../components/overlay-loader'
-import getPrimaryField from '/lib/imports/get-primary-field'
+import getPrimaryField from '/imports/lib/validation/get-primary-field'
 import store from '../redux/store'
 import { setPreferredSlideDirection, preventChildSwipe } from '../redux/action-creators'
 

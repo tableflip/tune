@@ -1,7 +1,7 @@
 import isEqual from 'is-equal'
 import { get as getObjectPath } from 'object-path'
-import { putPageContent, getPages } from '../imports/github-methods'
-import * as validator from '/lib/imports/validator'
+import { putPageContent, getPages } from '../github/methods'
+import * as validator from '/imports/lib/validation/validator'
 
 var putPageContentAsync = Meteor.wrapAsync(putPageContent)
 var getPagesAsync = Meteor.wrapAsync(getPages)

@@ -1,5 +1,5 @@
-import { tagGhPages } from '../imports/github-methods'
-import { syncAll } from '../imports/github-sync'
+import { tagGhPages } from '../github/methods'
+import { syncAll } from '/imports/lib/github/github-sync'
 
 var syncAllAsync = Meteor.wrapAsync(syncAll)
 var tagGhPagesSync = Meteor.wrapAsync(tagGhPages)
