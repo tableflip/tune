@@ -1,9 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { get as getObjectPath } from 'object-path'
 import OverlayLoader from '../components/overlay-loader'
 import Breadcrumbs from '../components/breadcrumbs'
 import ValidationError from '../components/validation-error'
-import fields from '../components/field-lookup'
+import fieldComponentLookup from '../components/field-component-lookup'
 import * as validator from '/lib/imports/validator'
 
 const PageEdit = React.createClass({
@@ -22,7 +23,6 @@ const PageEdit = React.createClass({
     }
   },
   render () {
-    console.log(this.props)
     if (this.props.spinnerVisible) return false
     var props = {
       page: this.data.page,
@@ -46,10 +46,10 @@ const PageField = React.createClass({
   getInitialState () {
     let page = this.props.page
     let field = this.props.field
-    let type = (page.schema[field] && page.schema[field].type) || 'text'
-    let content = page.content.json[field]
+    let schema = getObjectPath(page.schema, validator.schemaKey(field))
+    let content = getObjectPath(page.content.json, field)
     let newContent = (content instanceof Object) ? Object.assign({}, content) : content
-    return { type, content, newContent }
+    return { schema, content, newContent }
   },
   isValid () {
     let validation = validator.validateDocField({
@@ -67,7 +67,7 @@ const PageField = React.createClass({
   update (newContent) {
     this.setState({ newContent })
   },
-  save (e) {
+  save (e, cb) {
     e.preventDefault()
     if (!this.isValid()) return
     let payload = {
@@ -82,27 +82,56 @@ const PageField = React.createClass({
         this.setState({ validationError: 'Cannot update page data' })
         return console.error(err)
       }
+      if (cb instanceof Function) return cb()
+      let collectionDetails = validator.collectionKeyRegex.exec(this.props.field)
+      if (collectionDetails) return FlowRouter.go('collection-item', {
+        pageId: this.props.page._id,
+        projectId: this.props.project._id,
+        collectionName: collectionDetails[1],
+        index: collectionDetails[2]
+      })
       FlowRouter.go('page', { pageId: this.props.page._id, projectId: this.props.project._id })
     })
   },
+  getCancelLink () {
+    let fieldDetails = validator.collectionKeyRegex.exec(this.props.field)
+    if (fieldDetails) {
+      return FlowRouter.path('collection-item', {
+        pageId: this.props.page._id,
+        projectId: this.props.project._id,
+        collectionName: fieldDetails[1],
+        index: fieldDetails[2]
+      })
+    } else {
+      return FlowRouter.path('page', {
+        pageId: this.props.page._id,
+        projectId: this.props.project._id
+      })
+    }
+  },
   render () {
-    let field = fields(this.state.type, this.state.content, this.update, this.save)
+    let fieldComponent = fieldComponentLookup({
+      field: this.props.field,
+      schema: this.state.schema,
+      content: this.state.content,
+      update: this.update,
+      save: this.save
+    })
+    let cancelLink = this.getCancelLink()
     return (
       <div>
         <Breadcrumbs pages={[
-          { text: 'Home', href: '/' },
-          { text: this.props.project.name, href: `/project/${this.props.project._id}` },
           { text: this.props.page.name, href: `/project/${this.props.project._id}/page/${this.props.page._id}` }
         ]} />
         <div className="container">
           <p>Edit <code>{this.props.field}</code></p>
           <div className="m-y-1">
-            { field }
+            { fieldComponent }
           </div>
           <ValidationError message={this.state.validationError} />
           <div className="m-b-1">
             <button onClick={ this.save } className='btn btn-primary'>Save</button>
-            <a href={`/project/${this.props.project._id}/page/${this.props.page._id}`} className="btn btn-link">Cancel</a>
+            <a href={cancelLink} className="btn btn-link">Cancel</a>
           </div>
         </div>
         <OverlayLoader loaded={!this.state.saving} />
@@ -111,4 +140,4 @@ const PageField = React.createClass({
   }
 })
 
-export default connect(state => state)(PageEdit)
+export default connect(({ spinnerVisible }) => ({ spinnerVisible }))(PageEdit)

@@ -32,6 +32,7 @@ export default function (userId) {
       let repos = []
       let q = async.queue(Meteor.bindEnvironment(function (url, done) {
         makeRepoRequest(url, function (err, res) {
+          if (!res) return done()
           repos = _.union(repos, res.data.filter(isPlatformProject))
           let headers = parseGithubHeaders(res.headers.link)
           if (headers.next) q.push(headers.next.url)

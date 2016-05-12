@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm-run-all build:* --parallel watch:* meteor",
     "start-android": "npm-run-all build:* --parallel watch:* meteor-android",
-    "meteor": "meteor --settings settings.json --port 4000",
+    "meteor": "meteor --settings settings.json",
     "meteor-android": "meteor run android-device --settings settings.json",
     "build:css": "node-sass --output-style compact --include-path node_modules client/main.scss | postcss --local-plugins --use autoprefixer --output client/bundle.css",
     "watch:css": "nodemon -w client -e scss -x npm run build:css"
@@ -18,10 +18,12 @@
     "async": "^1.5.2",
     "bootstrap": "^4.0.0-alpha.2",
     "github": "^0.2.4",
+    "is-equal": "^1.5.1",
     "jsen": "0.6.0",
     "leaflet": "^0.7.7",
     "markdown-it": "^6.0.0",
     "moment": "^2.11.2",
+    "object-path": "^0.9.2",
     "parse-link-header": "^0.4.1",
     "react": "^0.14.8",
     "react-addons-css-transition-group": "^0.14.7",

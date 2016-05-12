@@ -15,3 +15,23 @@ export function setRouteParams (params) {
 export function setRouteQueryParams (queryParams) {
   return { type: Actions.SET_ROUTE_QUERY_PARAMS, queryParams }
 }
+
+export function updatePageDetails (ctx) {
+  return { type: Actions.UPDATE_PAGE_DETAILS, ctx }
+}
+
+export function setSlideDirection (direction) {
+  return { type: Actions.SET_SLIDE_DIRECTION, direction }
+}
+
+export function incrementPageCount () {
+  return { type: Actions.INCREMENT_PAGE_COUNT, count: 1 }
+}
+
+export function setPreferredSlideDirection (direction) {
+  return { type: Actions.SET_PREFERRED_SLIDE_DIRECTION, direction: direction }
+}
+
+export function preventChildSwipe () {
+  return { type: Actions.PREVENT_CHILD_SWIPE }
+}

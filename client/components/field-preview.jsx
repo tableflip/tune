@@ -1,8 +1,15 @@
 import React from 'react'
+import getPrimaryField from '/lib/imports/get-primary-field'
 
 export default React.createClass({
+  propTypes: {
+    schema: React.PropTypes.any,
+    value: React.PropTypes.any
+  },
   render () {
-    switch (this.props.type) {
+    if (this.props.schema instanceof Array) return (<CollectionPreview collection={this.props.value} schema={this.props.schema[0]} />)
+    let type = this.props.schema && this.props.schema.type
+    switch (type) {
       case 'img':
       return (<ImagePreview url={this.props.value} />)
 
@@ -69,6 +76,23 @@ let ListPreview = React.createClass({
       <div>
         {this.props.list.map((entry, i) => (<div key={i}>{entry}</div>))}
       </div>
+    )
+  }
+})
+
+let CollectionPreview = React.createClass({
+  render () {
+    let primaryField = getPrimaryField(this.props.schema)
+    return (
+      <ul className="list-group">
+        {
+          this.props.collection.length ?
+            this.props.collection.map((entry, ind) => (
+              <li className="list-group-item" key={ind}><span className="text-muted">{primaryField}:</span> {entry[primaryField]}</li>
+            )) :
+            (<li className="list-group-item text-xs-center text-muted">No entries</li>)
+        }
+      </ul>
     )
   }
 })

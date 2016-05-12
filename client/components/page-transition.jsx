@@ -1,7 +1,7 @@
 import React from 'react'
 import Swipeable from 'react-swipeable'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
-import pageCount from './page-count'
+import store from '../redux/store'
 
 let swipeDistance = Math.min(window.innerWidth / 3, 120)
 let transitionLengthNormal = 100
@@ -21,6 +21,9 @@ export default React.createClass({
     if (this.state.offset < -(swipeDistance * 0.9)) {
       transitionLength = transitionLengthLong
       this.setState({ transitionLength: transitionLengthLong }, this.props.pageBack)
+    } else if (this.state.offset > (swipeDistance * 0.9)) {
+      transitionLength = transitionLengthLong
+      this.setState({ transitionLength: transitionLengthLong }, this.props.pageForward)
     }
     this.setState({ transition: true }, () => setTimeout(() => {
       this.setState({ offset: 0 }, () => {
@@ -42,7 +45,7 @@ export default React.createClass({
               msTransition: this.state.transition ? `right ${this.state.transitionLength}ms ease-out` : null,
           }}>
             <ReactCSSTransitionGroup transitionName={`slide-${this.props.dir}`} transitionEnterTimeout={250} transitionLeaveTimeout={250}>
-              <div key={pageCount.get()} style={{position: 'absolute', display: 'inline-block', width: '100%'}}>{this.props.children}</div>
+              <div key={store.getState().pageCount} style={{position: 'absolute', display: 'inline-block', width: '100%'}}>{this.props.children}</div>
             </ReactCSSTransitionGroup>
           </div>
         </Swipeable>

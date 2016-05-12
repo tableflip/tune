@@ -22,10 +22,6 @@ const Project = React.createClass({
     if (this.props.spinnerVisible) return false
     return (
       <div>
-        <Breadcrumbs pages={[
-          { text: 'Home', href: '/' },
-          { text: this.data.project.name, active:true }
-        ]} />
         <div className="container">
           <h3 className="m-y-1 text-muted">{this.data.project.name}</h3>
           <p className="lead m-t-1">Pick a page</p>

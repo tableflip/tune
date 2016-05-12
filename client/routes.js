@@ -1,36 +1,46 @@
 import React from 'react'
 import { mount } from 'react-mounter'
 import store from './redux/store'
-import { setFooterVisible, setRouteParams, setRouteQueryParams } from './redux/action-creators'
+import * as actionCreators from './redux/action-creators'
 import * as pages from './pages'
-import pageCount from './components/page-count'
 import './subs-manager'
 
 FlowRouter.triggers.enter([
   function incrementPageCount () {
-    pageCount.inc()
+    store.dispatch(actionCreators.incrementPageCount())
   },
-  function setSlideDirection (ctx) {
-    ctx.params._dir = (ctx.oldRoute && ctx.oldRoute.options.index > ctx.route.options.index) ? 'right' : 'left'
+  function updatePageDetails (ctx) {
+    store.dispatch(actionCreators.updatePageDetails(ctx))
+  },
+  // This should probably be done in the updatePageDetails reducer.
+  function setSlideDirection () {
+    let state = store.getState()
+    let dir = (state.pageDetails.current.index > state.pageDetails.previous.index) ? 'left' : 'right'
+    store.dispatch(actionCreators.setSlideDirection(dir))
   },
   function updateFooterVisible (ctx) {
-    store.dispatch(setFooterVisible(!!ctx.route.options.footerVisible))
+    store.dispatch(actionCreators.setFooterVisible(!!ctx.route.options.footerVisible))
   },
   function storeRouteParams (ctx) {
-    store.dispatch(setRouteParams(ctx.params))
-    store.dispatch(setRouteQueryParams(ctx.queryParams))
-  }
+    store.dispatch(actionCreators.setRouteParams(ctx.params))
+    store.dispatch(actionCreators.setRouteQueryParams(ctx.queryParams))
+  },
 ])
+
+function mountPage (content) {
+  let state = store.getState()
+  mount(pages.Layout, {
+    content: content,
+    dir: state.slideDirection
+  })
+}
 
 FlowRouter.route('/', {
   name: 'home',
   index: 0,
   footerVisible: true,
-  action (params) {
-    mount(pages.Layout, {
-      content: React.createElement(pages.Home),
-      dir: params._dir
-    })
+  action () {
+    mountPage(React.createElement(pages.Home))
   }
 })
 
@@ -39,10 +49,7 @@ FlowRouter.route('/project/:projectId', {
   index: 1,
   parent: 'home',
   action (params) {
-    mount(pages.Layout, {
-      content: React.createElement(pages.Project, {projectId: params.projectId}),
-      dir: params._dir
-    })
+    mountPage(React.createElement(pages.Project, {projectId: params.projectId}))
   }
 })
 
@@ -51,10 +58,7 @@ FlowRouter.route('/project/:projectId/page/:pageId', {
   index: 2,
   parent: 'project',
   action (params) {
-    mount(pages.Layout, {
-      content: React.createElement(pages.Page, {pageId: params.pageId}),
-      dir: params._dir
-    })
+    mountPage(React.createElement(pages.Page, {pageId: params.pageId}))
   }
 })
 
@@ -66,10 +70,24 @@ FlowRouter.route('/project/:projectId/page/:pageId/edit', {
     if (!queryParams || !queryParams.field) {
       FlowRouter.go('page')
     } else {
-      mount(pages.Layout, {
-        content: React.createElement(pages.PageEdit, {pageId: params.pageId, field: queryParams.field}),
-        dir: params._dir
-      })
+      mountPage(React.createElement(pages.PageEdit, {pageId: params.pageId, field: queryParams.field}))
+    }
+  }
+})
+
+FlowRouter.route('/project/:projectId/page/:pageId/collection/:collectionName/:index', {
+  name: 'collection-item',
+  index: 4,
+  parent: 'page-edit',
+  action (params) {
+    if (!params || !params.collectionName) {
+      FlowRouter.go('page')
+    } else {
+      mountPage(React.createElement(pages.CollectionItem, {
+        pageId: params.pageId,
+        collectionName: params.collectionName,
+        index: params.index
+      }))
     }
   }
 })
