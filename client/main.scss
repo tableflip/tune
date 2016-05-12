@@ -49,7 +49,7 @@ html, body, #react-root {
 
   .content {
     position: relative;
-    overflow-y: scroll;
+    overflow-y: auto;
     flex: 1 1;
     > * {
       position: absolute;

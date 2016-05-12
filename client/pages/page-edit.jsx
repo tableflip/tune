@@ -22,6 +22,7 @@ const PageEdit = React.createClass({
     }
   },
   render () {
+    console.log(this.props)
     if (this.props.spinnerVisible) return false
     var props = {
       page: this.data.page,

@@ -1,20 +1,24 @@
 import React from 'react'
 import { mount } from 'react-mounter'
 import store from './redux/store'
-import { setFooterVisible } from './redux/action-creators'
+import { setFooterVisible, setRouteParams, setRouteQueryParams } from './redux/action-creators'
 import * as pages from './pages'
 import pageCount from './components/page-count'
 import './subs-manager'
 
 FlowRouter.triggers.enter([
-  function () {
+  function incrementPageCount () {
     pageCount.inc()
   },
-  function (ctx) {
+  function setSlideDirection (ctx) {
     ctx.params._dir = (ctx.oldRoute && ctx.oldRoute.options.index > ctx.route.options.index) ? 'right' : 'left'
   },
-  function (ctx) {
+  function updateFooterVisible (ctx) {
     store.dispatch(setFooterVisible(!!ctx.route.options.footerVisible))
+  },
+  function storeRouteParams (ctx) {
+    store.dispatch(setRouteParams(ctx.params))
+    store.dispatch(setRouteQueryParams(ctx.queryParams))
   }
 ])
 
