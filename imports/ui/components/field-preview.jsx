@@ -1,5 +1,5 @@
 import React from 'react'
-import getPrimaryField from '/lib/imports/get-primary-field'
+import getPrimaryField from '/imports/lib/validation/get-primary-field'
 
 export default React.createClass({
   propTypes: {

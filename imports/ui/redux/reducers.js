@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import { routerReducer } from 'react-router-redux'
 import * as Actions from './actions'
 import { collectionKeyRegex } from '/imports/lib/validation/validator'
 
@@ -108,7 +109,8 @@ const app = combineReducers({
   routeQueryParams,
   pageDetails,
   slideDirection,
-  pageCount
+  pageCount,
+  routing: routerReducer
 })
 
 export default app

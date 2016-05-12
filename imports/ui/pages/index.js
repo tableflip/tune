@@ -5,7 +5,7 @@ import PageEdit from './page-edit'
 import Project from './project'
 import Page from './page'
 
-export {
+export default {
   CollectionItem,
   Layout,
   Home,

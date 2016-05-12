@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { createContainer } from 'meteor/react-meteor-data'
 import { Link } from 'react-router'
-import store from '../redux/store'
+import Projects from '/imports/api/projects/projects'
 import { Icon } from './icon'
 
 const Navbar = React.createClass({
@@ -30,7 +30,7 @@ const Navbar = React.createClass({
 })
 
 const NavbarContainer = createContainer(props => {
-  Subs.subscribe('projects')
+  Meteor.subscribe('projects')
   return { project: Projects.findOne(props.projectId) }
 }, Navbar)
 

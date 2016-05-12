@@ -4,12 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm-run-all build:* --parallel watch:* meteor",
-    "start-android": "npm-run-all build:* --parallel watch:* meteor-android",
+    "start": "npm run meteor",
+    "start-android": "npm run meteor-android",
     "meteor": "meteor --settings settings.json",
     "meteor-android": "meteor run android-device --settings settings.json",
-    "build:css": "node-sass --output-style compact --include-path node_modules client/main.scss | postcss --local-plugins --use autoprefixer --output client/bundle.css",
-    "watch:css": "nodemon -w client -e scss -x npm run build:css"
   },
   "keywords": [],
   "author": "",
@@ -39,13 +37,6 @@
     "redux": "^3.3.1",
     "tether": "^1.2.4",
     "util": "^0.10.3"
-  },
-  "devDependencies": {
-    "node-sass": "^3.4.2",
-    "nodemon": "^1.9.1",
-    "npm-run-all": "^1.5.1",
-    "autoprefixer": "^6.3.3",
-    "postcss-cli": "^2.5.1"
   },
   "repository": {
     "type": "git",

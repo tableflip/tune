@@ -1,36 +1,28 @@
 import React from 'react'
-import moment from 'moment'
+import { Meteor } from 'meteor/meteor'
+import { createContainer } from 'meteor/react-meteor-data'
 import Loader from '../components/loader'
 import { LoginWithGithub } from '../components/login-with-github'
 import { ProjectCard } from '../components/project-card'
+import Projects from '/imports/api/projects/projects'
 
-export default React.createClass({
-  mixins: [ReactMeteorData],
-
-  getMeteorData () {
-    var projectSub = Subs.subscribe('projects')
-    return {
-      user: Meteor.user(),
-      loggingIn: Meteor.loggingIn(),
-      projects: Projects.find({}).fetch()
-    }
-  },
+const Home = React.createClass({
 
   render () {
-    if (!this.data.user) {
+    if (!this.props.user) {
       return (
         <div className="container-fluid bg-inverse h-100 text-xs-center">
           <p className="h4 p-t-3">Please log in<br/>to edit your site</p>
           <LoginWithGithub />
         </div>
       )
-    } else if (this.data.loggingIn) {
+    } else if (this.props.loggingIn) {
       return <Loader loaded={false} color='#ddd' />
     }
     return (
       <div className="container-fluid">
         <p className="lead m-t-1">Pick a site</p>
-          <ProjectsList projects={this.data.projects} />
+          <ProjectsList projects={this.props.projects} />
         <LoginWithGithub />
       </div>
     )
@@ -50,3 +42,12 @@ let ProjectsList = React.createClass({
     )
   }
 })
+
+export default createContainer(() => {
+  Meteor.subscribe('projects')
+  return {
+    user: Meteor.user(),
+    loggingIn: Meteor.loggingIn(),
+    projects: Projects.find({}).fetch()
+  }
+}, Home)

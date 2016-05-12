@@ -1,5 +1,7 @@
+import { Meteor } from 'meteor/meteor'
 import { tagGhPages } from '../github/methods'
 import { syncAll } from '/imports/lib/github/github-sync'
+import Projects from './projects'
 
 var syncAllAsync = Meteor.wrapAsync(syncAll)
 var tagGhPagesSync = Meteor.wrapAsync(tagGhPages)

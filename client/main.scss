@@ -22,8 +22,8 @@ $body-bg:                   #FAFAFA;
 $code-color:                hotpink;
 $code-bg:                   $gray-lighter;
 
-@import 'bootstrap/scss/bootstrap';
-@import './components/page-transitions';
+@import '{}/node_modules/bootstrap/scss/bootstrap';
+@import '{}/imports/ui/components/page-transitions';
 
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   font-family: 'Biryani', $font-family-sans-serif;
@@ -38,7 +38,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
   min-height:calc(100vh - 70px - 65px);
 }
 
-html, body, #react-root {
+html, body, #react-root, [data-reactroot] {
   height: 100%;
 }
 
