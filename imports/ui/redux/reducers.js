@@ -145,6 +145,7 @@ const app = combineReducers({
 export default app
 
 function getPageDetails (ctx, details) {
+  return ctx
   let index = ctx.route.options.index
   let newDetails = {}
   newDetails.previous = Object.assign({}, details.current)

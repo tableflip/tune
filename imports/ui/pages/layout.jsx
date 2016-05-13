@@ -9,17 +9,17 @@ import { setPreferredSlideDirection } from '../redux/actions'
 
 const Layout = React.createClass({
   pageBack () {
-    let details = this.props.pageDetails
-    if (details.parent && details.parent.name) {
+    const details = this.props.pageDetails
+    if (details.parent) {
       this.props.setPreferredSlideDirection('right')
-      browserHistory.push(details.parent.name, details.parent.params, details.parent.queryParams)
+      browserHistory.push(details.parent(details.params, details.queryParams))
     }
   },
   pageForward () {
-    let details = this.props.pageDetails
-    if (details.child && details.child.name) {
+    const details = this.props.pageDetails
+    if (details.child) {
       this.props.setPreferredSlideDirection('left')
-      browserHistory.push(details.child.name, details.child.params, details.child.queryParams)
+      browserHistory.push(details.child(details.params, details.queryParams))
     }
   },
   render () {
@@ -27,7 +27,7 @@ const Layout = React.createClass({
       <div className='full-height'>
         <Navbar />
         <div className='content'>
-          <PageTransition dir={this.props.dir} pageBack={this.pageBack} pageForward={this.pageForward}>
+          <PageTransition dir={this.props.slideDirection} pageBack={this.pageBack} pageForward={this.pageForward}>
             {this.props.children}
           </PageTransition>
           <UniversalLoader />
@@ -38,8 +38,8 @@ const Layout = React.createClass({
   }
 })
 
-function mapStateToProps (state) {
-  return state
+function mapStateToProps ({ pageDetails, slideDirection }) {
+  return { pageDetails, slideDirection }
 }
 
 const mapDispatchToProps = {
