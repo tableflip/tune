@@ -1,6 +1,9 @@
+import { _ } from 'meteor/underscore'
 import async from 'async'
 import githubInterface from '/imports/lib/github/github-interface'
 import base64 from '/imports/lib/github/base64'
+import Projects from '../projects/projects'
+import Pages from '../pages/pages'
 
 export function getRepos (userId, cb) {
   var github = githubInterface(userId)

@@ -1,5 +1,8 @@
+import { Meteor } from 'meteor/meteor'
 import async from 'async'
 import * as githubMethods from '/imports/api/github/methods'
+import Projects from '/imports/api/projects/projects'
+import Pages from '/imports/api/pages/pages'
 
 var getReposSync = Meteor.wrapAsync(githubMethods.getRepos)
 

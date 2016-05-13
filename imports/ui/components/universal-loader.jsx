@@ -4,8 +4,12 @@ import Loader from './loader'
 
 const UniversalLoader = React.createClass({
   render () {
-    return this.props.spinnerVisible ? (<Loader options={{position: 'relative'}} {...this.props} />) : null
+    return (this.props.spinnerVisible || !this.props.subscriptions.ready) ? (<Loader options={{position: 'relative'}} {...this.props} />) : null
   }
 })
 
-export default connect(state => state)(UniversalLoader)
+function mapStateToProps ({ spinnerVisible, subscriptions }) {
+  return { spinnerVisible, subscriptions }
+}
+
+export default connect(mapStateToProps)(UniversalLoader)

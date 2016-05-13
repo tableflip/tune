@@ -1,44 +1,36 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { createContainer } from 'meteor/react-meteor-data'
 import { Link } from 'react-router'
 import Breadcrumbs from '../components/breadcrumbs'
 import FieldPreview from '../components/field-preview'
+import Projects from '/imports/api/projects/projects'
+import Pages from '/imports/api/pages/pages'
+import { subscribe } from '/imports/ui/redux/actions'
 
 const Page = React.createClass({
-  mixins: [ReactMeteorData],
-
-  getMeteorData () {
-    var pageSub = Subs.subscribe('page', this.props.pageId)
-    let page = Pages.findOne({ _id: this.props.pageId })
-    return {
-      pageReady: pageSub.ready(),
-      page: page,
-      project: Projects.findOne({ _id: page && page.project._id })
-    }
-  },
-
   render () {
-    if (this.props.spinnerVisible) return false
-    let content = Object.keys(this.data.page.content.json)
+    if (!this.props.subsReady) return false
+    let content = Object.keys(this.props.page.content.json)
     return (
       <div>
         <Breadcrumbs pages={[
-          { text: this.data.page.name, active: true }
+          { text: this.props.page.name, active: true }
         ]} />
-        <div className="container">
-          <p className="lead m-t-1">Pick an item</p>
-          <ul className="list-group">
+        <div className='container'>
+          <p className='lead m-t-1'>Pick an item</p>
+          <ul className='list-group'>
             {content.map((field, ind) => {
-              let schema = this.data.page.schema[field]
-              let value = this.data.page.content.json[field]
+              let schema = this.props.page.schema[field]
+              let value = this.props.page.content.json[field]
               return (
-                <Link className='list-group-item' key={ind} to={`/project/${this.data.project._id}/page/${this.data.page._id}/edit?field=${field}`}>
+                <Link className='list-group-item' key={ind} to={`/project/${this.props.project._id}/page/${this.props.page._id}/edit?field=${field}`}>
                   <p><code>{field}</code></p>
                   <div><em>
                     <FieldPreview schema={schema} value={value} />
                   </em></div>
-              </Link>
-              )}
+                </Link>
+              ) }
             )}
           </ul>
         </div>
@@ -47,4 +39,22 @@ const Page = React.createClass({
   }
 })
 
-export default connect(state => state)(Page)
+const PageContainer = createContainer((props) => {
+  props.subscribe('page', props.params.pageId)
+  const page = Pages.findOne({ _id: props.params.pageId })
+  return {
+    page: page,
+    project: Projects.findOne({ _id: page && page.project._id })
+  }
+}, Page)
+
+function mapStateToProps ({ subscriptions }, ownProps) {
+  return {
+    params: ownProps.params,
+    subsReady: subscriptions.ready
+  }
+}
+
+const mapDispatchToProps = { subscribe }
+
+export default connect(mapStateToProps, mapDispatchToProps)(PageContainer)

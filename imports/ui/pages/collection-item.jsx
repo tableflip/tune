@@ -3,23 +3,23 @@ import { connect } from 'react-redux'
 import { Link, browserHistory } from 'react-router'
 import { createContainer } from 'meteor/react-meteor-data'
 import { get as getObjectPath } from 'object-path'
+import { Meteor } from 'meteor/meteor'
 import isEqual from 'is-equal'
 import Breadcrumbs from '../components/breadcrumbs'
 import FieldPreview from '../components/field-preview'
 import ValidationError from '../components/validation-error'
 import OverlayLoader from '../components/overlay-loader'
 import getPrimaryField from '/imports/lib/validation/get-primary-field'
-import store from '../redux/store'
-import { setPreferredSlideDirection, preventChildSwipe } from '../redux/action-creators'
+import { subscribe, setPreferredSlideDirection, preventChildSwipe } from '../redux/actions'
+import Projects from '/imports/api/projects/projects'
+import Pages from '/imports/api/pages/pages'
 
-const CollectionItem = connect(state => state)(React.createClass({
+const CollectionItem = React.createClass({
   propTypes: {
     pageReady: React.PropTypes.bool,
-    pageId: React.PropTypes.string,
+    params: React.PropTypes.object,
     page: React.PropTypes.object,
-    project: React.PropTypes.object,
-    collectionName: React.PropTypes.string,
-    index: React.PropTypes.string
+    project: React.PropTypes.object
   },
 
   getInitialState () {
@@ -33,9 +33,9 @@ const CollectionItem = connect(state => state)(React.createClass({
     e.preventDefault()
     this.setState({ saving: true }, () => {
       Meteor.call('pages/removeCollectionItem', {
-        pageId: this.props.pageId,
-        collectionName: this.props.collectionName,
-        index: parseInt(this.props.index, 10)
+        pageId: this.props.params.pageId,
+        collectionName: this.props.params.collectionName,
+        index: parseInt(this.props.params.index, 10)
       }, err => {
         this.setState({ saving: false })
         if (err) return this.setState({ validationError: err.details || err.reason || 'Could not remove entry' })
@@ -45,13 +45,13 @@ const CollectionItem = connect(state => state)(React.createClass({
   },
 
   navAction (n) {
-    let items = this.props.page.content.json[this.props.collectionName]
-    let index = parseInt(this.props.index, 10)
+    let items = this.props.page.content.json[this.props.params.collectionName]
+    let index = parseInt(this.props.params.index, 10)
     if (items[index + n]) {
       return {
         action: () => {
-          store.dispatch(setPreferredSlideDirection(n > 0 ? 'left' : 'right'))
-          browserHistory.push(`project/${this.props.project._id}/page/${this.props.pageId}/collection/${this.props.collectionName}/${(index + n).toString()}`)
+          this.props.setPreferredSlideDirection(n > 0 ? 'left' : 'right')
+          browserHistory.push(`/project/${this.props.params.projectId}/page/${this.props.params.pageId}/collection/${this.props.params.collectionName}/${(index + n).toString()}`)
         }
       }
     } else {
@@ -65,9 +65,9 @@ const CollectionItem = connect(state => state)(React.createClass({
   checkForwardButton (prevProps) {
     if (!this.props.pageReady) return
     if (prevProps && isEqual(prevProps.page, this.props.page)) return
-    let itemContent = this.props.page.content.json[this.props.collectionName]
-    if (!itemContent[parseInt(this.props.index, 10) + 1]) {
-      store.dispatch(preventChildSwipe())
+    let itemContent = this.props.page.content.json[this.props.param.scollectionName]
+    if (!itemContent[parseInt(this.props.params.index, 10) + 1]) {
+      this.props.preventChildSwipe()
     }
   },
   componentWillMount () {
@@ -83,61 +83,73 @@ const CollectionItem = connect(state => state)(React.createClass({
   },
 
   render () {
-    if (this.props.spinnerVisible) return false
-    let itemContent = getObjectPath(this.props.page.content.json, `${this.props.collectionName}.${this.props.index}`)
+    if (!this.props.subsReady) return false
+    let itemContent = getObjectPath(this.props.page.content.json, `${this.props.params.collectionName}.${this.props.params.index}`)
     // this is necessary as when we remove the item the page rerenders immediately before the redirect and
     // the render function would throw an error if we deleted the last element and the object path was no longer valid
     if (!itemContent) return false
-    let schema = getObjectPath(this.props.page.content.json, `${this.props.collectionName}.0`)
+    let schema = getObjectPath(this.props.page.content.json, `${this.props.params.collectionName}.0`)
     let itemKeys = Object.keys(itemContent)
     let navLeft = this.navAction(-1)
     let navRight = this.navAction(1)
     return (
       <div>
         <Breadcrumbs pages={[
-          { text: this.props.page.name, href: `/project/${this.props.project._id}/page/${this.props.page._id}` },
-          { text: this.props.collectionName, href: `/project/${this.props.project._id}/page/${this.props.page._id}/edit?field=${this.props.collectionName}` },
-          { text: itemContent[getPrimaryField(schema)] || this.props.index, active: true }
+          { text: this.props.page.name, href: `/project/${this.props.params.projectId}/page/${this.props.params.pageId}` },
+          { text: this.props.params.collectionName, href: `/project/${this.props.params.projectId}/page/${this.props.params.pageId}/edit?field=${this.props.params.collectionName}` },
+          { text: itemContent[getPrimaryField(schema)] || this.props.params.index, active: true }
         ]} />
-        <div className="container">
-          <button className='pull-right btn btn-danger' onClick={this.remove}><i className="fa fa-remove"></i></button>
-          <p className="lead m-t-1">Pick an item</p>
-          <ul className="list-group">
+        <div className='container'>
+          <button className='pull-right btn btn-danger' onClick={this.remove}><i className='fa fa-remove'></i></button>
+          <p className='lead m-t-1'>Pick an item</p>
+          <ul className='list-group'>
             {itemKeys.map((field, ind) => {
-              let schema = getObjectPath(this.props.page.schema, `${this.props.collectionName}.0.${field}`)
+              let schema = getObjectPath(this.props.page.schema, `${this.props.params.collectionName}.0.${field}`)
               let value = itemContent[field]
-              let fieldPath = `${this.props.collectionName}.${this.props.index}.${field}`
+              let fieldPath = `${this.props.params.collectionName}.${this.props.params.index}.${field}`
               return (
-                <Link className='list-group-item' key={ind} to={`/project/${this.props.project._id}/page/${this.props.page._id}/edit?field=${fieldPath}`}>
+                <Link className='list-group-item' key={ind} to={`/project/${this.props.params.projectId}/page/${this.props.params.pageId}/edit?field=${fieldPath}`}>
                   <p><code>{field}</code></p>
                   <div><em>
                     <FieldPreview schema={schema} value={value} />
                   </em></div>
-              </Link>
-              )}
+                </Link>
+              ) }
             )}
           </ul>
-          <nav className="m-t-1">
-            <button disabled={navLeft.disabled} onClick={navLeft.action} className="btn btn-lg btn-secondary pull-left">&laquo;</button>
-            <button disabled={navRight.disabled} onClick={navRight.action} className="btn btn-lg btn-secondary pull-right">&raquo;</button>
+          <nav className='m-t-1'>
+            <button disabled={navLeft.disabled} onClick={navLeft.action} className='btn btn-lg btn-secondary pull-left'>&laquo;</button>
+            <button disabled={navRight.disabled} onClick={navRight.action} className='btn btn-lg btn-secondary pull-right'>&raquo;</button>
           </nav>
-          <div className="clearfix m-b-1"></div>
+          <div className='clearfix m-b-1'></div>
           <ValidationError message={this.state.validationError} />
         </div>
         <OverlayLoader loaded={!this.state.saving} />
       </div>
     )
   }
-}))
+})
 
 const CollectionItemContainer = createContainer(props => {
-  var pageSub = Subs.subscribe('page', props.pageId)
-  let page = Pages.findOne({ _id: props.pageId })
+  props.subscribe('page', props.params.pageId)
+  const page = Pages.findOne({ _id: props.params.pageId })
   return Object.assign({}, props, {
-    pageReady: pageSub.ready(),
     page: page,
     project: Projects.findOne({ _id: page && page.project._id })
   })
 }, CollectionItem)
 
-export default CollectionItemContainer
+function mapStateToProps ({ subscriptions }, ownProps) {
+  return {
+    subsReady: subscriptions.ready,
+    params: ownProps.params
+  }
+}
+
+const mapDispatchToProps = {
+  subscribe,
+  setPreferredSlideDirection,
+  preventChildSwipe
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CollectionItemContainer)

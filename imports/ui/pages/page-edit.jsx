@@ -1,42 +1,17 @@
 import React from 'react'
+import { Meteor } from 'meteor/meteor'
 import { connect } from 'react-redux'
-import { Link } from 'react-router'
+import { createContainer } from 'meteor/react-meteor-data'
+import { Link, browserHistory } from 'react-router'
 import { get as getObjectPath } from 'object-path'
 import OverlayLoader from '../components/overlay-loader'
 import Breadcrumbs from '../components/breadcrumbs'
 import ValidationError from '../components/validation-error'
 import fieldComponentLookup from '../components/field-component-lookup'
 import * as validator from '/imports/lib/validation/validator'
-
-const PageEdit = React.createClass({
-  mixins: [ReactMeteorData],
-  propTypes: {
-    pageId: React.PropTypes.string,
-    field: React.PropTypes.string
-  },
-  getMeteorData () {
-    var pageSub = Subs.subscribe('page', this.props.pageId)
-    let page = Pages.findOne({ _id: this.props.pageId })
-    return {
-      pageReady: pageSub.ready(),
-      page: page,
-      project: Projects.findOne({ _id: page && page.project._id })
-    }
-  },
-  render () {
-    if (this.props.spinnerVisible) return false
-    var props = {
-      page: this.data.page,
-      project: this.data.project,
-      field: this.props.field
-    }
-    return (
-      <div>
-        <PageField {...props} />
-      </div>
-    )
-  }
-})
+import Projects from '/imports/api/projects/projects'
+import Pages from '/imports/api/pages/pages'
+import { subscribe } from '/imports/ui/redux/actions'
 
 const PageField = React.createClass({
   propTypes: {
@@ -85,21 +60,24 @@ const PageField = React.createClass({
       }
       if (cb instanceof Function) return cb()
       let collectionDetails = validator.collectionKeyRegex.exec(this.props.field)
-      if (collectionDetails) return browserHistory.push(`/project/${this.props.page._id}/page/${this.props.project._id}/collection/${collectionDetails[1]}/${collectionDetails[2]}`)
+      if (collectionDetails) return browserHistory.push(`/project/${this.props.project._id}/page/${this.props.page._id}/collection/${collectionDetails[1]}/${collectionDetails[2]}`)
       browserHistory.push(`/project/${this.props.project._id}/page/${this.props.page._id}`)
     })
   },
   getCancelLink () {
     let fieldDetails = validator.collectionKeyRegex.exec(this.props.field)
     if (fieldDetails) {
-      return `/project/${this.props.page._id}/page/${this.props.project._id}/collection/${fieldDetails[1]}/${fieldDetails[2]}`
+      return `/project/${this.props.project._id}/page/${this.props.page._id}/collection/${fieldDetails[1]}/${fieldDetails[2]}`
     } else {
       return `/project/${this.props.project._id}/page/${this.props.page._id}`
     }
   },
   render () {
+    if (!this.props.subsReady) return false
     let fieldComponent = fieldComponentLookup({
       field: this.props.field,
+      pageId: this.props.page._id,
+      projectId: this.props.project._id,
       schema: this.state.schema,
       content: this.state.content,
       update: this.update,
@@ -111,15 +89,15 @@ const PageField = React.createClass({
         <Breadcrumbs pages={[
           { text: this.props.page.name, href: `/project/${this.props.project._id}/page/${this.props.page._id}` }
         ]} />
-        <div className="container">
+        <div className='container'>
           <p>Edit <code>{this.props.field}</code></p>
-          <div className="m-y-1">
-            { fieldComponent }
+          <div className='m-y-1'>
+            {fieldComponent}
           </div>
           <ValidationError message={this.state.validationError} />
-          <div className="m-b-1">
-            <button onClick={ this.save } className='btn btn-primary'>Save</button>
-            <Link href={cancelLink} className="btn btn-link">Cancel</Link>
+          <div className='m-b-1'>
+            <button onClick={this.save} className='btn btn-primary'>Save</button>
+            <Link to={cancelLink} className='btn btn-link'>Cancel</Link>
           </div>
         </div>
         <OverlayLoader loaded={!this.state.saving} />
@@ -128,4 +106,35 @@ const PageField = React.createClass({
   }
 })
 
-export default connect(({ spinnerVisible }) => ({ spinnerVisible }))(PageEdit)
+const PageEdit = React.createClass({
+  render () {
+    if (!this.props.subsReady) return false
+    return (
+      <div>
+        <PageField {...this.props} />
+      </div>
+    )
+  }
+})
+
+const PageEditContainer = createContainer((props) => {
+  props.subscribe('page', props.params.pageId)
+  const page = Pages.findOne({ _id: props.params.pageId })
+  return {
+    page: page,
+    project: Projects.findOne({ _id: page && page.project._id }),
+    field: props.queryParams.field
+  }
+}, PageEdit)
+
+function mapStateToProps ({ subscriptions }, ownProps) {
+  return {
+    subsReady: subscriptions.ready,
+    params: ownProps.params,
+    queryParams: ownProps.location.query
+  }
+}
+
+const mapDispatchToProps = { subscribe }
+
+export default connect(mapStateToProps, mapDispatchToProps)(PageEditContainer)

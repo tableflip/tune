@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
+import merge from 'merge-deep'
 import * as Actions from './actions'
 import { collectionKeyRegex } from '/imports/lib/validation/validator'
 
@@ -36,6 +37,33 @@ function routeQueryParams (queryParams = {}, action) {
       return action.queryParams || {}
     default:
       return queryParams
+  }
+}
+
+function calcReady (subs) {
+  return !Object.keys(subs).some((id) => subs[id].ready === false)
+}
+
+function subscriptions (subs = { individual: {}, ready: true }, action) {
+  var newIndividual
+  switch (action.type) {
+    case Actions.MARK_SUB_STATUS:
+      let newSub = { ready: action.status }
+      if (action.params) newSub.params = action.params
+      newIndividual = merge(subs.individual, { [action.id]: newSub })
+      return merge(subs, {
+        individual: newIndividual,
+        ready: calcReady(newIndividual)
+      })
+    case Actions.REMOVE_SUB:
+      newIndividual = Object.assign({}, subs.individual)
+      delete newIndividual[action.id]
+      return merge(subs, {
+        individual: newIndividual,
+        ready: calcReady(newIndividual)
+      })
+    default:
+      return subs
   }
 }
 
@@ -110,6 +138,7 @@ const app = combineReducers({
   pageDetails,
   slideDirection,
   pageCount,
+  subscriptions,
   routing: routerReducer
 })
 
