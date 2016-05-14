@@ -56,7 +56,6 @@ const Project = React.createClass({
 
 const ProjectContainer = createContainer((props) => {
   const projectId = props.projectId
-  props.subscribe('project', projectId)
   return {
     project: Projects.findOne({ _id: projectId }),
     pages: Pages.find({ 'project._id': projectId }).fetch(),

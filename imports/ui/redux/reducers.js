@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
-import merge from 'merge-deep'
 import * as Actions from './actions'
 import { collectionKeyRegex } from '/imports/lib/validation/validator'
 
@@ -40,28 +39,22 @@ function routeQueryParams (queryParams = {}, action) {
   }
 }
 
-function calcReady (subs) {
-  return !Object.keys(subs).some((id) => subs[id].ready === false)
-}
-
 function subscriptions (subs = { individual: {}, ready: true }, action) {
   var newIndividual
   switch (action.type) {
-    case Actions.MARK_SUB_STATUS:
-      let newSub = { ready: action.status }
-      if (action.params) newSub.params = action.params
-      newIndividual = merge(subs.individual, { [action.id]: newSub })
-      return merge(subs, {
+    case Actions.ADD_SUB:
+      newIndividual = Object.assign({}, subs.individual, { [action.id]: true })
+      return {
         individual: newIndividual,
-        ready: calcReady(newIndividual)
-      })
+        ready: false
+      }
     case Actions.REMOVE_SUB:
       newIndividual = Object.assign({}, subs.individual)
       delete newIndividual[action.id]
-      return merge(subs, {
+      return {
         individual: newIndividual,
-        ready: calcReady(newIndividual)
-      })
+        ready: !newIndividual.length
+      }
     default:
       return subs
   }
@@ -80,16 +73,8 @@ let defaultPageDetails = {
     params: {},
     queryParams: {}
   },
-  parent: {
-    name: '',
-    params: {},
-    queryParams: {}
-  },
-  child: {
-    name: '',
-    params: {},
-    queryParams: {}
-  }
+  parent: null,
+  child: null
 }
 
 function pageDetails (details = defaultPageDetails, action) {
@@ -145,53 +130,22 @@ const app = combineReducers({
 export default app
 
 function getPageDetails (ctx, details) {
-  return ctx
-  let index = ctx.route.options.index
-  let newDetails = {}
-  newDetails.previous = Object.assign({}, details.current)
-  newDetails.current = {
-    name: ctx.route.name,
-    index: index,
-    params: Object.assign({}, ctx.params),
-    queryParams: Object.assign({}, ctx.queryParams)
+  console.log(ctx)
+  let newDetails = {
+    previous: Object.assign({}, details.current),
+    current: Object.assign({}, ctx),
+    parent: ctx.parentFn && ctx.parentFn(ctx.params, ctx.queryParams),
+    child: null
   }
-  if (newDetails.previous.index > newDetails.current.index) newDetails.child = Object.assign({}, newDetails.previous)
-  newDetails.parent = {
-    name: ctx.route.options.parent,
-    params: Object.assign({}, ctx.params),
-    queryParams: Object.assign({}, ctx.queryParams)
+  if (ctx.childFn) {
+    newDetails.child = ctx.childFn(ctx.params, ctx.queryParams)
+  } else if (ctx.index > details.current.index) {
+    newDetails.child = Object.assign({}, details.current)
   }
 
-  // Special cases from here
+  // If we're looking at a field within an object within a collection
   var collectionDetails = collectionKeyRegex.exec(ctx.queryParams.field)
-
-  if (newDetails.current.name === 'page-edit' && collectionDetails) newDetails.current.index = 5
-
-  if (newDetails.current.name === 'collection-item') {
-    let currentIndex = parseInt(newDetails.current.params.index, 10)
-    if (newDetails.current.params.index > 0) {
-      newDetails.parent = {
-        name: newDetails.current.name,
-        index: newDetails.current.index,
-        params: Object.assign({}, newDetails.current.params),
-        queryParams: Object.assign({}, newDetails.current.queryParams)
-      }
-      newDetails.parent.params.index = (currentIndex - 1).toString()
-    } else {
-      newDetails.parent.queryParams = {
-        field: newDetails.parent.params.collectionName
-      }
-    }
-    if (true) {
-      newDetails.child = {
-        name: newDetails.current.name,
-        index: newDetails.current.index,
-        params: Object.assign({}, newDetails.current.params),
-        queryParams: Object.assign({}, newDetails.current.queryParams)
-      }
-      newDetails.child.params.index = (currentIndex + 1).toString()
-    }
-  }
+  if (ctx.name === 'page-edit' && collectionDetails) newDetails.current.index = 5
 
   return newDetails
 }

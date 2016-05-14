@@ -43,7 +43,6 @@ let ProjectsList = React.createClass({
 })
 
 export default createContainer(() => {
-  Meteor.subscribe('projects')
   return {
     user: Meteor.user(),
     loggingIn: Meteor.loggingIn(),

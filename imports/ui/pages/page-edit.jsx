@@ -118,7 +118,6 @@ const PageEdit = React.createClass({
 })
 
 const PageEditContainer = createContainer((props) => {
-  props.subscribe('page', props.params.pageId)
   const page = Pages.findOne({ _id: props.params.pageId })
   return {
     page: page,

@@ -1,5 +1,4 @@
 import { Meteor } from 'meteor/meteor'
-import arrayEqual from 'array-equal'
 import * as Actions from './actions'
 
 export const SET_SPINNER_VISIBLE = 'SET_SPINNER_VISIBLE'
@@ -12,7 +11,7 @@ export const INCREMENT_PAGE_COUNT = 'INCREMENT_PAGE_COUNT'
 export const SET_PREFERRED_SLIDE_DIRECTION = 'SET_PREFERRED_SLIDE_DIRECTION'
 export const PREVENT_CHILD_SWIPE = 'PREVENT_CHILD_SWIPE'
 export const SUBSCRIBE = 'SUBSCRIBE'
-export const MARK_SUB_STATUS = 'MARK_SUB_STATUS'
+export const ADD_SUB = 'ADD_SUB'
 export const REMOVE_SUB = 'REMOVE_SUB'
 
 export function setSpinnerVisible (state) {
@@ -56,7 +55,7 @@ export function subscribe (...params) {
     let newSubId
     const subParams = [].concat(params, {
       onReady () {
-        dispatch(markSubStatus(newSubId, true))
+        dispatch(removeSub(newSubId))
       },
       onStop () {
         dispatch(removeSub(newSubId))
@@ -65,17 +64,13 @@ export function subscribe (...params) {
 
     const newSub = Meteor.subscribe.apply(Meteor, subParams)
     newSubId = newSub.subscriptionId
-    // here we pass the result of newSub.ready() into the action creator
-    // because if you subscribe with parameters which have already bee subscribed to
-    // Meteor will return a handle which is ready() immediately, but will NOT
-    // run the onReady callback!
-    dispatch(markSubStatus(newSubId, newSub.ready(), params))
+    if (!newSub.ready()) dispatch(addSub(newSubId))
     return newSub
   }
 }
 
-export function markSubStatus (id, status, params) {
-  return { type: Actions.MARK_SUB_STATUS, id, status, params }
+export function addSub (id) {
+  return { type: Actions.ADD_SUB, id }
 }
 
 export function removeSub (id) {
