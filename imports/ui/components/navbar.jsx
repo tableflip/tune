@@ -36,7 +36,7 @@ const NavbarContainer = createContainer((props) => {
 }, Navbar)
 
 function mapStateToProps (state) {
-  return { projectId: state.routeParams.projectId }
+  return { projectId: state.pageDetails.current.params.projectId }
 }
 
 const mapDispatchToProps = { subscribe: subscribe }
