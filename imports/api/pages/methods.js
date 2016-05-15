@@ -1,14 +1,18 @@
 import { Meteor } from 'meteor/meteor'
 import { check } from 'meteor/check'
 import isEqual from 'is-equal'
+import url from 'url'
 import { get as getObjectPath } from 'object-path'
+import createUploadcare from 'uploadcare'
 import { putPageContent, getPages } from '../github/methods'
 import * as validator from '/imports/lib/validation/validator'
 import Pages from './pages'
 import Projects from '../projects/projects'
 
-var putPageContentAsync = Meteor.wrapAsync(putPageContent)
-var getPagesAsync = Meteor.wrapAsync(getPages)
+const uploadcare = createUploadcare(Meteor.settings.public.uploadcare.publicKey, Meteor.settings.uploadcare.privateKey)
+const storeUploadcareSync = Meteor.wrapAsync(uploadcare.files.store.bind(uploadcare.files))
+const putPageContentAsync = Meteor.wrapAsync(putPageContent)
+const getPagesAsync = Meteor.wrapAsync(getPages)
 
 Meteor.methods({
   'pages/updateContent': function ({ pageId, key, newValue }) {
@@ -34,6 +38,10 @@ Meteor.methods({
     var update = {}
     update[`content.json.${key}`] = newValue
     Pages.update(page._id, { $set: update })
+    if (validation.type === 'img') {
+      let uuid = uploadcareUuidFromUrl(newValue)
+      storeUploadcareSync(uuid)
+    }
     return savePage.call(this, page, project)
   },
 
@@ -71,4 +79,12 @@ function savePage (page, project) {
   }
   Projects.update(project._id, { $set: githubProjectUpdate })
   return Pages.update(page._id, { $set: githubPageUpdate })
+}
+
+function uploadcareUuidFromUrl (uploadcareUrl) {
+  const invalidError = new Error(`Invalid Uploadcare URL: ${uploadcareUrl}`)
+  if (!uploadcareUrl) throw invalidError
+  const thisUrl = url.parse(uploadcareUrl)
+  if (thisUrl.hostname !== 'ucarecdn.com' || !thisUrl.pathname) throw invalidError
+  return thisUrl.pathname.split('/')[1]
 }

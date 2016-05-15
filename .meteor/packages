@@ -18,7 +18,6 @@ standard-minifier-js
 accounts-github
 fortawesome:fontawesome
 service-configuration
-maximdubrovin:uploadcare
 http
 check
 meteorhacks:subs-manager

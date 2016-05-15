@@ -32,10 +32,13 @@ const UploadcareInner = React.createClass({
       })
     })
   },
+  onError () {
+    this.setState({ src: '/placeholder.png' })
+  },
   render () {
     return (
       <div>
-        <img src={this.state.src} width='100%' onClick={this.uploadcare} ref='img' />
+        <img src={this.state.src} width='100%' onClick={this.uploadcare} onError={this.onError} ref='img' />
       </div>
     )
   }

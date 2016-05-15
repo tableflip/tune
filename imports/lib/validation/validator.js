@@ -33,8 +33,10 @@ export function validateDocField ({ doc, field, newValue }) {
   }
   var validate = validator(miniSchema)
   var valid = validate({ [field]: newValue })
-  if (!valid) return { error: validationError(validate.errors[0].keyword) }
-  return { value: newValue }
+  var result = { type: docSchemaKey.type || schemaVal.type }
+  if (!valid) result.error = validationError(validate.errors[0].keyword)
+  else result.value = newValue
+  return result
 }
 
 function validateCollection (schema, collection) {

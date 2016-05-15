@@ -6,7 +6,6 @@ import { Link } from 'react-router'
 import OverlayLoader from '../components/overlay-loader'
 import Projects from '/imports/api/projects/projects'
 import Pages from '/imports/api/pages/pages'
-import { subscribe } from '/imports/ui/redux/actions'
 
 window.Pages = Pages
 
@@ -67,4 +66,4 @@ function mapStateToProps ({ subscriptions }, ownProps) {
   return { projectId: ownProps.params.projectId, subsReady: subscriptions.ready }
 }
 
-export default connect(mapStateToProps, { subscribe })(ProjectContainer)
+export default connect(mapStateToProps)(ProjectContainer)

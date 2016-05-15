@@ -10,7 +10,7 @@ import FieldPreview from '../components/field-preview'
 import ValidationError from '../components/validation-error'
 import OverlayLoader from '../components/overlay-loader'
 import getPrimaryField from '/imports/lib/validation/get-primary-field'
-import { subscribe, setPreferredSlideDirection, preventChildSwipe } from '../redux/actions'
+import { setPreferredSlideDirection, preventChildSwipe, setCollectionSize } from '../redux/actions'
 import Projects from '/imports/api/projects/projects'
 import Pages from '/imports/api/pages/pages'
 
@@ -83,7 +83,7 @@ const CollectionItem = React.createClass({
   },
 
   render () {
-    if (!this.props.subsReady) return false
+    if (!this.props.subsReady || !this.props.page) return false
     let itemContent = getObjectPath(this.props.page.content.json, `${this.props.params.collectionName}.${this.props.params.index}`)
     // this is necessary as when we remove the item the page rerenders immediately before the redirect and
     // the render function would throw an error if we deleted the last element and the object path was no longer valid
@@ -131,8 +131,11 @@ const CollectionItem = React.createClass({
 })
 
 const CollectionItemContainer = createContainer(props => {
-  props.subscribe('page', props.params.pageId)
   const page = Pages.findOne({ _id: props.params.pageId })
+  if (page) {
+    let collection = page.content.json[props.params.collectionName]
+    if (collection) props.setCollectionSize(collection.length)
+  }
   return Object.assign({}, props, {
     page: page,
     project: Projects.findOne({ _id: page && page.project._id })
@@ -147,9 +150,9 @@ function mapStateToProps ({ subscriptions }, ownProps) {
 }
 
 const mapDispatchToProps = {
-  subscribe,
   setPreferredSlideDirection,
-  preventChildSwipe
+  preventChildSwipe,
+  setCollectionSize
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CollectionItemContainer)

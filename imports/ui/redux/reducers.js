@@ -115,6 +115,15 @@ function pageCount (count = 0, action) {
   }
 }
 
+function collectionSize (size = 0, action) {
+  switch (action.type) {
+    case Actions.SET_COLLECTION_SIZE:
+      return action.size
+    default:
+      return size
+  }
+}
+
 const app = combineReducers({
   spinnerVisible,
   footerVisible,
@@ -124,6 +133,7 @@ const app = combineReducers({
   slideDirection,
   pageCount,
   subscriptions,
+  collectionSize,
   routing: routerReducer
 })
 

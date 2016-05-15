@@ -5,12 +5,14 @@
     "secret": "SECRET"
   },
   "uploadcare": {
-    "publicKey": "",
     "privateKey": ""
   },
   "public": {
     "mapbox": {
       "accessToken": "ACCESS_TOKEN"
+    },
+    "uploadcare": {
+      "publicKey": ""
     }
   }
 }

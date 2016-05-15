@@ -1,5 +1,4 @@
 import { Meteor } from 'meteor/meteor'
-import * as Actions from './actions'
 
 export const SET_SPINNER_VISIBLE = 'SET_SPINNER_VISIBLE'
 export const SET_FOOTER_VISIBLE = 'SET_FOOTER_VISIBLE'
@@ -13,41 +12,42 @@ export const PREVENT_CHILD_SWIPE = 'PREVENT_CHILD_SWIPE'
 export const SUBSCRIBE = 'SUBSCRIBE'
 export const ADD_SUB = 'ADD_SUB'
 export const REMOVE_SUB = 'REMOVE_SUB'
+export const SET_COLLECTION_SIZE = 'SET_COLLECTION_SIZE'
 
 export function setSpinnerVisible (state) {
-  return { type: Actions.SET_SPINNER_VISIBLE, state }
+  return { type: SET_SPINNER_VISIBLE, state }
 }
 
 export function setFooterVisible (state) {
-  return { type: Actions.SET_FOOTER_VISIBLE, state }
+  return { type: SET_FOOTER_VISIBLE, state }
 }
 
 export function setRouteParams (params) {
-  return { type: Actions.SET_ROUTE_PARAMS, params }
+  return { type: SET_ROUTE_PARAMS, params }
 }
 
 export function setRouteQueryParams (queryParams) {
-  return { type: Actions.SET_ROUTE_QUERY_PARAMS, queryParams }
+  return { type: SET_ROUTE_QUERY_PARAMS, queryParams }
 }
 
 export function updatePageDetails (ctx) {
-  return { type: Actions.UPDATE_PAGE_DETAILS, ctx }
+  return { type: UPDATE_PAGE_DETAILS, ctx }
 }
 
 export function setSlideDirection (direction) {
-  return { type: Actions.SET_SLIDE_DIRECTION, direction }
+  return { type: SET_SLIDE_DIRECTION, direction }
 }
 
 export function incrementPageCount () {
-  return { type: Actions.INCREMENT_PAGE_COUNT, count: 1 }
+  return { type: INCREMENT_PAGE_COUNT, count: 1 }
 }
 
 export function setPreferredSlideDirection (direction) {
-  return { type: Actions.SET_PREFERRED_SLIDE_DIRECTION, direction: direction }
+  return { type: SET_PREFERRED_SLIDE_DIRECTION, direction: direction }
 }
 
 export function preventChildSwipe () {
-  return { type: Actions.PREVENT_CHILD_SWIPE }
+  return { type: PREVENT_CHILD_SWIPE }
 }
 
 export function subscribe (...params) {
@@ -70,9 +70,13 @@ export function subscribe (...params) {
 }
 
 export function addSub (id) {
-  return { type: Actions.ADD_SUB, id }
+  return { type: ADD_SUB, id }
 }
 
 export function removeSub (id) {
-  return { type: Actions.REMOVE_SUB, id }
+  return { type: REMOVE_SUB, id }
+}
+
+export function setCollectionSize (size) {
+  return { type: SET_COLLECTION_SIZE, size }
 }

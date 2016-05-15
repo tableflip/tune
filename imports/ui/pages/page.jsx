@@ -6,11 +6,10 @@ import Breadcrumbs from '../components/breadcrumbs'
 import FieldPreview from '../components/field-preview'
 import Projects from '/imports/api/projects/projects'
 import Pages from '/imports/api/pages/pages'
-import { subscribe } from '/imports/ui/redux/actions'
 
 const Page = React.createClass({
   render () {
-    if (!this.props.subsReady) return false
+    if (!this.props.subsReady || !this.props.page) return false
     let content = Object.keys(this.props.page.content.json)
     return (
       <div>
@@ -54,6 +53,4 @@ function mapStateToProps ({ subscriptions }, ownProps) {
   }
 }
 
-const mapDispatchToProps = { subscribe }
-
-export default connect(mapStateToProps, mapDispatchToProps)(PageContainer)
+export default connect(mapStateToProps)(PageContainer)

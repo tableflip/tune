@@ -11,7 +11,6 @@ import fieldComponentLookup from '../components/field-component-lookup'
 import * as validator from '/imports/lib/validation/validator'
 import Projects from '/imports/api/projects/projects'
 import Pages from '/imports/api/pages/pages'
-import { subscribe } from '/imports/ui/redux/actions'
 
 const PageField = React.createClass({
   propTypes: {
@@ -73,7 +72,7 @@ const PageField = React.createClass({
     }
   },
   render () {
-    if (!this.props.subsReady) return false
+    if (!this.props.subsReady || !this.props.page) return false
     let fieldComponent = fieldComponentLookup({
       field: this.props.field,
       pageId: this.props.page._id,
@@ -108,7 +107,7 @@ const PageField = React.createClass({
 
 const PageEdit = React.createClass({
   render () {
-    if (!this.props.subsReady) return false
+    if (!this.props.subsReady || !this.props.page) return false
     return (
       <div>
         <PageField {...this.props} />
@@ -134,6 +133,4 @@ function mapStateToProps ({ subscriptions }, ownProps) {
   }
 }
 
-const mapDispatchToProps = { subscribe }
-
-export default connect(mapStateToProps, mapDispatchToProps)(PageEditContainer)
+export default connect(mapStateToProps)(PageEditContainer)

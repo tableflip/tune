@@ -40,19 +40,19 @@ const routes = (props = {}) => {
   const history = props.store ? syncHistoryWithStore(browserHistory, props.store) : browserHistory
 
   function collectionChildFn (params) {
-    // TODO: compare collection size to current index via store
-    if (true) {
-      return `/project/${params.projectId}/page/${params.pageId}/collection/${params.collectionName}/${params.index + 1}`
-    } else {
-      return `/project/${params.projectId}/page/${params.pageId}/edit?fieldName=${params.collectionName}`
+    const index = parseInt(params.index, 10)
+    const collectionSize = props.store.getState().collectionSize
+    if (index < collectionSize - 1) {
+      return `/project/${params.projectId}/page/${params.pageId}/collection/${params.collectionName}/${index + 1}`
     }
   }
 
   function collectionParentFn (params) {
-    if (params.index > 0) {
-      return `/project/${params.projectId}/page/${params.pageId}/collection/${params.collectionName}/${params.index - 1}`
+    const index = parseInt(params.index, 10)
+    if (index > 0) {
+      return `/project/${params.projectId}/page/${params.pageId}/collection/${params.collectionName}/${index - 1}`
     } else {
-      return `/project/${params.projectId}/page/${params.pageId}/edit?fieldName=${params.collectionName}`
+      return `/project/${params.projectId}/page/${params.pageId}/edit?field=${params.collectionName}`
     }
   }
 
