@@ -1,5 +1,6 @@
 import React from 'react'
 import { Map, TileLayer, Marker } from 'react-leaflet'
+import Helmet from 'react-helmet'
 
 export default React.createClass({
   propTypes: {
@@ -24,12 +25,19 @@ export default React.createClass({
   },
   render () {
     return (
-      <Map center={this.props.content} zoom={13} id='map' onClick={this.changePosition}>
-        <TileLayer
-          url='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+      <div>
+        <Helmet
+          link={[
+            { rel: 'stylesheet', type: 'text/css', href: 'https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.css' }
+          ]}
         />
-        <Marker position={this.state.position} />
-      </Map>
+        <Map center={this.props.content} zoom={13} id='map' onClick={this.changePosition}>
+          <TileLayer
+            url='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+            />
+          <Marker position={this.state.position} />
+        </Map>
+      </div>
     )
   }
 })

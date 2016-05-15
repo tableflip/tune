@@ -7,15 +7,13 @@ import { syncHistoryWithStore } from 'react-router-redux'
 import thunkMiddleware from 'redux-thunk'
 import { Meteor } from 'meteor/meteor'
 import reducers from '/imports/ui/redux/reducers'
-import Routes from '/imports/ui/routes.jsx'
+import Routes from '/imports/ui/routes'
+import Head from '/imports/ui/components/head'
 
 const store = createStore(
   reducers,
   compose(
-    applyMiddleware(
-      thunkMiddleware
-      // loggerMiddleware
-    ),
+    applyMiddleware(thunkMiddleware),
     window.devToolsExtension ? window.devToolsExtension() : undefined
   )
 )
@@ -24,6 +22,7 @@ syncHistoryWithStore(browserHistory, store)
 Meteor.startup(() => {
   render((
     <div>
+      <Head />
       <Provider store={store}>
         <Routes store={store} />
       </Provider>
