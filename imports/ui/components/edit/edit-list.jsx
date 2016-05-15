@@ -1,4 +1,5 @@
 import React from 'react'
+import { _ } from 'meteor/underscore'
 
 export default React.createClass({
   propTypes: {
@@ -38,51 +39,51 @@ export default React.createClass({
     this.setState({list: _.union(top, bottom)}, this.update)
   },
   storeButton (index, dir) {
-    return (index === this.state.lastMoved && dir === this.state.lastDir) ?
-      button => this._focusButton = button :
-      () => {}
+    return (index === this.state.lastMoved && dir === this.state.lastDir)
+      ? (button) => { this._focusButton = button }
+      : () => {}
   },
   refocus (e) {
     switch (e.keyCode) {
       case 37:
       case 39:
-      this.setState({ lastDir: this.state.lastDir * -1 })
-      return
+        this.setState({ lastDir: this.state.lastDir * -1 })
+        return
 
       case 38:
-      this.setState({ lastMoved: (this.state.lastMoved - 1) % this.state.list.length })
-      return
+        this.setState({ lastMoved: (this.state.lastMoved - 1) % this.state.list.length })
+        return
 
       case 40:
-      this.setState({ lastMoved: (this.state.lastMoved + 1) % this.state.list.length })
-      return
+        this.setState({ lastMoved: (this.state.lastMoved + 1) % this.state.list.length })
+        return
     }
   },
   render () {
     return (
       <ul className='list-group' onKeyDown={this.refocus}>
-        { this.state.list.map((item, i) => {
+        {this.state.list.map((item, i) => {
           return <li key={i} className='list-group-item'>
-              <div className="btn-group m-r-1" role="group">
-                <button type="button" className="btn btn-secondary" onClick={ this.move.bind(null, i, -1) } ref={this.storeButton(i, -1)}>
-                  <i className="fa fa-arrow-up"></i>
-                </button>
-                <button type="button" className="btn btn-secondary" onClick={ this.move.bind(null, i, 1) } ref={this.storeButton(i, 1)}>
-                  <i className="fa fa-arrow-down"></i>
-                </button>
-              </div>
-              { item }
-              <button  className='pull-right btn btn-danger' onClick={ this.remove.bind(null, i) }><i className="fa fa-remove"></i></button>
-            </li>
+            <div className='btn-group m-r-1' role='group'>
+              <button type='button' className='btn btn-secondary' onClick={this.move.bind(null, i, -1)} ref={this.storeButton(i, -1)}>
+                <i className='fa fa-arrow-up'></i>
+              </button>
+              <button type='button' className='btn btn-secondary' onClick={this.move.bind(null, i, 1)} ref={this.storeButton(i, 1)}>
+                <i className='fa fa-arrow-down'></i>
+              </button>
+            </div>
+            {item}
+            <button className='pull-right btn btn-danger' onClick={this.remove.bind(null, i)}><i className='fa fa-remove'></i></button>
+          </li>
         })}
-        <li className="list-group-item">
-          <form onSubmit={ this.addItem }>
-            <div className="form-group row m-y-0">
-              <div className="col-xs-10">
+        <li className='list-group-item'>
+          <form onSubmit={this.addItem}>
+            <div className='form-group row m-y-0'>
+              <div className='col-xs-10'>
                 <input className='form-control' type='text' placeholder='Add an Item' ref='addItem' />
               </div>
-              <div className="col-xs-2 text-right">
-                <span className='pull-right btn btn-primary' onClick={ this.addItem }><i className="fa fa-plus"></i></span>
+              <div className='col-xs-2 text-right'>
+                <span className='pull-right btn btn-primary' onClick={this.addItem}><i className='fa fa-plus'></i></span>
               </div>
             </div>
           </form>

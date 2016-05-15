@@ -1,9 +1,11 @@
+import { SimpleSchema } from 'meteor/aldeed:simple-schema'
+
 export default new SimpleSchema({
   name: {
     type: String
   },
   'project.full_name': {
-    type: String,
+    type: String
   },
   'project._id': {
     type: String,

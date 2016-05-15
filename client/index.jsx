@@ -5,12 +5,10 @@ import { Provider } from 'react-redux'
 import { browserHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import thunkMiddleware from 'redux-thunk'
-import createLogger from 'redux-logger'
 import { Meteor } from 'meteor/meteor'
 import reducers from '/imports/ui/redux/reducers'
 import Routes from '/imports/ui/routes.jsx'
 
-const loggerMiddleware = createLogger()
 const store = createStore(
   reducers,
   compose(

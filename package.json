@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "standard",
     "start": "npm run meteor",
     "start-android": "npm run meteor-android",
     "meteor": "meteor --settings settings.json",
@@ -43,5 +44,8 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:tableflip/the-platform-client.git"
+  },
+  "devDependencies": {
+    "pre-commit": "^1.1.3"
   }
 }

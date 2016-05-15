@@ -1,3 +1,6 @@
+import { Meteor } from 'meteor/meteor'
+import { HTTP } from 'meteor/http '
+import { _ } from 'meteor/underscore'
 import parseGithubHeaders from 'parse-link-header'
 import async from 'async'
 import isPlatformProject from './is-platform-project'
@@ -32,6 +35,7 @@ export default function (userId) {
       let repos = []
       let q = async.queue(Meteor.bindEnvironment(function (url, done) {
         makeRepoRequest(url, function (err, res) {
+          if (err) return cb(err)
           if (!res) return done()
           repos = _.union(repos, res.data.filter(isPlatformProject))
           let headers = parseGithubHeaders(res.headers.link)
@@ -78,7 +82,7 @@ export default function (userId) {
     getFileContents: function (fullName, path, cb) {
       var res = githubCall({
         method: 'GET',
-        url: `${baseUrl}/repos/${fullName}/contents/${path}`,
+        url: `${baseUrl}/repos/${fullName}/contents/${path}`
       }, pluckFromResponse('data', cb))
       if (!cb) return res.data
     },

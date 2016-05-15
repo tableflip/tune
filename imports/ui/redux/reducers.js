@@ -130,7 +130,6 @@ const app = combineReducers({
 export default app
 
 function getPageDetails (ctx, details) {
-  console.log(ctx)
   let newDetails = {
     previous: Object.assign({}, details.current),
     current: Object.assign({}, ctx),

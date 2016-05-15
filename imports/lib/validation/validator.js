@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor'
 import validator from 'jsen'
 import { get as getObjectPath } from 'object-path'
 import fieldValidation from './field-validation'
@@ -10,7 +11,7 @@ export function schemaKey (key) {
   return `${keyDetails[1]}.0.${keyDetails[3]}`
 }
 
-export function validateDocField({ doc, field, newValue }) {
+export function validateDocField ({ doc, field, newValue }) {
   field = schemaKey(field)
   var data = doc.content
   if (!data) throw new Meteor.Error('No valid data in document')
@@ -52,7 +53,7 @@ function validateCollection (schema, collection) {
   return { value: collection }
 }
 
-function validationError(keyword) {
+function validationError (keyword) {
   switch (keyword) {
     case 'maxLength':
       return 'The value is too long'

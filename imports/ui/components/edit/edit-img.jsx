@@ -24,7 +24,7 @@ export default React.createClass({
       crop: 'free',
       imagesOnly: true
     }
-    uploadcare.openDialog(null, opts).done((file) => {
+    window.uploadcare.openDialog(null, opts).done((file) => {
       file.done((info) => {
         self.setState({src: info.cdnUrl}, self.update)
       })
@@ -33,7 +33,7 @@ export default React.createClass({
   render () {
     return (
       <div>
-        <img src={ this.state.src } width='100%' onClick={ this.uploadcare } ref='img'/>
+        <img src={this.state.src} width='100%' onClick={this.uploadcare} ref='img' />
       </div>
     )
   }

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Meteor } from 'meteor/meteor'
 import getPrimaryField from '/imports/lib/validation/get-primary-field'
 
 export default React.createClass({
@@ -11,41 +12,49 @@ export default React.createClass({
     let type = this.props.schema && this.props.schema.type
     switch (type) {
       case 'img':
-      return (<ImagePreview url={this.props.value} />)
+        return (<ImagePreview url={this.props.value} />)
 
       case 'map':
-      return (<MapPreview center={this.props.value} />)
+        return (<MapPreview center={this.props.value} />)
 
       case 'color':
-      return (<ColorPreview color={this.props.value} />)
+        return (<ColorPreview color={this.props.value} />)
 
       case 'list':
-      return (<ListPreview list={this.props.value} />)
+        return (<ListPreview list={this.props.value} />)
 
       default:
-      return (<div>{this.props.value}</div>)
+        return (<div>{this.props.value}</div>)
     }
   }
 })
 
 let ImagePreview = React.createClass({
-  render() {
+  getInitialState () {
+    return {
+      src: this.props.url
+    }
+  },
+  onError () {
+    this.setState({ src: '/placeholder.png' })
+  },
+  render () {
     let style = {
       borderRadius: '5px',
       border: '2px solid #444',
       height: '70px'
     }
     return (
-      <img src={this.props.url} style={style} />
+      <img src={this.state.src} style={style} onError={this.onError} />
     )
   }
 })
 
 let MapPreview = React.createClass({
-  render() {
+  render () {
     let style = {
       borderRadius: '5px',
-      border: '2px solid #444',
+      border: '2px solid #444'
     }
     let accessToken = Meteor.settings && Meteor.settings.public && Meteor.settings.public.mapbox && Meteor.settings.public.mapbox.accessToken
     let center = `${this.props.center[1]},${this.props.center[0]}`
@@ -56,7 +65,7 @@ let MapPreview = React.createClass({
 })
 
 let ColorPreview = React.createClass({
-  render() {
+  render () {
     let style = {
       borderRadius: '5px',
       border: '2px solid #444',
@@ -84,13 +93,13 @@ let CollectionPreview = React.createClass({
   render () {
     let primaryField = getPrimaryField(this.props.schema)
     return (
-      <ul className="list-group">
+      <ul className='list-group'>
         {
-          this.props.collection.length ?
-            this.props.collection.map((entry, ind) => (
-              <li className="list-group-item" key={ind}><span className="text-muted">{primaryField}:</span> {entry[primaryField]}</li>
-            )) :
-            (<li className="list-group-item text-xs-center text-muted">No entries</li>)
+          this.props.collection.length
+            ? this.props.collection.map((entry, ind) => (
+              <li className='list-group-item' key={ind}><span className='text-muted'>{primaryField}:</span> {entry[primaryField]}</li>
+            ))
+            : (<li className='list-group-item text-xs-center text-muted'>No entries</li>)
         }
       </ul>
     )

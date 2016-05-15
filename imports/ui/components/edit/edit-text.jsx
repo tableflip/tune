@@ -12,7 +12,7 @@ export default React.createClass({
   render () {
     return (
       <form onSubmit={this.props.save}>
-        <input type='text' className='form-control' ref='text' defaultValue={ this.props.content } onChange={ this.update }/>
+        <input type='text' className='form-control' ref='text' defaultValue={this.props.content} onChange={this.update} />
       </form>
     )
   }

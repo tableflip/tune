@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor'
 import { _ } from 'meteor/underscore'
 import async from 'async'
 import githubInterface from '/imports/lib/github/github-interface'
