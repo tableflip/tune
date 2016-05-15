@@ -51,9 +51,10 @@ export default React.createClass({
         <Helmet
           script={[
             { type: 'text/javascript', innerHTML: `
-              window.UPLOADCARE_PUBLIC_KEY = '${Meteor.settings.public.uploadcare.publicKey}';
+              UPLOADCARE_PUBLIC_KEY = '${Meteor.settings.public.uploadcare.publicKey}';
               UPLOADCARE_LOCALE = "en";
               UPLOADCARE_TABS = "file url facebook gdrive dropbox instagram";
+              UPLOADCARE_MANUAL_START = true;
             ` },
             { type: 'text/javascript', src: 'https://ucarecdn.com/widget/2.8.2/uploadcare/uploadcare.full.min.js' }
           ]}
