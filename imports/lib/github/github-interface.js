@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor'
-import { HTTP } from 'meteor/http '
+import { HTTP } from 'meteor/http'
 import { _ } from 'meteor/underscore'
 import parseGithubHeaders from 'parse-link-header'
 import async from 'async'
