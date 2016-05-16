@@ -35,6 +35,8 @@
     "react-mounter": "^1.1.0",
     "react-page-transitions": "^1.2.0",
     "react-redux": "^4.4.0",
+    "react-router": "^2.4.0",
+    "react-router-redux": "^4.0.4",
     "react-swipeable": "^3.1.0",
     "redux": "^3.3.1",
     "redux-logger": "^2.6.1",
