@@ -1,4 +1,4 @@
-# the-platform-client
+# Tune
 
 Client for the TABLEFLIP static site generator
 
@@ -6,27 +6,18 @@ Client for the TABLEFLIP static site generator
 
 - Copy `settings.json.tpl` to `settings.json`
 - Grab the `clientId` & `clientSecret` from: https://github.com/organizations/tableflip/settings/applications/313932
+- Add Uploadcare and Mapbox credentials
 - Install dependencies
 
     ```sh
-    npm install
+    meteor npm install
     ```
 
 - Start it up
 
     ```sh
-    npm start
+    meteor npm start
     ```
-
-## Client-side structure
-
-We use *kadira:flow-router* along with the npm module *react-mounter* to render pages.
-
-**client/routes.jsx** - contains routing, imports pages from:
-
-**client/pages** - a directory of page components, as well as layout components which may be used to render them inside.
-
-**client/components** - reusable components which can be imported where required into pages.
 
 ## Collections
 
