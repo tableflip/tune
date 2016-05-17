@@ -1,15 +1,11 @@
 import React from 'react'
 import { Meteor } from 'meteor/meteor'
 import { createContainer } from 'meteor/react-meteor-data'
-import OverlayLoader from './overlay-loader'
+import { login, logout} from '../redux/actions'
 
 const LoginWithGithub = React.createClass({
-  getInitialState () {
-    return { loginSpinner: false }
-  },
   login () {
-    this.setState({ loginSpinner: true })
-    Meteor.loginWithGithub({ requestPermissions: ['repo'] }, this.setState.bind(this, { loginSpinner: false }))
+
   },
   logout () {
     Meteor.logout()
@@ -22,8 +18,6 @@ const LoginWithGithub = React.createClass({
           <button className='btn btn-primary-outline' type='button' onClick={this.logout}>Log out</button>
         </div>
       )
-    } else if (this.state.loginSpinner) {
-      return (<OverlayLoader color='#ddd' position='relative' />)
     } else {
       return (
         <div>
@@ -34,6 +28,14 @@ const LoginWithGithub = React.createClass({
     }
   }
 })
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onLoginClick: () => {
+      dispatch(toggleTodo(id))
+    }
+  }
+}
 
 export default createContainer(() => {
   return {

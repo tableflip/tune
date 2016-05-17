@@ -1,7 +1,6 @@
 import React from 'react'
 import { Meteor } from 'meteor/meteor'
 import { createContainer } from 'meteor/react-meteor-data'
-import Loader from '../components/loader'
 import LoginWithGithub from '../components/login-with-github'
 import { ProjectCard } from '../components/project-card'
 import Projects from '/imports/api/projects/projects'
@@ -15,8 +14,6 @@ const Home = React.createClass({
           <LoginWithGithub />
         </div>
       )
-    } else if (this.props.loggingIn) {
-      return <Loader loaded={false} color='#ddd' />
     }
     return (
       <div className='container-fluid'>

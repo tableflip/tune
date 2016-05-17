@@ -1,5 +1,6 @@
 import React from 'react'
-import Loader from './loader'
+import Loader from 'react-loader'
+import LoaderStyle from './loader/loader-style'
 
 let style = {
   position: 'fixed',
@@ -15,7 +16,7 @@ export default React.createClass({
     if (this.props.loaded) return false
     return (
       <div style={style}>
-        <Loader options={{ position: 'relative', color: '#ddd' }} />
+        <Loader loaded="false" {...LoaderStyle()} />
       </div>
     )
   }

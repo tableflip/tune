@@ -13,6 +13,12 @@ export const SUBSCRIBE = 'SUBSCRIBE'
 export const ADD_SUB = 'ADD_SUB'
 export const REMOVE_SUB = 'REMOVE_SUB'
 export const SET_COLLECTION_SIZE = 'SET_COLLECTION_SIZE'
+export const LOGIN = 'LOGIN'
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
+export const LOGIN_FAILURE = 'LOGIN_FAILURE'
+export const LOGOUT = 'LOGOUT'
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS'
+export const LOGOUT_FAILURE = 'LOGOUT_FAILURE'
 
 export function setSpinnerVisible (state) {
   return { type: SET_SPINNER_VISIBLE, state }
@@ -79,4 +85,16 @@ export function removeSub (id) {
 
 export function setCollectionSize (size) {
   return { type: SET_COLLECTION_SIZE, size }
+}
+
+export function login () {
+  Meteor.loginWithGithub({ requestPermissions: ['repo'] })
+}
+
+export function logout () {
+  // dispatch LOGOUT
+  Meteor.logout(err => {
+    if (err) // return dispatch LOGOUT_FAILURE
+    // dispatch LOGOUT
+  })
 }

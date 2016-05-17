@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import Navbar from '../components/navbar'
 import PageTransition from '../components/page-transition'
 import Footer from '../components/footer'
-import UniversalLoader from '../components/universal-loader'
+import Loader from '../components/loader/loader-subs-ready'
 import { SubscribeProjects } from '../components/subscriptions'
 import { setPreferredSlideDirection } from '../redux/actions'
 
@@ -28,11 +28,11 @@ const Layout = React.createClass({
       <div className='full-height'>
         <SubscribeProjects />
         <Navbar />
+        <Loader top='32px' left='calc(100% - 35px)' />
         <div className='content'>
           <PageTransition dir={this.props.slideDirection} pageBack={this.pageBack} pageForward={this.pageForward}>
             {this.props.children}
           </PageTransition>
-          <UniversalLoader />
         </div>
         <Footer />
       </div>
