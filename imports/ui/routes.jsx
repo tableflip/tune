@@ -91,6 +91,10 @@ const routes = (props = {}) => {
               childFn={collectionChildFn}
               parentFn={collectionParentFn}
             />
+            <Route path='collection/:collectionName/:index/edit'
+              component={pages.PageEdit}
+              index={5}
+            />
           </Route>
         </Route>
       </Route>

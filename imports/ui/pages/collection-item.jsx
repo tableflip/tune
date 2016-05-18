@@ -19,7 +19,9 @@ const CollectionItem = React.createClass({
     pageReady: React.PropTypes.bool,
     params: React.PropTypes.object,
     page: React.PropTypes.object,
-    project: React.PropTypes.object
+    pageId: React.PropTypes.string,
+    project: React.PropTypes.object,
+    collectionName: React.PropTypes.string
   },
 
   getInitialState () {
@@ -65,7 +67,7 @@ const CollectionItem = React.createClass({
   checkForwardButton (prevProps) {
     if (!this.props.pageReady) return
     if (prevProps && isEqual(prevProps.page, this.props.page)) return
-    let itemContent = this.props.page.content.json[this.props.param.scollectionName]
+    let itemContent = this.props.page.content.json[this.props.params.collectionName]
     if (!itemContent[parseInt(this.props.params.index, 10) + 1]) {
       this.props.preventChildSwipe()
     }
@@ -108,7 +110,7 @@ const CollectionItem = React.createClass({
               let value = itemContent[field]
               let fieldPath = `${this.props.params.collectionName}.${this.props.params.index}.${field}`
               return (
-                <Link className='list-group-item' key={ind} to={`/project/${this.props.params.projectId}/page/${this.props.params.pageId}/edit?field=${fieldPath}`}>
+                <Link className='list-group-item' key={ind} to={`/project/${this.props.params.projectId}/page/${this.props.params.pageId}/collection/${this.props.params.collectionName}/${ind}/edit?field=${fieldPath}`} >
                   <p><code>{field}</code></p>
                   <div><em>
                     <FieldPreview schema={schema} value={value} />
