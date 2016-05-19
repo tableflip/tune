@@ -35,7 +35,7 @@ export function getFacts (userId, fullName, cb) {
       github.getFileContents(fullName, 'schema.json', (err, res) => {
         if (err) {
           if (err.response && err.response.statusCode === 404) {
-            data.schema = '{}'
+            data.schema = base64.encode('{}')
           } else {
             return cb(err)
           }
@@ -91,7 +91,7 @@ export function getPageContents (userId, fullName, page, cb) {
       github.getFileContents(fullName, `pages/${page}/schema.json`, (err, res) => {
         if (err) {
           if (err.response && err.response.statusCode === 404) {
-            data.schema = '{}'
+            data.schema = base64.encode('{}')
           } else {
             return cb(err)
           }
