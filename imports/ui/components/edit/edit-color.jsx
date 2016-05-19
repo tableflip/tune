@@ -1,5 +1,5 @@
 import React from 'react'
-import ColorPicker from 'react-color'
+import { SketchPicker } from 'react-color'
 
 export default React.createClass({
   propTypes: {
@@ -11,7 +11,7 @@ export default React.createClass({
     return { color: this.props.content }
   },
   changeColor: function (colorData) {
-    let newColor = '#' + colorData.hex
+    let newColor = colorData.hex
     this.setState({color: newColor})
     this.props.update(newColor)
   },
@@ -22,7 +22,7 @@ export default React.createClass({
         <div className='card-header' style={{background: this.state.color}}>New Color</div>
         <div className='card-block text-xs-center'>
           <div style={{display: 'inline-block'}}>
-            <ColorPicker type='sketch' color={this.state.color} onChange={this.changeColor} />
+            <SketchPicker color={this.state.color} onChange={this.changeColor} />
           </div>
         </div>
       </div>
