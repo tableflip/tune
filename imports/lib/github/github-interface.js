@@ -39,7 +39,7 @@ export default function (userId) {
           if (!res) return done()
           repos = _.union(repos, res.data.filter(isPlatformProject))
           let headers = parseGithubHeaders(res.headers.link)
-          if (headers.next) q.push(headers.next.url)
+          if (headers && headers.next) q.push(headers.next.url)
           done()
         })
       }), 1)
