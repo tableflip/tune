@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor'
 import { createContainer } from 'meteor/react-meteor-data'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
-import OverlayLoader from '../components/overlay-loader'
+import OverlayLoader from '../components/loader/loader-overlay'
 import Projects from '/imports/api/projects/projects'
 import Pages from '/imports/api/pages/pages'
 

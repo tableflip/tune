@@ -1,7 +1,7 @@
 import React from 'react'
 import { Meteor } from 'meteor/meteor'
 import { createContainer } from 'meteor/react-meteor-data'
-import Loader from '../components/loader'
+import Loader from '../components/loader/loader-overlay'
 import LoginWithGithub from '../components/login-with-github'
 import { ProjectCard } from '../components/project-card'
 import Projects from '/imports/api/projects/projects'
