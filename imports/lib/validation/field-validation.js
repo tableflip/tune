@@ -23,5 +23,13 @@ export default {
   },
   boolean: {
     type: 'boolean'
+  },
+  url: {
+    type: 'string',
+    format: 'uri'
+  },
+  email: {
+    type: 'string',
+    format: 'email'
   }
 }

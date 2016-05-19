@@ -7,13 +7,18 @@ import text from './edit-text'
 import textarea from './edit-textarea'
 import boolean from './edit-boolean'
 
+const email = text
+const url = text
+
 export {
   color,
   collection,
+  email,
   img,
   list,
   map,
   text,
   textarea,
   boolean
+  url
 }
