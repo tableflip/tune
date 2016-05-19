@@ -33,6 +33,8 @@ const CollectionItem = React.createClass({
 
   remove (e) {
     e.preventDefault()
+    if (!window.confirm('Are you sure you want to delete this item?')) return
+
     this.setState({ saving: true }, () => {
       Meteor.call('pages/removeCollectionItem', {
         pageId: this.props.params.pageId,
