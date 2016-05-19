@@ -41,7 +41,7 @@ const CollectionItem = React.createClass({
       }, err => {
         this.setState({ saving: false })
         if (err) return this.setState({ validationError: err.details || err.reason || 'Could not remove entry' })
-        browserHistory.push(`/project/${this.props.project._id}/page/${this.props.pageId}/edit?field=${this.props.collectionName}`)
+        browserHistory.push(`/project/${this.props.params.projectId}/page/${this.props.params.pageId}/edit?field=${this.props.params.collectionName}`)
       })
     })
   },
