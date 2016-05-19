@@ -18,7 +18,7 @@ const Page = React.createClass({
         ]} />
         <div className='container'>
           <p className='lead m-t-1'>Pick an item</p>
-          <ul className='list-group'>
+          <ul className='list-group m-y-1'>
             {content.map((field, ind) => {
               let schema = this.props.page.schema[field]
               let value = this.props.page.content.json[field]

@@ -35,21 +35,19 @@ const PageTransition = React.createClass({
   },
   render () {
     return (
-      <div>
-        <Swipeable onSwiping={this.swipe} onSwiped={this.swipeEnd}>
-          <div style={{
-            position: 'relative',
-            right: `${this.state.offset}px`,
-            transition: this.state.transition ? `right ${this.state.transitionLength}ms ease-out` : null,
-            WebkitTransition: this.state.transition ? `right ${this.state.transitionLength}ms ease-out` : null,
-            msTransition: this.state.transition ? `right ${this.state.transitionLength}ms ease-out` : null
-          }}>
-            <ReactCSSTransitionGroup transitionName={`slide-${this.props.dir}`} transitionEnterTimeout={250} transitionLeaveTimeout={250}>
-              <div key={this.props.pageCount} style={{position: 'absolute', display: 'inline-block', width: '100%'}}>{this.props.children}</div>
-            </ReactCSSTransitionGroup>
-          </div>
-        </Swipeable>
-      </div>
+      <Swipeable onSwiping={this.swipe} onSwiped={this.swipeEnd}>
+        <div style={{
+          position: 'relative',
+          right: `${this.state.offset}px`,
+          transition: this.state.transition ? `right ${this.state.transitionLength}ms ease-out` : null,
+          WebkitTransition: this.state.transition ? `right ${this.state.transitionLength}ms ease-out` : null,
+          msTransition: this.state.transition ? `right ${this.state.transitionLength}ms ease-out` : null
+        }}>
+          <ReactCSSTransitionGroup transitionName={`slide-${this.props.dir}`} transitionEnterTimeout={250} transitionLeaveTimeout={250}>
+            <div key={this.props.pageCount} style={{position: 'absolute', display: 'inline-block', width: '100%'}}>{this.props.children}</div>
+          </ReactCSSTransitionGroup>
+        </div>
+      </Swipeable>
     )
   }
 })

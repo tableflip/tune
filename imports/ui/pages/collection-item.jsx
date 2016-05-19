@@ -104,7 +104,7 @@ const CollectionItem = React.createClass({
         <div className='container'>
           <button className='pull-right btn btn-danger' onClick={this.remove}><i className='fa fa-remove'></i></button>
           <p className='lead m-t-1'>Pick an item</p>
-          <ul className='list-group'>
+          <ul className='list-group m-y-1'>
             {itemKeys.map((field, ind) => {
               let schema = getObjectPath(this.props.page.schema, `${this.props.params.collectionName}.0.${field}`)
               let value = itemContent[field]
