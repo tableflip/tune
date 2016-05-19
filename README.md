@@ -1,4 +1,4 @@
-# Tune
+# Tune [![CircleCI](https://circleci.com/gh/tableflip/tune.svg?style=svg)](https://circleci.com/gh/tableflip/tune)
 
 Client for the TABLEFLIP static site generator
 
