@@ -5,13 +5,17 @@ import list from './edit-list'
 import map from './edit-map'
 import text from './edit-text'
 import textarea from './edit-textarea'
+const email = text
+const url = text
 
 export {
   color,
   collection,
+  email,
   img,
   list,
   map,
   text,
-  textarea
+  textarea,
+  url
 }
