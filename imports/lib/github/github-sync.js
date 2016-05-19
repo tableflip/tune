@@ -30,6 +30,7 @@ export function syncProject (userId, { fullName, name }, cb) {
   }, (err, res) => {
     if (err) return cb(err)
     if (Projects.find({ full_name: fullName, 'lastCommit.sha': res.lastCommit[0].sha }).count()) {
+      Projects.update({ full_name: fullName }, { $addToSet: { users: userId } })
       console.log(`Not syncing ${fullName} as we already have the most recent commit`)
       return cb(null, { numberAffected: 0 })
     }
