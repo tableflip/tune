@@ -28,7 +28,7 @@ const Layout = React.createClass({
       <div className='full-height'>
         <SubscribeProjects />
         <Navbar />
-        <div className='content'>
+        <div className='content m-b-1'>
           <PageTransition dir={this.props.slideDirection} pageBack={this.pageBack} pageForward={this.pageForward}>
             {this.props.children}
           </PageTransition>

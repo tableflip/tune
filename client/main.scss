@@ -51,9 +51,6 @@ html, body, #react-root, [data-reactroot] {
     position: relative;
     overflow-y: auto;
     flex: 1 1;
-    .container {
-      padding-bottom: 1rem;
-    }
     > * {
       position: absolute;
       width: 100%;
