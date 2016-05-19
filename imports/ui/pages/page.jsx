@@ -8,6 +8,11 @@ import Projects from '/imports/api/projects/projects'
 import Pages from '/imports/api/pages/pages'
 
 const Page = React.createClass({
+  propTypes: {
+    page: React.PropTypes.object,
+    subsReady: React.PropTypes.bool,
+    project: React.PropTypes.object
+  },
   render () {
     if (!this.props.subsReady || !this.props.page) return false
     let content = Object.keys(this.props.page.content.json)

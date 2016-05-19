@@ -16,7 +16,8 @@ const PageField = React.createClass({
   propTypes: {
     page: React.PropTypes.object,
     project: React.PropTypes.object,
-    field: React.PropTypes.string
+    field: React.PropTypes.string,
+    subsReady: React.PropTypes.bool
   },
   getInitialState () {
     let page = this.props.page
@@ -106,6 +107,10 @@ const PageField = React.createClass({
 })
 
 const PageEdit = React.createClass({
+  propTypes: {
+    page: React.PropTypes.object,
+    subsReady: React.PropTypes.bool
+  },
   render () {
     if (!this.props.subsReady || !this.props.page) return false
     return (

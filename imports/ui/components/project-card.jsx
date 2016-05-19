@@ -3,6 +3,9 @@ import { Link } from 'react-router'
 import moment from 'moment'
 
 export const ProjectCard = React.createClass({
+  propTypes: {
+    project: React.PropTypes.object
+  },
   render () {
     let project = this.props.project
     return (

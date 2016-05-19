@@ -21,7 +21,10 @@ const CollectionItem = React.createClass({
     page: React.PropTypes.object,
     pageId: React.PropTypes.string,
     project: React.PropTypes.object,
-    collectionName: React.PropTypes.string
+    collectionName: React.PropTypes.string,
+    setPreferredSlideDirection: React.PropTypes.func,
+    preventChildSwipe: React.PropTypes.func,
+    subsReady: React.PropTypes.bool
   },
 
   getInitialState () {

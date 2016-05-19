@@ -10,6 +10,13 @@ import Pages from '/imports/api/pages/pages'
 window.Pages = Pages
 
 const Project = React.createClass({
+  propTypes: {
+    pages: React.PropTypes.array,
+    subsReady: React.PropTypes.bool,
+    project: React.PropTypes.object,
+    projectId: React.PropTypes.string
+  },
+
   getInitialState () {
     return { publishing: false }
   },

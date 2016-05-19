@@ -3,6 +3,9 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 
 const Footer = React.createClass({
+  propTypes: {
+    footerVisible: React.PropTypes.bool
+  },
   render () {
     let style = {
       transition: 'max-height 500ms, padding 500ms',

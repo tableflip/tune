@@ -9,6 +9,12 @@ import { SubscribeProjects } from '../components/subscriptions'
 import { setPreferredSlideDirection } from '../redux/actions'
 
 const Layout = React.createClass({
+  propTypes: {
+    pageDetails: React.PropTypes.object,
+    setPreferredSlideDirection: React.PropTypes.func,
+    slideDirection: React.PropTypes.string,
+    children: React.PropTypes.node
+  },
   pageBack () {
     const details = this.props.pageDetails
     if (details.parent) {

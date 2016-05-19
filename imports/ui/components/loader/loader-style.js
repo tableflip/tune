@@ -10,7 +10,7 @@ export default () => ({
   color: '#FFC107', // #rgb or #rrggbb or array of colors
   opacity: 0.05, // Opacity of the lines
   rotate: 55, // The rotation offset
-  direction: 1, // 1: clockwise, -1: counterclockwise
+  direction: 1, // 1: clockwise  -1: counterclockwise
   speed: 1.1, // Rounds per second
   trail: 80, // Afterglow percentage
   fps: 20, // Frames per second when using setTimeout() as a fallback for CSS

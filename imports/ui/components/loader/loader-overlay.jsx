@@ -12,6 +12,9 @@ let style = {
 }
 
 export default React.createClass({
+  propTypes: {
+    loaded: React.PropTypes.bool
+  },
   render () {
     if (this.props.loaded) return false
     return (
