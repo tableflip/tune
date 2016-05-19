@@ -100,7 +100,6 @@ const CollectionItem = React.createClass({
           { text: itemContent[getPrimaryField(schema)] || this.props.params.index, active: true }
         ]} />
         <div className='container'>
-          <button className='pull-right btn btn-danger' onClick={this.remove}><i className='fa fa-remove'></i></button>
           <p className='lead m-t-1'>Pick an item</p>
           <ul className='list-group'>
             {itemKeys.map((field, ind) => {
@@ -117,8 +116,9 @@ const CollectionItem = React.createClass({
               ) }
             )}
           </ul>
-          <nav className='m-t-1'>
+          <nav className='m-t-1 text-xs-center'>
             <button disabled={navLeft.disabled} onClick={navLeft.action} className='btn btn-lg btn-secondary pull-left'>&laquo;</button>
+            <button className='btn btn-lg btn-danger' onClick={this.remove}>Delete Item</button>
             <button disabled={navRight.disabled} onClick={navRight.action} className='btn btn-lg btn-secondary pull-right'>&raquo;</button>
           </nav>
           <div className='clearfix m-b-1'></div>
