@@ -19,6 +19,6 @@ export {
   map,
   text,
   textarea,
-  boolean
+  boolean,
   url
 }
