@@ -20,5 +20,8 @@ export default {
   },
   color: {
     type: 'string'
+  },
+  boolean: {
+    type: 'boolean'
   }
 }

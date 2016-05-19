@@ -5,6 +5,7 @@ import list from './edit-list'
 import map from './edit-map'
 import text from './edit-text'
 import textarea from './edit-textarea'
+import boolean from './edit-boolean'
 
 export {
   color,
@@ -13,5 +14,6 @@ export {
   list,
   map,
   text,
-  textarea
+  textarea,
+  boolean
 }

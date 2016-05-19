@@ -23,6 +23,9 @@ export default React.createClass({
       case 'list':
         return (<ListPreview list={this.props.value} />)
 
+      case 'boolean':
+        return (<div>{this.props.value ? 'Yes' : 'No'}</div>)
+
       default:
         return (<div>{this.props.value}</div>)
     }
