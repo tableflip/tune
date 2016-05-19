@@ -8,6 +8,13 @@ let transitionLengthNormal = 100
 let transitionLengthLong = 250
 
 const PageTransition = React.createClass({
+  propTypes: {
+    dir: React.PropTypes.string,
+    pageCount: React.PropTypes.number,
+    pageBack: React.PropTypes.func,
+    pageForward: React.PropTypes.func,
+    children: React.PropTypes.node
+  },
   getInitialState () {
     return { offset: 0, transitionLength: transitionLengthNormal }
   },

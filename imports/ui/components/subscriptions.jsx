@@ -4,6 +4,9 @@ import { createContainer } from 'meteor/react-meteor-data'
 import { subscribe } from '/imports/ui/redux/actions'
 
 const Children = React.createClass({
+  propTypes: {
+    children: React.PropTypes.node
+  },
   render () {
     return (<div>{this.props.children}</div>)
   }

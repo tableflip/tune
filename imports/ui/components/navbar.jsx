@@ -7,6 +7,9 @@ import { subscribe } from '/imports/ui/redux/actions'
 import { Icon } from './icon'
 
 const Navbar = React.createClass({
+  propTypes: {
+    project: React.PropTypes.object
+  },
   render () {
     const path = this.props.project && `/project/${this.props.project._id}`
     return (

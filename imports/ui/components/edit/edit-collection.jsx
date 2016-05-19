@@ -10,6 +10,7 @@ let EditCollection = React.createClass({
     field: React.PropTypes.string,
     schema: React.PropTypes.any,
     content: React.PropTypes.array,
+    save: React.PropTypes.func,
     update: React.PropTypes.func
   },
   getInitialState: function () {

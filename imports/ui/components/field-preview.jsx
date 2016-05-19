@@ -33,6 +33,9 @@ export default React.createClass({
 })
 
 let ImagePreview = React.createClass({
+  propTypes: {
+    url: React.PropTypes.string
+  },
   getInitialState () {
     return {
       src: this.props.url
@@ -54,6 +57,9 @@ let ImagePreview = React.createClass({
 })
 
 let MapPreview = React.createClass({
+  propTypes: {
+    center: React.PropTypes.array
+  },
   render () {
     let style = {
       borderRadius: '5px',
@@ -68,6 +74,9 @@ let MapPreview = React.createClass({
 })
 
 let ColorPreview = React.createClass({
+  propTypes: {
+    color: React.PropTypes.string
+  },
   render () {
     let style = {
       borderRadius: '5px',
@@ -83,6 +92,9 @@ let ColorPreview = React.createClass({
 })
 
 let ListPreview = React.createClass({
+  propTypes: {
+    list: React.PropTypes.array
+  },
   render () {
     return (
       <div>
@@ -93,6 +105,10 @@ let ListPreview = React.createClass({
 })
 
 let CollectionPreview = React.createClass({
+  propTypes: {
+    schema: React.PropTypes.object,
+    collection: React.PropTypes.array
+  },
   render () {
     let primaryField = getPrimaryField(this.props.schema)
     return (

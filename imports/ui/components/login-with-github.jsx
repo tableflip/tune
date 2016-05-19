@@ -4,6 +4,9 @@ import { createContainer } from 'meteor/react-meteor-data'
 import OverlayLoader from './loader/loader-overlay'
 
 const LoginWithGithub = React.createClass({
+  propTypes: {
+    user: React.PropTypes.object
+  },
   getInitialState () {
     return { loginSpinner: false }
   },

@@ -7,6 +7,11 @@ import { ProjectCard } from '../components/project-card'
 import Projects from '/imports/api/projects/projects'
 
 const Home = React.createClass({
+  propTypes: {
+    user: React.PropTypes.object,
+    loggingIn: React.PropTypes.bool,
+    projects: React.PropTypes.array
+  },
   render () {
     if (!this.props.user) {
       return (
@@ -29,6 +34,9 @@ const Home = React.createClass({
 })
 
 let ProjectsList = React.createClass({
+  propTypes: {
+    projects: React.PropTypes.array
+  },
   render () {
     return (
       <div className='row' >
