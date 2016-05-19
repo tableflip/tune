@@ -1,7 +1,7 @@
 import React from 'react'
 import { Meteor } from 'meteor/meteor'
 import { createContainer } from 'meteor/react-meteor-data'
-import OverlayLoader from './overlay-loader'
+import OverlayLoader from './loader/loader-overlay'
 
 const LoginWithGithub = React.createClass({
   getInitialState () {
@@ -23,7 +23,7 @@ const LoginWithGithub = React.createClass({
         </div>
       )
     } else if (this.state.loginSpinner) {
-      return (<OverlayLoader color='#ddd' position='relative' />)
+      return (<OverlayLoader position='relative' />)
     } else {
       return (
         <div>
