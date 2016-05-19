@@ -1,5 +1,5 @@
 {
-  "name": "the-platform-client",
+  "name": "tune",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -47,7 +47,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:tableflip/the-platform-client.git"
+    "url": "git@github.com:tableflip/tune.git"
   },
   "devDependencies": {
     "pre-commit": "^1.1.3"
