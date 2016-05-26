@@ -6,6 +6,27 @@ import base64 from '/imports/lib/github/base64'
 import Projects from '../projects/projects'
 import Pages from '../pages/pages'
 
+function base64ToJson (str) {
+  var obj = {}
+  try {
+    obj = JSON.parse(base64.decode(str))
+  } catch (err) {
+    console.log(err)
+  }
+  return obj
+}
+
+function getFileContents (github, repo, dir, filename, cb) {
+  var fileInfo = dir.find(obj => obj.type === 'file' && obj.name === filename)
+  // file not in this dir... return nothing, in the next tick, meteor style.
+  if (!fileInfo) return Meteor.setTimeout(cb, 0)
+  // File exists, go get it.
+  github.getFileContents(repo, fileInfo.path, (err, res) => {
+    if (res && res.content) res.content = base64ToJson(res.content)
+    cb(err, res)
+  })
+}
+
 export function getRepos (userId, cb) {
   var github = githubInterface(userId)
   github.getRepos((err, res) => {
@@ -21,36 +42,27 @@ export function getLastCommit (userId, fullName, opts, cb) {
 
 export function getFacts (userId, fullName, cb) {
   var github = githubInterface(userId)
-  async.waterfall([
-    function getRootDirContents (cb) {
-      github.getDirContents(fullName, '', cb)
-    },
-    function getFacts (res, cb) {
-      var factsJson = res.find(obj => obj.type === 'file' && obj.name === 'facts.json')
-      github.getFileContents(fullName, 'facts.json', (err, res) => {
-        cb(err, { sha: factsJson.sha, content: res.content })
+  github.getDirContents(fullName, '', (err, dir) => {
+    if (err) return cb(err) // ruh roh, couldn't list dir contents.
+    async.parallel({
+      factsJson: (cb) => {
+        getFileContents(github, fullName, dir, 'facts.json', (err, res) => {
+          cb(err, { sha: res && res.sha, content: res && res.content })
+        })
+      },
+      schemaJson: (cb) => {
+        getFileContents(github, fullName, dir, 'schema.json', (err, res) => {
+          cb(err, { content: res && res.content })
+        })
+      }
+    }, (err, data) => {
+      if (err) return cb(err)
+      if (!data.factsJson) return cb(err, null)
+      cb(null, {
+        sha: data.factsJson.sha,
+        content: data.factsJson.content,
+        schema: data.schemaJson.content
       })
-    },
-    function getSchema (data, cb) {
-      github.getFileContents(fullName, 'schema.json', (err, res) => {
-        if (err) {
-          if (err.response && err.response.statusCode === 404) {
-            data.schema = base64.encode('{}')
-          } else {
-            return cb(err)
-          }
-        } else {
-          data.schema = res.content
-        }
-        cb(null, data)
-      })
-    }
-  ], (err, data) => {
-    if (err) return cb(err)
-    cb(null, {
-      sha: data.sha,
-      content: JSON.parse(base64.decode(data.content)),
-      schema: JSON.parse(base64.decode(data.schema))
     })
   })
 }
@@ -76,39 +88,29 @@ export function getAllPageContents (userId, fullName, cb) {
 
 export function getPageContents (userId, fullName, page, cb) {
   var github = githubInterface(userId)
-  async.waterfall([
-    function getPageDirContents (cb) {
-      github.getDirContents(fullName, `pages/${page}`, cb)
-    },
-    function getPageDataJson (res, cb) {
-      var contentJson = res.find(obj => obj.type === 'file' && obj.name === 'content.json')
-      if (!contentJson) return cb('Missing content.json')
-      github.getFileContents(fullName, `pages/${page}/${contentJson.name}`, (err, res) => {
-        cb(err, { sha: contentJson.sha, content: res.content })
+  github.getDirContents(fullName, `pages/${page}`, (err, dir) => {
+    if (err) return cb(err) // ruh roh, couldn't list dir contents.
+    async.parallel({
+      contentJson: (cb) => {
+        getFileContents(github, fullName, dir, 'content.json', (err, res) => {
+          cb(err, { sha: res && res.sha, content: res && res.content })
+        })
+      },
+      schemaJson: (cb) => {
+        getFileContents(github, fullName, dir, 'schema.json', (err, res) => {
+          cb(err, { content: res && res.content })
+        })
+      }
+    }, (err, data) => {
+      if (err) return cb(err)
+      if (!data.contentJson) return cb(err, null)
+      cb(null, {
+        name: page,
+        sha: data.contentJson.sha,
+        dateTime: new Date(),
+        content: data.contentJson.content,
+        schema: data.schemaJson.content
       })
-    },
-    function getPageSchemaJson (data, cb) {
-      github.getFileContents(fullName, `pages/${page}/schema.json`, (err, res) => {
-        if (err) {
-          if (err.response && err.response.statusCode === 404) {
-            data.schema = base64.encode('{}')
-          } else {
-            return cb(err)
-          }
-        } else {
-          data.schema = res.content
-        }
-        cb(null, data)
-      })
-    }
-  ], (err, data) => {
-    if (err) return cb(err)
-    cb(null, {
-      name: page,
-      sha: data.sha,
-      dateTime: new Date(),
-      content: JSON.parse(base64.decode(data.content)),
-      schema: JSON.parse(base64.decode(data.schema))
     })
   })
 }
