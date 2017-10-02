@@ -1,3 +1,8 @@
 import { Mongo } from 'meteor/mongo'
+import everything from '/imports/lib/everything'
 
-export default new Mongo.Collection('projects')
+const Projects = new Mongo.Collection('projects')
+
+Projects.deny(everything)
+
+export default Projects
